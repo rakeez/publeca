@@ -1,0 +1,212 @@
+// Publeca data model
+// Oversell prevention lives here: atomic decrement (see src/inventory.ts),
+// a CHECK constraint added via migration SQL, time-boxed Reservation holds,
+// and idempotent payment handling via unique providerRef.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ─────────────────────────── Accounts ───────────────────────────
+
+enum Role {
+  HOST
+  ADMIN
+}
+
+model Host {
+  id           String          @id @default(cuid())
+  name         String
+  email        String          @unique
+  passwordHash String
+  role         Role            @default(HOST)
+  kycStatus    String          @default("pending")
+  events       Event[]
+  paymentConfigs PaymentConfig[]
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+}
+
+// ─────────────────────────── Events ───────────────────────────
+
+enum EventStatus {
+  DRAFT
+  LIVE
+  ENDED
+}
+
+model Event {
+  id          String       @id @default(cuid())
+  hostId      String
+  host        Host         @relation(fields: [hostId], references: [id], onDelete: Cascade)
+  slug        String       @unique
+  title       String
+  description String?
+  venue       String?
+  startsAt    DateTime
+  endsAt      DateTime?
+  currency    String       @default("LKR")
+  status      EventStatus  @default(DRAFT)
+  ticketTypes TicketType[]
+  orders      Order[]
+  landingPage LandingPage?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([hostId])
+}
+
+model TicketType {
+  id            String        @id @default(cuid())
+  eventId       String
+  event         Event         @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  name          String
+  price         Decimal       @db.Decimal(12, 2)
+  // Inventory: quantitySold counts confirmed seats; active holds are tracked
+  // in Reservation and summed at availability-check time.
+  quantityTotal Int
+  quantitySold  Int           @default(0)
+  salesEnd      DateTime?
+  reservations  Reservation[]
+  tickets       Ticket[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([eventId])
+}
+
+// Time-boxed hold created when a buyer enters checkout. Counts against
+// availability until it either converts to an Order/Ticket or expires and
+// is swept back into the pool by a cron job.
+enum ReservationStatus {
+  HELD
+  CONVERTED
+  EXPIRED
+}
+
+model Reservation {
+  id           String            @id @default(cuid())
+  ticketTypeId String
+  ticketType   TicketType        @relation(fields: [ticketTypeId], references: [id], onDelete: Cascade)
+  quantity     Int
+  status       ReservationStatus @default(HELD)
+  expiresAt    DateTime
+  orderId      String?
+  createdAt    DateTime          @default(now())
+
+  @@index([ticketTypeId, status, expiresAt])
+}
+
+// ─────────────────────────── Orders & tickets ───────────────────────────
+
+enum OrderStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  eventId     String
+  event       Event       @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  buyerName   String
+  buyerEmail  String
+  amount      Decimal     @db.Decimal(12, 2)
+  currency    String      @default("LKR")
+  status      OrderStatus @default(PENDING)
+  provider    String // "payhere" | "koko" | "mintpay" | ...
+  // Gateway's own reference. Unique so a replayed webhook can't double-issue.
+  providerRef String?     @unique
+  tickets     Ticket[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([eventId])
+  @@index([buyerEmail])
+}
+
+enum TicketStatus {
+  VALID
+  USED
+  VOID
+}
+
+model Ticket {
+  id            String       @id @default(cuid())
+  orderId       String
+  order         Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  ticketTypeId  String
+  ticketType    TicketType   @relation(fields: [ticketTypeId], references: [id])
+  attendeeName  String
+  attendeeEmail String
+  // Signed token embedded in the QR; verified server-side at scan time.
+  qrToken       String       @unique
+  status        TicketStatus @default(VALID)
+  checkedInAt   DateTime?
+  checkedInBy   String?
+  scanLogs      ScanLog[]
+  createdAt     DateTime     @default(now())
+
+  @@index([orderId])
+}
+
+enum ScanResult {
+  OK
+  ALREADY_USED
+  INVALID
+}
+
+model ScanLog {
+  id        String     @id @default(cuid())
+  ticketId  String?
+  ticket    Ticket?    @relation(fields: [ticketId], references: [id], onDelete: SetNull)
+  scannedBy String
+  result    ScanResult
+  at        DateTime   @default(now())
+
+  @@index([ticketId])
+}
+
+// ─────────────────────────── Landing page & tracking ───────────────────────────
+
+model LandingPage {
+  id           String  @id @default(cuid())
+  eventId      String  @unique
+  event        Event   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  theme        Json? // colors, layout options
+  heroImageUrl String?
+  videoUrl     String?
+  copyBlocks   Json? // ordered content blocks (headings, paragraphs, etc.)
+
+  // Per-event conversion tracking — pasted by the host in admin, no code needed.
+  metaPixelId          String?
+  metaCapiToken        String? // stored encrypted
+  googleAdsId          String?
+  googleConversionLabel String?
+
+  updatedAt DateTime @updatedAt
+}
+
+// ─────────────────────────── Payment config ───────────────────────────
+
+// Per-host gateway / BNPL credentials. `credentials` is an encrypted JSON blob
+// (encrypted with CREDENTIALS_ENCRYPTION_KEY) — never returned to the client.
+model PaymentConfig {
+  id          String   @id @default(cuid())
+  hostId      String
+  host        Host     @relation(fields: [hostId], references: [id], onDelete: Cascade)
+  provider    String // "payhere" | "koko" | "mintpay" | "webxpay" | ...
+  credentials String // encrypted JSON
+  enabled     Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([hostId, provider])
+}

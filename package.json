@@ -1,0 +1,27 @@
+{
+  "name": "publeca",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Publeca — event booking, ticketing, and landing-page platform",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "db:generate": "npm run db:generate -w @publeca/db",
+    "db:migrate": "npm run db:migrate -w @publeca/db",
+    "db:studio": "npm run db:studio -w @publeca/db"
+  },
+  "devDependencies": {
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.2",
+    "prettier": "^3.4.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

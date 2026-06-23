@@ -1,0 +1,6 @@
+# NOTE: This project uses npm workspaces (see package.json "workspaces"),
+# not pnpm. This file is intentionally disabled to avoid confusing tooling.
+# If you later migrate to pnpm, rename this to pnpm-workspace.yaml.
+packages:
+  - "apps/*"
+  - "packages/*"
