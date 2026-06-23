@@ -3,9 +3,12 @@
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { prisma, holdSeats, releaseReservation, SoldOutError } from "@publeca/db";
+import type { ProviderId } from "@publeca/payments";
+import { enabledProvidersForHost } from "@/lib/payment-config";
 
 const buyerSchema = z.object({
   ticketTypeId: z.string().min(1),
+  provider: z.string().optional(),
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
   email: z.string().email("Valid email required"),
@@ -30,6 +33,14 @@ export async function startCheckout(
   if (!tt || tt.event.status !== "LIVE") return { error: "This ticket is not on sale." };
   if (tt.salesEnd && tt.salesEnd < new Date()) return { error: "Sales have closed." };
 
+  // Validate the chosen payment method against what this host actually offers.
+  const available = await enabledProvidersForHost(tt.event.hostId);
+  if (available.length === 0) return { error: "Payments aren't set up for this event yet." };
+  const provider: ProviderId =
+    parsed.data.provider && available.includes(parsed.data.provider as ProviderId)
+      ? (parsed.data.provider as ProviderId)
+      : available[0]!;
+
   // Reserve the seat (atomic; throws if sold out), then create the pending order.
   let reservationId: string | null = null;
   try {
@@ -44,7 +55,7 @@ export async function startCheckout(
         amount: tt.price,
         currency: tt.event.currency,
         status: "PENDING",
-        provider: "payhere",
+        provider,
       },
     });
 

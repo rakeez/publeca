@@ -3,7 +3,15 @@
 import { useActionState } from "react";
 import { startCheckout, type CheckoutState } from "./actions";
 
-export function CheckoutForm({ ticketTypeId }: { ticketTypeId: string }) {
+type Method = { id: string; label: string; kind: "card" | "bnpl" };
+
+export function CheckoutForm({
+  ticketTypeId,
+  methods,
+}: {
+  ticketTypeId: string;
+  methods: Method[];
+}) {
   const [state, action, pending] = useActionState(startCheckout, {
     error: null,
   } as CheckoutState);
@@ -11,6 +19,31 @@ export function CheckoutForm({ ticketTypeId }: { ticketTypeId: string }) {
   return (
     <form action={action} className="space-y-4">
       <input type="hidden" name="ticketTypeId" value={ticketTypeId} />
+
+      {methods.length > 1 && (
+        <fieldset>
+          <legend className="text-sm font-medium text-slate-700">Payment method</legend>
+          <div className="mt-2 space-y-2">
+            {methods.map((m, i) => (
+              <label
+                key={m.id}
+                className="flex cursor-pointer items-center gap-3 rounded-lg border border-slate-200 px-3 py-2 text-sm has-[:checked]:border-brand-400 has-[:checked]:ring-2 has-[:checked]:ring-brand-100"
+              >
+                <input type="radio" name="provider" value={m.id} defaultChecked={i === 0} />
+                <span className="font-medium">{m.label}</span>
+                {m.kind === "bnpl" && (
+                  <span className="rounded-full bg-violet-100 px-2 py-0.5 text-xs font-medium text-violet-700">
+                    Pay later
+                  </span>
+                )}
+              </label>
+            ))}
+          </div>
+        </fieldset>
+      )}
+      {methods.length === 1 && (
+        <input type="hidden" name="provider" value={methods[0]!.id} />
+      )}
 
       <div className="grid grid-cols-2 gap-3">
         <Field label="First name" name="firstName" autoComplete="given-name" />

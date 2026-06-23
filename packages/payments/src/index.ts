@@ -1,12 +1,17 @@
 import type { PaymentProvider, ProviderId } from "./types";
 import { payhere } from "./payhere";
+import { koko } from "./koko";
+import { mintpay } from "./mintpay";
 
 export * from "./types";
-export { payhere };
+export * from "./catalog";
+export { payhere, koko, mintpay };
 
 const providers: Partial<Record<ProviderId, PaymentProvider>> = {
   payhere,
-  // koko, mintpay, webxpay, onepay — added in later phases
+  koko,
+  mintpay,
+  // webxpay, onepay — added later
 };
 
 export function getProvider(id: ProviderId): PaymentProvider {

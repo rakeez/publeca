@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { prisma } from "@publeca/db";
-import { getProvider } from "@publeca/payments";
+import { getProvider, type ProviderId } from "@publeca/payments";
+import { resolveCreds } from "@/lib/payment-config";
 
 // Builds the signed PayHere checkout form server-side (secret never reaches the client)
 // and auto-submits it to PayHere. PayHere then redirects back to /pay/return and
@@ -24,8 +25,21 @@ export default async function PayPage({
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
   const [firstName, ...rest] = order.buyerName.split(" ");
+  const provider = order.provider as ProviderId;
 
-  const checkout = getProvider("payhere").createCheckout(
+  const creds = await resolveCreds(order.event.hostId, provider);
+  if (!creds) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-slate-50 px-6 text-center">
+        <p className="max-w-sm text-slate-600">
+          This payment method isn't configured for the event. Please go back and choose
+          another, or contact the organizer.
+        </p>
+      </main>
+    );
+  }
+
+  const checkout = getProvider(provider).createCheckout(
     {
       orderId: order.id,
       amount: Number(order.amount),
@@ -39,18 +53,14 @@ export default async function PayPage({
       },
       returnUrl: `${appUrl}/pay/return?order=${order.id}`,
       cancelUrl: `${appUrl}/e/${order.event.slug}`,
-      notifyUrl: `${appUrl}/api/payments/payhere/notify`,
+      notifyUrl: `${appUrl}/api/payments/${provider}/notify`,
     },
-    {
-      merchantId: process.env.PAYHERE_MERCHANT_ID ?? "",
-      merchantSecret: process.env.PAYHERE_MERCHANT_SECRET ?? "",
-      sandbox: process.env.PAYHERE_SANDBOX !== "false",
-    }
+    creds
   );
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-6">
-      <p className="text-slate-600">Redirecting you to PayHere…</p>
+      <p className="text-slate-600">Redirecting you to the payment page…</p>
 
       <form id="payhere" method={checkout.method} action={checkout.actionUrl}>
         {Object.entries(checkout.fields).map(([k, v]) => (

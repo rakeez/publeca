@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@publeca/db";
+import { getProviderMeta } from "@publeca/payments";
+import { enabledProvidersForHost } from "@/lib/payment-config";
 import { CheckoutForm } from "./checkout-form";
 
 export default async function CheckoutPage({
@@ -23,6 +25,13 @@ export default async function CheckoutPage({
   if (!ticketType) notFound();
 
   const soldOut = ticketType.quantityTotal - ticketType.quantitySold <= 0;
+
+  const methods = (await enabledProvidersForHost(event.hostId))
+    .map((id) => {
+      const meta = getProviderMeta(id);
+      return meta ? { id: meta.id, label: meta.label, kind: meta.kind } : null;
+    })
+    .filter((m): m is NonNullable<typeof m> => m !== null);
 
   return (
     <main className="mx-auto max-w-md px-6 py-12">
@@ -48,9 +57,9 @@ export default async function CheckoutPage({
         </p>
       ) : (
         <div className="mt-6">
-          <CheckoutForm ticketTypeId={ticketType.id} />
+          <CheckoutForm ticketTypeId={ticketType.id} methods={methods} />
           <p className="mt-4 text-center text-xs text-slate-400">
-            You'll be redirected to PayHere to pay securely.
+            You'll be redirected to your chosen provider to pay securely.
           </p>
         </div>
       )}
