@@ -53,6 +53,12 @@ export default async function EventDetailPage({
 
         {/* Publish controls */}
         <div className="flex shrink-0 items-center gap-2">
+          <Link
+            href={`/app/events/${event.id}/landing`}
+            className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300"
+          >
+            Customize page
+          </Link>
           {event.status !== "LIVE" ? (
             <form action={setEventStatus.bind(null, event.id, "LIVE")}>
               <button

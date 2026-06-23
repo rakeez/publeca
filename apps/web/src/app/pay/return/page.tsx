@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { prisma } from "@publeca/db";
+import { MetaPixel, GoogleGtag } from "@/lib/tracking";
+import { FireConversion } from "@/lib/fire-conversion";
 
 // Where PayHere sends the buyer after payment. Status here is informational only —
 // the notify webhook is authoritative — so we show a friendly state and tell them
-// to check their email for the ticket.
+// to check their email for the ticket. When paid, we fire the purchase conversion.
 export default async function PayReturnPage({
   searchParams,
 }: {
@@ -11,13 +13,32 @@ export default async function PayReturnPage({
 }) {
   const { order: orderId } = await searchParams;
   const order = orderId
-    ? await prisma.order.findUnique({ where: { id: orderId }, include: { event: true } })
+    ? await prisma.order.findUnique({
+        where: { id: orderId },
+        include: { event: { include: { landingPage: true } } },
+      })
     : null;
 
   const paid = order?.status === "PAID";
+  const lp = order?.event.landingPage;
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-6 text-center">
+      {paid && lp && (
+        <>
+          <MetaPixel id={lp.metaPixelId} />
+          <GoogleGtag id={lp.googleAdsId} />
+          <FireConversion
+            orderId={order.id}
+            value={Number(order.amount)}
+            currency={order.currency}
+            googleAdsId={lp.googleAdsId}
+            googleConversionLabel={lp.googleConversionLabel}
+            hasMetaPixel={!!lp.metaPixelId}
+          />
+        </>
+      )}
+
       <div className="max-w-md rounded-2xl border border-slate-200 bg-white p-10">
         <div className="text-5xl">{paid ? "🎟️" : "⏳"}</div>
         <h1 className="mt-4 text-2xl font-bold tracking-tight">

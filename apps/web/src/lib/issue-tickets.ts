@@ -2,6 +2,7 @@ import { randomUUID } from "crypto";
 import { prisma } from "@publeca/db";
 import { signTicketToken } from "@publeca/tickets";
 import { sendTicketEmail } from "./email";
+import { sendMetaPurchase } from "./meta-capi";
 
 /**
  * Issue tickets for a paid order. Safe to call multiple times (PayHere can resend
@@ -18,7 +19,7 @@ export async function issueTicketsForOrder(orderId: string, providerRef: string)
 
   const order = await prisma.order.findUniqueOrThrow({
     where: { id: orderId },
-    include: { event: true, tickets: true },
+    include: { event: { include: { landingPage: true } }, tickets: true },
   });
 
   // Convert this order's holds and mint a ticket per held seat.
@@ -55,6 +56,23 @@ export async function issueTicketsForOrder(orderId: string, providerRef: string)
     await sendTicketEmail(order, created, order.event);
   } catch (e) {
     console.error("Ticket email failed:", (e as Error).message);
+  }
+
+  // Best-effort server-side Meta conversion (deduped with the browser pixel by order id).
+  const lp = order.event.landingPage;
+  if (lp?.metaPixelId && lp?.metaCapiToken) {
+    try {
+      await sendMetaPurchase({
+        pixelId: lp.metaPixelId,
+        token: lp.metaCapiToken,
+        orderId: order.id,
+        value: Number(order.amount),
+        currency: order.currency,
+        email: order.buyerEmail,
+      });
+    } catch (e) {
+      console.error("Meta CAPI failed:", (e as Error).message);
+    }
   }
 
   return { issued: true, count: created.length };

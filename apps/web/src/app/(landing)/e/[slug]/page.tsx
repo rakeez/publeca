@@ -1,8 +1,16 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@publeca/db";
+import { MetaPixel, GoogleGtag } from "@/lib/tracking";
 
-// Per-event public landing page. Shared structure, host-customized content.
-// Conversion pixels (Meta + Google Ads) are injected from LandingPage settings.
+function videoEmbed(url: string) {
+  const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
+  if (yt) return { type: "iframe" as const, src: `https://www.youtube.com/embed/${yt[1]}` };
+  const vimeo = url.match(/vimeo\.com\/(\d+)/);
+  if (vimeo) return { type: "iframe" as const, src: `https://player.vimeo.com/video/${vimeo[1]}` };
+  if (/\.(mp4|webm|ogg)(\?|$)/i.test(url)) return { type: "video" as const, src: url };
+  return { type: "iframe" as const, src: url };
+}
+
 export default async function EventLandingPage({
   params,
 }: {
@@ -12,16 +20,24 @@ export default async function EventLandingPage({
 
   const event = await prisma.event.findUnique({
     where: { slug },
-    include: { ticketTypes: true, landingPage: true, host: true },
+    include: { ticketTypes: { orderBy: { createdAt: "asc" } }, landingPage: true, host: true },
   });
-
   if (!event || event.status !== "LIVE") notFound();
 
   const lp = event.landingPage;
+  const theme = (lp?.theme as { accent?: string } | null) ?? {};
+  const copy =
+    (lp?.copyBlocks as { tagline?: string; aboutHeading?: string; aboutBody?: string } | null) ??
+    {};
+  const accent = theme.accent ?? "#635bff";
+  const video = lp?.videoUrl ? videoEmbed(lp.videoUrl) : null;
 
   return (
     <main className="min-h-screen bg-white">
-      {/* Hero — host-customizable image/video + copy */}
+      <MetaPixel id={lp?.metaPixelId} />
+      <GoogleGtag id={lp?.googleAdsId} />
+
+      {/* Hero */}
       <section className="relative">
         {lp?.heroImageUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -31,28 +47,59 @@ export default async function EventLandingPage({
             className="h-[42vh] w-full object-cover md:h-[56vh]"
           />
         ) : (
-          <div className="h-[42vh] w-full bg-gradient-to-br from-brand-500 to-emerald-500 md:h-[56vh]" />
+          <div
+            className="h-[42vh] w-full md:h-[56vh]"
+            style={{ background: `linear-gradient(135deg, ${accent}, #10b981)` }}
+          />
         )}
         <div className="mx-auto max-w-3xl px-6 py-10">
-          <p className="text-sm font-medium text-brand-600">{event.host.name}</p>
+          <p className="text-sm font-medium" style={{ color: accent }}>
+            {event.host.name}
+          </p>
           <h1 className="mt-2 text-4xl font-bold tracking-tight">{event.title}</h1>
-          {event.venue && <p className="mt-2 text-slate-600">{event.venue}</p>}
+          {copy.tagline && <p className="mt-2 text-lg text-slate-600">{copy.tagline}</p>}
+          {event.venue && <p className="mt-3 text-slate-600">{event.venue}</p>}
           <p className="mt-1 text-slate-600">
             {new Date(event.startsAt).toLocaleString("en-GB", {
               dateStyle: "full",
               timeStyle: "short",
             })}
           </p>
-          {event.description && (
-            <p className="mt-6 whitespace-pre-line leading-relaxed text-slate-700">
-              {event.description}
-            </p>
-          )}
         </div>
       </section>
 
-      {/* Ticket selection + checkout (wired in Phase 2) */}
-      <section className="mx-auto max-w-3xl px-6 pb-24">
+      {/* About */}
+      {(copy.aboutHeading || copy.aboutBody || event.description) && (
+        <section className="mx-auto max-w-3xl px-6 pb-6">
+          {copy.aboutHeading && (
+            <h2 className="text-xl font-semibold">{copy.aboutHeading}</h2>
+          )}
+          <p className="mt-3 whitespace-pre-line leading-relaxed text-slate-700">
+            {copy.aboutBody || event.description}
+          </p>
+        </section>
+      )}
+
+      {/* Video */}
+      {video && (
+        <section className="mx-auto max-w-3xl px-6 pb-6">
+          <div className="aspect-video overflow-hidden rounded-xl bg-black">
+            {video.type === "iframe" ? (
+              <iframe
+                src={video.src}
+                className="h-full w-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            ) : (
+              <video src={video.src} controls className="h-full w-full" />
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* Tickets */}
+      <section className="mx-auto max-w-3xl px-6 pb-24 pt-4">
         <h2 className="text-xl font-semibold">Tickets</h2>
         <div className="mt-4 space-y-3">
           {event.ticketTypes.map((t) => {
@@ -77,7 +124,8 @@ export default async function EventLandingPage({
                 ) : (
                   <a
                     href={`/e/${event.slug}/checkout?tt=${t.id}`}
-                    className="rounded-full bg-brand-500 px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-600"
+                    className="rounded-full px-5 py-2 text-sm font-semibold text-white transition hover:opacity-90"
+                    style={{ backgroundColor: accent }}
                   >
                     Buy
                   </a>
@@ -90,22 +138,6 @@ export default async function EventLandingPage({
           )}
         </div>
       </section>
-
-      {/* Conversion tracking placeholders — populated in Phase 3 */}
-      {lp?.metaPixelId && (
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `/* Meta Pixel ${lp.metaPixelId} injected in Phase 3 */`,
-          }}
-        />
-      )}
-      {lp?.googleAdsId && (
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `/* Google Ads ${lp.googleAdsId} injected in Phase 3 */`,
-          }}
-        />
-      )}
     </main>
   );
 }
