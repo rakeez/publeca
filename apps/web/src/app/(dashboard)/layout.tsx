@@ -5,6 +5,7 @@ import { auth, signOut } from "@/auth";
 const nav = [
   { href: "/app", label: "Overview" },
   { href: "/app/events", label: "Events" },
+  { href: "/app/scan", label: "Scan tickets" },
   { href: "/app/attendees", label: "Attendees" },
   { href: "/app/payments", label: "Payments" },
   { href: "/app/settings", label: "Settings" },
