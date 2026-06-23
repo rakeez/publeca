@@ -143,7 +143,7 @@ model Ticket {
   orderId       String
   order         Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
   ticketTypeId  String
-  ticketType    TicketType   @relation(fields: [ticketTypeId], references: [id])
+  ticketType    TicketType   @relation(fields: [ticketTypeId], references: [id], onDelete: Cascade)
   attendeeName  String
   attendeeEmail String
   // Signed token embedded in the QR; verified server-side at scan time.

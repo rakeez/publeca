@@ -70,12 +70,18 @@ export default async function EventLandingPage({
                     {!soldOut && remaining <= 10 ? ` · only ${remaining} left` : ""}
                   </p>
                 </div>
-                <button
-                  disabled={soldOut}
-                  className="rounded-full bg-brand-500 px-5 py-2 text-sm font-semibold text-white transition enabled:hover:bg-brand-600 disabled:cursor-not-allowed disabled:bg-slate-300"
-                >
-                  {soldOut ? "Sold out" : "Buy"}
-                </button>
+                {soldOut ? (
+                  <span className="rounded-full bg-slate-200 px-5 py-2 text-sm font-semibold text-slate-500">
+                    Sold out
+                  </span>
+                ) : (
+                  <a
+                    href={`/e/${event.slug}/checkout?tt=${t.id}`}
+                    className="rounded-full bg-brand-500 px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-600"
+                  >
+                    Buy
+                  </a>
+                )}
               </div>
             );
           })}
