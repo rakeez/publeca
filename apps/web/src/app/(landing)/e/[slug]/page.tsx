@@ -29,7 +29,7 @@ export default async function EventLandingPage({
   const copy =
     (lp?.copyBlocks as { tagline?: string; aboutHeading?: string; aboutBody?: string } | null) ??
     {};
-  const accent = theme.accent ?? "#635bff";
+  const accent = theme.accent ?? "#ff0066";
   const video = lp?.videoUrl ? videoEmbed(lp.videoUrl) : null;
 
   return (

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth, signOut } from "@/auth";
+import { Logo } from "@/components/logo";
 
 const nav = [
   { href: "/app", label: "Overview" },
@@ -22,8 +23,8 @@ export default async function DashboardLayout({
   return (
     <div className="flex min-h-screen bg-slate-50">
       <aside className="hidden w-60 shrink-0 border-r border-slate-200 bg-white p-5 md:block">
-        <Link href="/app" className="text-lg font-bold tracking-tight">
-          Publeca
+        <Link href="/app" aria-label="Publeca">
+          <Logo markClassName="h-6 w-6" wordClassName="text-lg font-bold tracking-tight" />
         </Link>
         <nav className="mt-8 space-y-1">
           {nav.map((n) => (
