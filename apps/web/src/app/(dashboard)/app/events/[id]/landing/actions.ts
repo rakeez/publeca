@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@publeca/db";
 import { getCurrentHost } from "@/lib/session";
+import { manageableHostIds } from "@/lib/access";
 
 export type LandingState = { error: string | null; ok?: boolean };
 
@@ -14,7 +15,9 @@ export async function upsertLandingPage(
 ): Promise<LandingState> {
   const host = await getCurrentHost();
   const event = await prisma.event.findUnique({ where: { id: eventId } });
-  if (!event || event.hostId !== host.id) redirect("/app/events");
+  if (!event) redirect("/app/events");
+  const allowed = await manageableHostIds(host.id);
+  if (!allowed.includes(event.hostId)) redirect("/app/events");
 
   const str = (k: string) => {
     const v = formData.get(k);

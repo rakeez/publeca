@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect, notFound } from "next/navigation";
 import { prisma } from "@publeca/db";
 import { getCurrentHost } from "@/lib/session";
+import { accessibleHostIds } from "@/lib/access";
 import { EventForm } from "../event-form";
 import { updateEvent, addTicketType, deleteTicketType, setEventStatus } from "../actions";
 
@@ -25,7 +26,8 @@ export default async function EventDetailPage({
   });
 
   if (!event) notFound();
-  if (event.hostId !== host.id) redirect("/app/events");
+  const hostIds = await accessibleHostIds(host.id);
+  if (!hostIds.includes(event.hostId)) redirect("/app/events");
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "";
   const liveUrl = `${appUrl}/e/${event.slug}`;
@@ -53,6 +55,12 @@ export default async function EventDetailPage({
 
         {/* Publish controls */}
         <div className="flex shrink-0 items-center gap-2">
+          <Link
+            href={`/app/events/${event.id}/orders`}
+            className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300"
+          >
+            Orders
+          </Link>
           <Link
             href={`/app/events/${event.id}/landing`}
             className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300"

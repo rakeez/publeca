@@ -6,6 +6,7 @@ import { z } from "zod";
 import { prisma } from "@publeca/db";
 import { getCurrentHost } from "@/lib/session";
 import { uniqueEventSlug } from "@/lib/slug";
+import { manageableHostIds } from "@/lib/access";
 
 type ActionState = { error: string | null };
 
@@ -24,10 +25,12 @@ function toDate(value?: string | null): Date | null {
   return isNaN(d.getTime()) ? null : d;
 }
 
-/** Confirm an event belongs to the signed-in host; redirect/throw otherwise. */
-async function assertEventOwned(eventId: string, hostId: string) {
+/** Confirm the signed-in user can manage this event (owner or MANAGER teammate). */
+async function assertEventOwned(eventId: string, userId: string) {
   const event = await prisma.event.findUnique({ where: { id: eventId } });
-  if (!event || event.hostId !== hostId) redirect("/app/events");
+  if (!event) redirect("/app/events");
+  const allowed = await manageableHostIds(userId);
+  if (!allowed.includes(event.hostId)) redirect("/app/events");
   return event;
 }
 
@@ -121,7 +124,9 @@ export async function deleteTicketType(ticketTypeId: string): Promise<void> {
     where: { id: ticketTypeId },
     include: { event: true },
   });
-  if (!tt || tt.event.hostId !== host.id) return;
+  if (!tt) return;
+  const allowed = await manageableHostIds(host.id);
+  if (!allowed.includes(tt.event.hostId)) return;
   // Don't allow deleting a type that has already sold seats.
   if (tt.quantitySold > 0) return;
 

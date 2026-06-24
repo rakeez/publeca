@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@publeca/db";
 import { getCurrentHost } from "@/lib/session";
+import { accessibleHostIds } from "@/lib/access";
 
 const statusStyles: Record<string, string> = {
   DRAFT: "bg-slate-100 text-slate-600",
@@ -10,8 +11,9 @@ const statusStyles: Record<string, string> = {
 
 export default async function EventsPage() {
   const host = await getCurrentHost();
+  const hostIds = await accessibleHostIds(host.id);
   const events = await prisma.event.findMany({
-    where: { hostId: host.id },
+    where: { hostId: { in: hostIds } },
     orderBy: { createdAt: "desc" },
     include: { ticketTypes: true },
   });

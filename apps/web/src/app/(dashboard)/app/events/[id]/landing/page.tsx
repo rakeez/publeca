@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect, notFound } from "next/navigation";
 import { prisma } from "@publeca/db";
 import { getCurrentHost } from "@/lib/session";
+import { manageableHostIds } from "@/lib/access";
 import { upsertLandingPage } from "./actions";
 import { LandingForm } from "./landing-form";
 
@@ -18,7 +19,8 @@ export default async function LandingEditorPage({
     include: { landingPage: true },
   });
   if (!event) notFound();
-  if (event.hostId !== host.id) redirect("/app/events");
+  const allowed = await manageableHostIds(host.id);
+  if (!allowed.includes(event.hostId)) redirect("/app/events");
 
   const lp = event.landingPage;
   const theme = (lp?.theme as { accent?: string } | null) ?? {};

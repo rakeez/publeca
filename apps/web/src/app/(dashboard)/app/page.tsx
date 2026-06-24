@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { prisma } from "@publeca/db";
 import { getCurrentHost } from "@/lib/session";
+import { accessibleHostIds } from "@/lib/access";
 
 export default async function DashboardHome() {
   const host = await getCurrentHost();
+  const hostIds = await accessibleHostIds(host.id);
 
   const events = await prisma.event.findMany({
-    where: { hostId: host.id },
+    where: { hostId: { in: hostIds } },
     include: { ticketTypes: true },
   });
 
@@ -17,11 +19,11 @@ export default async function DashboardHome() {
   );
 
   const paid = await prisma.order.aggregate({
-    where: { event: { hostId: host.id }, status: "PAID" },
+    where: { event: { hostId: { in: hostIds } }, status: "PAID" },
     _sum: { amount: true },
   });
   const checkedIn = await prisma.ticket.count({
-    where: { order: { event: { hostId: host.id } }, status: "USED" },
+    where: { order: { event: { hostId: { in: hostIds } } }, status: "USED" },
   });
 
   const stats = [

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@publeca/db";
 import { getCurrentHost } from "@/lib/session";
+import { accessibleHostIds } from "@/lib/access";
 import { manualCheckIn, undoCheckIn } from "./actions";
 
 export default async function AttendeesPage({
@@ -10,9 +11,10 @@ export default async function AttendeesPage({
 }) {
   const host = await getCurrentHost();
   const { event: selectedId } = await searchParams;
+  const hostIds = await accessibleHostIds(host.id);
 
   const events = await prisma.event.findMany({
-    where: { hostId: host.id },
+    where: { hostId: { in: hostIds } },
     orderBy: { createdAt: "desc" },
     select: { id: true, title: true },
   });
@@ -21,7 +23,7 @@ export default async function AttendeesPage({
 
   const tickets = eventId
     ? await prisma.ticket.findMany({
-        where: { order: { eventId, event: { hostId: host.id } } },
+        where: { order: { eventId, event: { hostId: { in: hostIds } } } },
         include: { ticketType: true },
         orderBy: { createdAt: "asc" },
       })
@@ -59,9 +61,19 @@ export default async function AttendeesPage({
             ))}
           </div>
 
-          <p className="mt-4 text-sm text-slate-500">
-            {checkedIn} / {tickets.length} checked in
-          </p>
+          <div className="mt-4 flex items-center justify-between">
+            <p className="text-sm text-slate-500">
+              {checkedIn} / {tickets.length} checked in
+            </p>
+            {tickets.length > 0 && eventId && (
+              <a
+                href={`/app/attendees/export?event=${eventId}`}
+                className="rounded-full border border-slate-200 bg-white px-4 py-1.5 text-sm font-medium text-slate-700 transition hover:border-slate-300"
+              >
+                Export CSV
+              </a>
+            )}
+          </div>
 
           <div className="mt-3 overflow-hidden rounded-xl border border-slate-200 bg-white">
             <table className="w-full text-left text-sm">

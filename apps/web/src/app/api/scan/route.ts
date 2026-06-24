@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "@publeca/db";
 import { verifyTicketToken } from "@publeca/tickets";
 import { getCurrentHost } from "@/lib/session";
+import { accessibleHostIds } from "@/lib/access";
 
 type ScanOutcome =
   | { result: "ok"; attendee: string; ticketType: string; event: string }
@@ -37,8 +38,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ result: "invalid" } satisfies ScanOutcome);
   }
 
-  // Only the event's owner may check its attendees in.
-  if (ticket.order.event.hostId !== host.id) {
+  // Only the event's owner or a teammate may check its attendees in.
+  const hostIds = await accessibleHostIds(host.id);
+  if (!hostIds.includes(ticket.order.event.hostId)) {
     return NextResponse.json({ result: "forbidden" } satisfies ScanOutcome);
   }
 

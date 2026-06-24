@@ -3,13 +3,16 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@publeca/db";
 import { getCurrentHost } from "@/lib/session";
+import { accessibleHostIds } from "@/lib/access";
 
-async function ownedTicket(ticketId: string, hostId: string) {
+async function ownedTicket(ticketId: string, userId: string) {
   const ticket = await prisma.ticket.findUnique({
     where: { id: ticketId },
     include: { order: { include: { event: true } } },
   });
-  if (!ticket || ticket.order.event.hostId !== hostId) return null;
+  if (!ticket) return null;
+  const hostIds = await accessibleHostIds(userId);
+  if (!hostIds.includes(ticket.order.event.hostId)) return null;
   return ticket;
 }
 

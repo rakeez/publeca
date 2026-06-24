@@ -22,13 +22,20 @@ export async function signupHost(_prev: unknown, formData: FormData) {
     return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
   }
 
-  const { name, email, password } = parsed.data;
+  const { name, password } = parsed.data;
+  const email = parsed.data.email.toLowerCase();
 
   const existing = await prisma.host.findUnique({ where: { email } });
   if (existing) return { error: "An account with this email already exists" };
 
   const passwordHash = await bcrypt.hash(password, 12);
-  await prisma.host.create({ data: { name, email, passwordHash } });
+  const host = await prisma.host.create({ data: { name, email, passwordHash } });
+
+  // Activate any team invitations sent to this email before they had an account.
+  await prisma.teamMember.updateMany({
+    where: { memberEmail: email.toLowerCase(), memberId: null },
+    data: { memberId: host.id },
+  });
 
   await signIn("credentials", { email, password, redirectTo: "/app" });
   return { error: null };

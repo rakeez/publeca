@@ -29,8 +29,31 @@ model Host {
   kycStatus    String          @default("pending")
   events       Event[]
   paymentConfigs PaymentConfig[]
+  // Team: memberships this host owns, and memberships granting this host access elsewhere.
+  ownedMemberships TeamMember[] @relation("OwnedMemberships")
+  memberships      TeamMember[] @relation("Memberships")
   createdAt    DateTime        @default(now())
   updatedAt    DateTime        @updatedAt
+}
+
+enum TeamRole {
+  MANAGER // full access to the owner's events (edit, publish, scan, attendees)
+  STAFF // door staff: scan + view attendees only
+}
+
+// Grants another user (by email) access to an owner host's events.
+model TeamMember {
+  id          String   @id @default(cuid())
+  ownerId     String
+  owner       Host     @relation("OwnedMemberships", fields: [ownerId], references: [id], onDelete: Cascade)
+  memberEmail String
+  memberId    String? // linked to a Host once that email signs up / exists
+  member      Host?    @relation("Memberships", fields: [memberId], references: [id], onDelete: SetNull)
+  role        TeamRole @default(STAFF)
+  createdAt   DateTime @default(now())
+
+  @@unique([ownerId, memberEmail])
+  @@index([memberId])
 }
 
 // ─────────────────────────── Events ───────────────────────────
@@ -56,6 +79,8 @@ model Event {
   ticketTypes TicketType[]
   orders      Order[]
   landingPage LandingPage?
+  // Set when the pre-event reminder email batch has been sent (cron idempotency).
+  reminderSentAt DateTime?
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 

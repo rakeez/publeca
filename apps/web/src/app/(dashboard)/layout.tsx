@@ -8,7 +8,7 @@ const nav = [
   { href: "/app/scan", label: "Scan tickets" },
   { href: "/app/attendees", label: "Attendees" },
   { href: "/app/payments", label: "Payments" },
-  { href: "/app/settings", label: "Settings" },
+  { href: "/app/team", label: "Team" },
 ];
 
 export default async function DashboardLayout({
