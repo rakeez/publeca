@@ -1,5 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="112" fill="#635bff"/>
-  <text x="50%" y="50%" dy="0.35em" text-anchor="middle"
-        font-family="system-ui, sans-serif" font-size="300" font-weight="700" fill="#fff">P</text>
+  <rect width="512" height="512" rx="115" fill="#ff0066"/>
+  <defs>
+    <mask id="counter">
+      <rect width="512" height="512" fill="white"/>
+      <g transform="translate(305 195) rotate(-38)">
+        <path d="M0 -64 C 40 -64 60 -23 53 20 C 47 53 20 76 0 86 C -20 76 -47 53 -53 20 C -60 -23 -40 -64 0 -64 Z" fill="black"/>
+      </g>
+    </mask>
+  </defs>
+  <g mask="url(#counter)" fill="#ffffff">
+    <rect x="158" y="120" width="112" height="300" rx="56"/>
+    <circle cx="300" cy="198" r="150"/>
+  </g>
 </svg>

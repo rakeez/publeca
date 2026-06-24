@@ -1,30 +1,21 @@
 import Link from "next/link";
+import { SERVICES } from "@/lib/marketing-content";
+import { WhatsAppButton } from "@/components/whatsapp";
 
-const features = [
-  {
-    title: "Custom event landing pages",
-    body: "Every host gets a polished, conversion-optimized page. Swap images, video, and copy — keep the structure that sells.",
-  },
-  {
-    title: "Local payments + BNPL",
-    body: "Accept payments through PayHere out of the box, add BNPL like Koko and Mintpay, and bring your own merchant keys.",
-  },
-  {
-    title: "QR tickets & door scanning",
-    body: "Buyers get a QR ticket by email. Scan it from your phone at the door and mark attendees in real time.",
-  },
-  {
-    title: "Built-in ad tracking",
-    body: "Drop in your Meta Pixel and Google Ads IDs per event. Paid buyers fire as conversions — server-side, accurate.",
-  },
-  {
-    title: "No double-bookings, ever",
-    body: "Atomic inventory and time-boxed holds mean the last seat sells exactly once, even under a rush.",
-  },
-  {
-    title: "One dashboard",
-    body: "Events, ticket types, orders, attendees, and check-in stats — all in one admin built for hosts.",
-  },
+const journey = [
+  { step: "Promote", text: "Meta & Google ads, influencers and a campaign built to fill the room." },
+  { step: "Create", text: "Scroll-stopping creative, reels and key visuals that make people care." },
+  { step: "Sell", text: "Custom event pages, local payments and BNPL, QR e-tickets." },
+  { step: "Capture", text: "Photography and videography that fuel your next event." },
+  { step: "Grow", text: "Conversion tracking and reporting so every rupee is measured." },
+];
+
+const steps = [
+  { n: "01", title: "Plan", body: "We learn your event and build the go-to-market — audience, message, channels and timeline." },
+  { n: "02", title: "Promote", body: "Ads, creative and content go live, tuned daily to lower your cost per ticket." },
+  { n: "03", title: "Sell", body: "Buyers land on a page built to convert and pay by card or BNPL. Tickets arrive instantly." },
+  { n: "04", title: "Host", body: "Scan guests in at the door from your phone. Watch attendance live." },
+  { n: "05", title: "Measure", body: "Clear reporting on spend, sales and conversions — and content for next time." },
 ];
 
 export default function HomePage() {
@@ -33,102 +24,245 @@ export default function HomePage() {
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div
-          className="absolute inset-0 -z-10 opacity-90"
+          className="absolute inset-0 -z-10"
           style={{
             background:
-              "radial-gradient(1200px 600px at 80% -10%, #e0e3ff 0%, transparent 50%), radial-gradient(900px 500px at 0% 0%, #d7f5ec 0%, transparent 45%)",
+              "radial-gradient(1100px 520px at 78% -8%, #ffd9e8 0%, transparent 55%), radial-gradient(820px 460px at -5% 5%, #fff0f6 0%, transparent 50%)",
           }}
         />
         <div className="mx-auto max-w-6xl px-6 pb-24 pt-20 md:pt-28">
-          <p className="mb-4 inline-block rounded-full border border-brand-200 bg-white/60 px-3 py-1 text-xs font-semibold text-brand-700">
-            Built for event hosts in Sri Lanka 🇱🇰 and beyond
+          <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-brand-100 bg-white/70 px-3.5 py-1.5 text-xs font-semibold text-brand-700">
+            <span className="h-1.5 w-1.5 rounded-full bg-brand-500" />
+            Sri Lanka's full-service event growth partner
           </p>
-          <h1 className="max-w-3xl text-5xl font-bold leading-[1.05] tracking-tight text-slate-900 md:text-7xl">
-            Sell tickets.
+          <h1 className="font-display max-w-4xl text-5xl font-bold leading-[1.04] text-slate-900 md:text-7xl">
+            We promote, sell out,
             <br />
-            <span className="bg-gradient-to-r from-brand-600 to-emerald-500 bg-clip-text text-transparent">
-              Host unforgettable events.
+            and run your{" "}
+            <span className="bg-gradient-to-r from-brand-500 to-rose-400 bg-clip-text text-transparent">
+              events.
             </span>
           </h1>
-          <p className="mt-6 max-w-xl text-lg text-slate-600">
-            Publeca gives you a beautiful landing page, local payments and BNPL, QR
-            tickets, and ad conversion tracking — everything you need to fill the room.
+          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-slate-600">
+            From the first ad to the final scan at the door — Meta &amp; Google ads, creative,
+            photography and videography, ticketing and check-in. Let us handle it all, or
+            self-serve with our platform. You choose.
           </p>
-          <div className="mt-8 flex flex-wrap gap-4">
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <WhatsAppButton className="px-6 py-3 text-base">Contact now</WhatsAppButton>
             <Link
               href="/signup"
               className="rounded-full bg-brand-500 px-6 py-3 text-base font-semibold text-white shadow-lg shadow-brand-500/20 transition hover:bg-brand-600"
             >
-              Create your event
+              Explore the platform
             </Link>
-            <a
-              href="#features"
+            <Link
+              href="/services"
               className="rounded-full border border-slate-200 bg-white px-6 py-3 text-base font-semibold text-slate-700 transition hover:border-slate-300"
             >
-              See how it works
-            </a>
+              Our services
+            </Link>
+          </div>
+          <p className="mt-6 text-sm text-slate-400">
+            Done-for-you event marketing · or a self-serve ticketing platform · all in one place.
+          </p>
+        </div>
+      </section>
+
+      {/* Journey strip */}
+      <section className="border-y border-slate-100 bg-slate-50">
+        <div className="mx-auto max-w-6xl px-6 py-14">
+          <h2 className="font-display text-sm font-semibold uppercase tracking-wider text-brand-600">
+            The whole journey, handled
+          </h2>
+          <div className="mt-6 grid gap-px overflow-hidden rounded-2xl border border-slate-200 bg-slate-200 sm:grid-cols-2 lg:grid-cols-5">
+            {journey.map((j) => (
+              <div key={j.step} className="bg-white p-5">
+                <p className="font-display text-lg font-bold text-slate-900">{j.step}</p>
+                <p className="mt-2 text-sm leading-relaxed text-slate-500">{j.text}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Features */}
-      <section id="features" className="mx-auto max-w-6xl px-6 py-20">
-        <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-          Everything to run a paid event
-        </h2>
-        <p className="mt-3 max-w-2xl text-slate-600">
-          From the first ad click to the door scan, Publeca handles the whole journey.
-        </p>
-        <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {features.map((f) => (
-            <div
-              key={f.title}
-              className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition hover:shadow-md"
+      {/* Services */}
+      <section className="mx-auto max-w-6xl px-6 py-20">
+        <div className="max-w-2xl">
+          <h2 className="font-display text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
+            One team for everything your event needs
+          </h2>
+          <p className="mt-3 text-slate-600">
+            Pick the pieces you want. Hand us the whole thing, or just use the platform —
+            it's the same crew either way.
+          </p>
+        </div>
+        <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {SERVICES.map((s) => (
+            <Link
+              key={s.slug}
+              href={`/services/${s.slug}`}
+              className="group rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-brand-100 hover:shadow-md"
             >
-              <h3 className="text-lg font-semibold text-slate-900">{f.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate-600">{f.body}</p>
-            </div>
+              <p className="font-display text-lg font-semibold text-slate-900">{s.name}</p>
+              <p className="mt-1 text-sm font-medium text-brand-600">{s.tagline}</p>
+              <p className="mt-3 text-sm leading-relaxed text-slate-500">{s.summary}</p>
+              <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-slate-900 transition group-hover:text-brand-600">
+                Learn more →
+              </span>
+            </Link>
           ))}
         </div>
       </section>
 
-      {/* Payments band */}
-      <section id="payments" className="bg-slate-900 py-20 text-white">
+      {/* How it works */}
+      <section id="how-it-works" className="bg-slate-900 py-20 text-white">
         <div className="mx-auto max-w-6xl px-6">
-          <h2 className="text-3xl font-bold tracking-tight md:text-4xl">
-            Get paid the way your audience pays
+          <h2 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
+            How we sell out your event
           </h2>
           <p className="mt-3 max-w-2xl text-slate-300">
-            Start with PayHere, add Buy-Now-Pay-Later, and plug in more gateways as you
-            grow. Hosts connect their own merchant accounts — funds go straight to you.
+            A system, not a scramble. Here's how a Publeca campaign runs from kickoff to
+            the morning after.
           </p>
-          <div className="mt-10 flex flex-wrap gap-3">
-            {["PayHere", "Koko (BNPL)", "Mintpay (BNPL)", "WebXPay", "OnePay", "More soon"].map(
-              (p) => (
-                <span
-                  key={p}
-                  className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium"
-                >
-                  {p}
-                </span>
-              )
-            )}
+          <div className="mt-12 grid gap-6 md:grid-cols-3 lg:grid-cols-5">
+            {steps.map((s) => (
+              <div key={s.n} className="rounded-2xl border border-white/10 bg-white/5 p-6">
+                <span className="font-display text-2xl font-bold text-brand-400">{s.n}</span>
+                <p className="mt-3 text-lg font-semibold">{s.title}</p>
+                <p className="mt-2 text-sm leading-relaxed text-slate-300">{s.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Platform / self-serve */}
+      <section id="platform" className="mx-auto max-w-6xl px-6 py-20">
+        <div className="grid items-center gap-12 lg:grid-cols-2">
+          <div>
+            <p className="font-display text-sm font-semibold uppercase tracking-wider text-brand-600">
+              Prefer to run it yourself?
+            </p>
+            <h2 className="font-display mt-3 text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
+              A ticketing platform you can launch in minutes
+            </h2>
+            <p className="mt-4 text-slate-600">
+              Everything you need to sell and run an event yourself — no developer, no
+              spreadsheets, no chasing payments.
+            </p>
+            <ul className="mt-6 space-y-3">
+              {[
+                "Customizable event pages with your images, video and copy",
+                "Local payments (PayHere) and BNPL (Koko, Mintpay) — your own merchant accounts",
+                "QR e-tickets emailed instantly, with door scanning from your phone",
+                "Meta & Google conversion tracking installed per event, no code",
+              ].map((f) => (
+                <li key={f} className="flex gap-3 text-slate-700">
+                  <span className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-100 text-xs font-bold text-brand-600">
+                    ✓
+                  </span>
+                  <span className="text-sm leading-relaxed">{f}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                href="/signup"
+                className="rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-600"
+              >
+                Start free
+              </Link>
+              <Link
+                href="/services/ticketing-platform"
+                className="rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300"
+              >
+                See the platform
+              </Link>
+            </div>
+          </div>
+
+          {/* Decorative product card */}
+          <div className="relative">
+            <div
+              className="absolute inset-0 -z-10 rounded-3xl opacity-70"
+              style={{ background: "radial-gradient(420px 300px at 70% 20%, #ffd9e8, transparent 70%)" }}
+            />
+            <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-xl shadow-slate-200/60">
+              <div className="h-40 rounded-2xl bg-gradient-to-br from-brand-500 to-rose-400" />
+              <div className="mt-4 space-y-3">
+                <div className="h-3 w-2/3 rounded-full bg-slate-100" />
+                <div className="h-3 w-1/2 rounded-full bg-slate-100" />
+                <div className="flex items-center justify-between rounded-xl border border-slate-100 p-3">
+                  <div className="space-y-1.5">
+                    <div className="h-2.5 w-24 rounded-full bg-slate-200" />
+                    <div className="h-2.5 w-16 rounded-full bg-slate-100" />
+                  </div>
+                  <div className="rounded-full bg-brand-500 px-4 py-1.5 text-xs font-semibold text-white">
+                    Buy
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-slate-400">
+                  <span className="rounded-full bg-violet-100 px-2 py-0.5 font-medium text-violet-700">
+                    BNPL
+                  </span>
+                  <span className="rounded-full bg-sky-100 px-2 py-0.5 font-medium text-sky-700">
+                    PayHere
+                  </span>
+                  <span className="rounded-full bg-emerald-100 px-2 py-0.5 font-medium text-emerald-700">
+                    QR ticket
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Two paths */}
+      <section className="border-y border-slate-100 bg-slate-50">
+        <div className="mx-auto grid max-w-6xl gap-6 px-6 py-16 md:grid-cols-2">
+          <div className="rounded-2xl border border-slate-200 bg-white p-8">
+            <h3 className="font-display text-xl font-bold text-slate-900">Done for you</h3>
+            <p className="mt-2 text-sm leading-relaxed text-slate-600">
+              Hand us the event. We plan the campaign, run the ads, make the creative, shoot
+              the photos and video, and sell the tickets — you just show up and host.
+            </p>
+            <WhatsAppButton className="mt-6">Talk to our team</WhatsAppButton>
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-white p-8">
+            <h3 className="font-display text-xl font-bold text-slate-900">Self-serve</h3>
+            <p className="mt-2 text-sm leading-relaxed text-slate-600">
+              Run it yourself on our platform — event page, payments, BNPL, QR tickets and
+              door check-in. Add tracking in a click. Upgrade to done-for-you anytime.
+            </p>
+            <Link
+              href="/signup"
+              className="mt-6 inline-block rounded-full bg-brand-500 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-600"
+            >
+              Create your event
+            </Link>
           </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section id="pricing" className="mx-auto max-w-6xl px-6 py-24 text-center">
-        <h2 className="text-4xl font-bold tracking-tight">Ready to sell your first ticket?</h2>
+      <section className="mx-auto max-w-6xl px-6 py-24 text-center">
+        <h2 className="font-display text-4xl font-bold tracking-tight text-slate-900">
+          Let's fill your next event
+        </h2>
         <p className="mx-auto mt-3 max-w-xl text-slate-600">
-          Create a host account, set up your event, and share your landing page in minutes.
+          Tell us what you're planning. We'll come back with a plan to sell it out.
         </p>
-        <Link
-          href="/signup"
-          className="mt-8 inline-block rounded-full bg-brand-500 px-8 py-4 text-base font-semibold text-white shadow-lg shadow-brand-500/20 transition hover:bg-brand-600"
-        >
-          Start free
-        </Link>
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <WhatsAppButton className="px-7 py-3.5 text-base">Contact now</WhatsAppButton>
+          <Link
+            href="/signup"
+            className="rounded-full bg-brand-500 px-7 py-3.5 text-base font-semibold text-white shadow-lg shadow-brand-500/20 transition hover:bg-brand-600"
+          >
+            Start free
+          </Link>
+        </div>
       </section>
     </main>
   );
