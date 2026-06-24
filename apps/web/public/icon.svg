@@ -1,15 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="115" fill="#ff0066"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
   <defs>
     <mask id="counter">
-      <rect width="512" height="512" fill="white"/>
-      <g transform="translate(305 195) rotate(-38)">
-        <path d="M0 -64 C 40 -64 60 -23 53 20 C 47 53 20 76 0 86 C -20 76 -47 53 -53 20 C -60 -23 -40 -64 0 -64 Z" fill="black"/>
+      <rect width="1000" height="1000" fill="white"/>
+      <g transform="translate(610 340) rotate(-32)">
+        <path d="M0 -165 C 104 -165 165 -62 140 60 C 124 142 64 202 0 226 C -64 202 -124 142 -140 60 C -165 -62 -104 -165 0 -165 Z" fill="black"/>
       </g>
     </mask>
   </defs>
-  <g mask="url(#counter)" fill="#ffffff">
-    <rect x="158" y="120" width="112" height="300" rx="56"/>
-    <circle cx="300" cy="198" r="150"/>
+  <g mask="url(#counter)" fill="#635bff">
+    <path d="M455 175 C 415 340 430 470 445 575 C 462 700 420 825 305 880" fill="none" stroke="#635bff" stroke-width="250" stroke-linecap="round" stroke-linejoin="round"/>
+    <ellipse cx="600" cy="320" rx="295" ry="280" transform="rotate(-6 600 320)"/>
   </g>
 </svg>

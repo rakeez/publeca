@@ -45,7 +45,7 @@ export default async function LandingEditorPage({
           action={upsertLandingPage.bind(null, id)}
           slug={event.slug}
           defaults={{
-            accent: theme.accent ?? "#ff0066",
+            accent: theme.accent ?? "#635bff",
             tagline: copy.tagline ?? "",
             aboutHeading: copy.aboutHeading ?? "",
             aboutBody: copy.aboutBody ?? "",

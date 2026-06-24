@@ -24,7 +24,7 @@ export async function upsertLandingPage(
     return typeof v === "string" && v.trim() ? v.trim() : null;
   };
 
-  const theme = { accent: str("accent") ?? "#ff0066" };
+  const theme = { accent: str("accent") ?? "#635bff" };
   const copyBlocks = {
     tagline: str("tagline"),
     aboutHeading: str("aboutHeading"),

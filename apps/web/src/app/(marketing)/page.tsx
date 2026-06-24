@@ -27,7 +27,7 @@ export default function HomePage() {
           className="absolute inset-0 -z-10"
           style={{
             background:
-              "radial-gradient(1100px 520px at 78% -8%, #ffd9e8 0%, transparent 55%), radial-gradient(820px 460px at -5% 5%, #fff0f6 0%, transparent 50%)",
+              "radial-gradient(1100px 520px at 78% -8%, #e0e3ff 0%, transparent 55%), radial-gradient(820px 460px at -5% 5%, #d7f5ec 0%, transparent 50%)",
           }}
         />
         <div className="mx-auto max-w-6xl px-6 pb-24 pt-20 md:pt-28">
@@ -39,7 +39,7 @@ export default function HomePage() {
             We promote, sell out,
             <br />
             and run your{" "}
-            <span className="bg-gradient-to-r from-brand-500 to-rose-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-brand-600 to-emerald-500 bg-clip-text text-transparent">
               events.
             </span>
           </h1>
@@ -186,23 +186,29 @@ export default function HomePage() {
           <div className="relative">
             <div
               className="absolute inset-0 -z-10 rounded-3xl opacity-70"
-              style={{ background: "radial-gradient(420px 300px at 70% 20%, #ffd9e8, transparent 70%)" }}
+              style={{ background: "radial-gradient(420px 300px at 70% 20%, #e0e3ff, transparent 70%)" }}
             />
             <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-xl shadow-slate-200/60">
-              <div className="h-40 rounded-2xl bg-gradient-to-br from-brand-500 to-rose-400" />
-              <div className="mt-4 space-y-3">
-                <div className="h-3 w-2/3 rounded-full bg-slate-100" />
-                <div className="h-3 w-1/2 rounded-full bg-slate-100" />
-                <div className="flex items-center justify-between rounded-xl border border-slate-100 p-3">
-                  <div className="space-y-1.5">
-                    <div className="h-2.5 w-24 rounded-full bg-slate-200" />
-                    <div className="h-2.5 w-16 rounded-full bg-slate-100" />
+              {/* event hero */}
+              <div className="relative flex h-40 items-end overflow-hidden rounded-2xl bg-gradient-to-br from-brand-600 to-emerald-500 p-4">
+                <span className="absolute right-3 top-3 rounded-full bg-white/20 px-2.5 py-1 text-[11px] font-semibold text-white backdrop-blur">
+                  Live
+                </span>
+                <p className="text-lg font-bold text-white drop-shadow-sm">Neon Nights — Colombo</p>
+              </div>
+              {/* event details */}
+              <div className="mt-4">
+                <p className="text-sm text-slate-500">Saturday 12 Sep · 8:00 PM · Arena Colombo</p>
+                <div className="mt-3 flex items-center justify-between rounded-xl border border-slate-100 p-3">
+                  <div>
+                    <p className="text-sm font-semibold text-slate-900">General Admission</p>
+                    <p className="text-xs text-slate-500">LKR 2,500 · 38 left</p>
                   </div>
                   <div className="rounded-full bg-brand-500 px-4 py-1.5 text-xs font-semibold text-white">
                     Buy
                   </div>
                 </div>
-                <div className="flex items-center gap-2 text-xs text-slate-400">
+                <div className="mt-3 flex items-center gap-2 text-xs">
                   <span className="rounded-full bg-violet-100 px-2 py-0.5 font-medium text-violet-700">
                     BNPL
                   </span>

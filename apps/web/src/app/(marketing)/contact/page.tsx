@@ -14,7 +14,7 @@ export default function ContactPage() {
       <section className="relative overflow-hidden">
         <div
           className="absolute inset-0 -z-10"
-          style={{ background: "radial-gradient(900px 420px at 80% -10%, #ffd9e8 0%, transparent 55%)" }}
+          style={{ background: "radial-gradient(900px 420px at 80% -10%, #e0e3ff 0%, transparent 55%)" }}
         />
         <div className="mx-auto max-w-3xl px-6 py-20 text-center">
           <h1 className="font-display text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">

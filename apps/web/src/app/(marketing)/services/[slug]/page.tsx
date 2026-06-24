@@ -36,7 +36,7 @@ export default async function ServiceDetailPage({
       <section className="relative overflow-hidden border-b border-slate-100">
         <div
           className="absolute inset-0 -z-10"
-          style={{ background: "radial-gradient(900px 420px at 80% -10%, #ffd9e8 0%, transparent 55%)" }}
+          style={{ background: "radial-gradient(900px 420px at 80% -10%, #e0e3ff 0%, transparent 55%)" }}
         />
         <div className="mx-auto max-w-4xl px-6 py-16">
           <Link href="/services" className="text-sm font-medium text-slate-500 hover:text-slate-900">
