@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useRef } from "react";
 import { startCheckout, type CheckoutState } from "./actions";
 
 type Method = { id: string; label: string; kind: "card" | "bnpl" };
@@ -15,6 +15,29 @@ export function CheckoutForm({
   const [state, action, pending] = useActionState(startCheckout, {
     error: null,
   } as CheckoutState);
+  const redirectRef = useRef<HTMLFormElement>(null);
+
+  // As soon as the action returns the gateway form, post straight to it — no extra
+  // page load between "Pay" and the payment provider.
+  useEffect(() => {
+    if (state?.redirect && redirectRef.current) redirectRef.current.submit();
+  }, [state]);
+
+  const redirecting = !!state?.redirect;
+
+  if (redirecting && state.redirect) {
+    return (
+      <div className="flex flex-col items-center gap-3 py-6 text-center">
+        <span className="h-8 w-8 animate-spin rounded-full border-2 border-brand-200 border-t-brand-500" />
+        <p className="text-sm text-slate-600">Redirecting to secure payment…</p>
+        <form ref={redirectRef} method={state.redirect.method} action={state.redirect.actionUrl} className="hidden">
+          {Object.entries(state.redirect.fields).map(([k, v]) => (
+            <input key={k} type="hidden" name={k} value={v} />
+          ))}
+        </form>
+      </div>
+    );
+  }
 
   return (
     <form action={action} className="space-y-4">

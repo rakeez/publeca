@@ -14,10 +14,30 @@ const eventSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
   description: z.string().optional(),
   venue: z.string().optional(),
+  venueLat: z.string().optional(),
+  venueLng: z.string().optional(),
+  placeId: z.string().optional(),
+  mapsUrl: z.string().optional(),
   startsAt: z.string().min(1, "Start date/time is required"),
   endsAt: z.string().optional(),
   currency: z.string().default("LKR"),
 });
+
+function toNum(v?: string | null): number | null {
+  if (!v) return null;
+  const n = Number(v);
+  return isNaN(n) ? null : n;
+}
+
+function venueFields(data: z.infer<typeof eventSchema>) {
+  return {
+    venue: data.venue || null,
+    venueLat: toNum(data.venueLat),
+    venueLng: toNum(data.venueLng),
+    placeId: data.placeId || null,
+    mapsUrl: data.mapsUrl || null,
+  };
+}
 
 function toDate(value?: string | null): Date | null {
   if (!value) return null;
@@ -50,7 +70,7 @@ export async function createEvent(_prev: ActionState, formData: FormData): Promi
       slug,
       title: data.title,
       description: data.description || null,
-      venue: data.venue || null,
+      ...venueFields(data),
       startsAt,
       endsAt: toDate(data.endsAt),
       currency: data.currency || "LKR",
@@ -82,7 +102,7 @@ export async function updateEvent(
     data: {
       title: data.title,
       description: data.description || null,
-      venue: data.venue || null,
+      ...venueFields(data),
       startsAt,
       endsAt: toDate(data.endsAt),
       currency: data.currency || "LKR",

@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import { prisma } from "@publeca/db";
+import { prisma, confirmReservation } from "@publeca/db";
 import { signTicketToken } from "@publeca/tickets";
 import { sendTicketEmail } from "./email";
 import { sendMetaPurchase } from "./meta-capi";
@@ -29,10 +29,8 @@ export async function issueTicketsForOrder(orderId: string, providerRef: string)
 
   const created = [];
   for (const res of reservations) {
-    await prisma.reservation.update({
-      where: { id: res.id },
-      data: { status: "CONVERTED" },
-    });
+    // Mark hold CONVERTED and add its seats to confirmed sales (quantitySold).
+    await confirmReservation(res.id);
 
     for (let i = 0; i < res.quantity; i++) {
       const id = randomUUID();

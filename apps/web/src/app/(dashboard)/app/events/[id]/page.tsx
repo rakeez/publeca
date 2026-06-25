@@ -62,6 +62,12 @@ export default async function EventDetailPage({
             Orders
           </Link>
           <Link
+            href={`/app/events/${event.id}/seating`}
+            className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300"
+          >
+            Seating
+          </Link>
+          <Link
             href={`/app/events/${event.id}/landing`}
             className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300"
           >
@@ -174,6 +180,10 @@ export default async function EventDetailPage({
               title: event.title,
               description: event.description ?? "",
               venue: event.venue ?? "",
+              venueLat: event.venueLat != null ? String(event.venueLat) : "",
+              venueLng: event.venueLng != null ? String(event.venueLng) : "",
+              placeId: event.placeId ?? "",
+              mapsUrl: event.mapsUrl ?? "",
               startsAt: toLocalInput(event.startsAt),
               endsAt: toLocalInput(event.endsAt),
               currency: event.currency,

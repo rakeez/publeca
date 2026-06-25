@@ -23,12 +23,38 @@ export async function upsertLandingPage(
     const v = formData.get(k);
     return typeof v === "string" && v.trim() ? v.trim() : null;
   };
+  const lines = (k: string) =>
+    (str(k) ?? "")
+      .split("\n")
+      .map((l) => l.trim())
+      .filter(Boolean);
 
   const theme = { accent: str("accent") ?? "#635bff" };
+
+  const gallery = ["gallery0", "gallery1", "gallery2", "gallery3"]
+    .map((k) => str(k))
+    .filter((v): v is string => !!v);
+
+  const faq = lines("faq")
+    .map((line) => {
+      const [q, ...a] = line.split("::");
+      return { q: (q ?? "").trim(), a: a.join("::").trim() };
+    })
+    .filter((f) => f.q && f.a);
+
   const copyBlocks = {
     tagline: str("tagline"),
     aboutHeading: str("aboutHeading"),
     aboutBody: str("aboutBody"),
+    doorsOpen: str("doorsOpen"),
+    highlights: lines("highlights"),
+    gallery,
+    faq,
+    socials: {
+      instagram: str("instagram"),
+      facebook: str("facebook"),
+      website: str("website"),
+    },
   };
 
   const data = {

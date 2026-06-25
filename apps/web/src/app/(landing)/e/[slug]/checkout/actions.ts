@@ -1,10 +1,9 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { z } from "zod";
 import { prisma, holdSeats, releaseReservation, SoldOutError } from "@publeca/db";
-import type { ProviderId } from "@publeca/payments";
-import { enabledProvidersForHost } from "@/lib/payment-config";
+import { getProvider, type ProviderId } from "@publeca/payments";
+import { enabledProvidersForHost, resolveCreds } from "@/lib/payment-config";
 
 const buyerSchema = z.object({
   ticketTypeId: z.string().min(1),
@@ -15,7 +14,10 @@ const buyerSchema = z.object({
   phone: z.string().optional(),
 });
 
-export type CheckoutState = { error: string | null };
+export type CheckoutState = {
+  error: string | null;
+  redirect?: { method: "POST" | "GET"; actionUrl: string; fields: Record<string, string> };
+};
 
 export async function startCheckout(
   _prev: CheckoutState,
@@ -33,7 +35,6 @@ export async function startCheckout(
   if (!tt || tt.event.status !== "LIVE") return { error: "This ticket is not on sale." };
   if (tt.salesEnd && tt.salesEnd < new Date()) return { error: "Sales have closed." };
 
-  // Validate the chosen payment method against what this host actually offers.
   const available = await enabledProvidersForHost(tt.event.hostId);
   if (available.length === 0) return { error: "Payments aren't set up for this event yet." };
   const provider: ProviderId =
@@ -41,7 +42,11 @@ export async function startCheckout(
       ? (parsed.data.provider as ProviderId)
       : available[0]!;
 
-  // Reserve the seat (atomic; throws if sold out), then create the pending order.
+  const creds = await resolveCreds(tt.event.hostId, provider);
+  if (!creds) return { error: "This payment method isn't available right now." };
+
+  // Reserve the seat (atomic; throws if sold out), then create the pending order and
+  // build the gateway checkout in one shot so the client can redirect immediately.
   let reservationId: string | null = null;
   try {
     const reservation = await holdSeats(ticketTypeId, 1);
@@ -58,20 +63,32 @@ export async function startCheckout(
         provider,
       },
     });
-
     await prisma.reservation.update({
       where: { id: reservation.id },
       data: { orderId: order.id },
     });
 
-    // Stash phone on the order via a side table later; for now redirect to pay.
-    redirect(`/pay/${order.id}?phone=${encodeURIComponent(phone ?? "")}`);
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+    const checkout = getProvider(provider).createCheckout(
+      {
+        orderId: order.id,
+        amount: Number(order.amount),
+        currency: order.currency,
+        itemsDescription: `${tt.event.title} — ${tt.name}`,
+        customer: { firstName, lastName, email, phone: phone ?? "" },
+        returnUrl: `${appUrl}/pay/return?order=${order.id}`,
+        cancelUrl: `${appUrl}/e/${tt.event.slug}`,
+        notifyUrl: `${appUrl}/api/payments/${provider}/notify`,
+      },
+      creds
+    );
+
+    return { error: null, redirect: checkout };
   } catch (e) {
     if (e instanceof SoldOutError) {
       if (reservationId) await releaseReservation(reservationId);
       return { error: "Sorry — that ticket just sold out." };
     }
-    // redirect() throws a control-flow signal; re-throw so Next handles it.
     throw e;
   }
 }

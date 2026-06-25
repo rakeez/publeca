@@ -30,6 +30,8 @@ export default function HomePage() {
               "radial-gradient(1100px 520px at 78% -8%, #ffd9e8 0%, transparent 55%), radial-gradient(820px 460px at -5% 5%, #e0e3ff 0%, transparent 50%)",
           }}
         />
+        {/* Stripe-style angled gradient ribbon */}
+        <div className="absolute -top-28 right-0 -z-10 h-80 w-full -skew-y-6 bg-gradient-to-r from-brand-500/10 via-accent-500/10 to-transparent" />
         <div className="mx-auto max-w-6xl px-6 pb-24 pt-20 md:pt-28">
           <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-brand-100 bg-white/70 px-3.5 py-1.5 text-xs font-semibold text-brand-700">
             <span className="h-1.5 w-1.5 rounded-full bg-brand-500" />

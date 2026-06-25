@@ -1,22 +1,22 @@
 import { prisma } from "./index";
 
 /**
- * Oversell prevention.
+ * Oversell prevention — corrected accounting.
  *
- * The only safe way to reserve inventory under concurrency is an atomic,
- * conditional write enforced by the database — never read-then-write in app code.
+ *   quantitySold  = CONFIRMED (paid) seats only.
+ *   active holds  = HELD reservations whose expiry is in the future.
+ *   availability  = quantityTotal - quantitySold - activeHolds.
  *
- * `holdSeats` does two things in a single transaction:
- *   1. Atomically increments quantitySold ONLY if enough capacity remains, after
- *      accounting for live (unexpired) holds. The conditional UPDATE returns 0 rows
- *      when sold out, so two simultaneous buyers can never both win the last seat.
- *   2. Creates a time-boxed Reservation that expires if the buyer abandons checkout.
+ * A hold no longer touches quantitySold, so an abandoned/expired checkout never
+ * leaves a seat marked as sold — the hold simply ages out of `activeHolds`.
  *
- * A CHECK (quantitySold <= quantityTotal) constraint (added in migration SQL) is the
- * hard backstop: even a logic bug elsewhere physically cannot oversell.
+ * Concurrency safety: holdSeats locks the TicketType row (SELECT ... FOR UPDATE)
+ * for the duration of the transaction, so two simultaneous buyers can't both pass
+ * the availability check for the last seat. The CHECK (quantitySold <= quantityTotal)
+ * constraint is the final backstop on confirmed sales.
  */
 
-const HOLD_TTL_MINUTES = 10;
+const HOLD_TTL_MINUTES = 12;
 
 export class SoldOutError extends Error {
   constructor() {
@@ -29,26 +29,25 @@ export async function holdSeats(ticketTypeId: string, quantity: number) {
   if (quantity < 1) throw new Error("quantity must be >= 1");
 
   return prisma.$transaction(async (tx) => {
-    // Atomic conditional decrement. `quantitySold` already includes confirmed
-    // sales; live holds are added on top via the correlated subquery so two
-    // pending checkouts can't both consume the last seat.
-    const updated = await tx.$executeRaw`
-      UPDATE "TicketType" t
-      SET "quantitySold" = "quantitySold" + ${quantity}
-      WHERE t.id = ${ticketTypeId}
-        AND "quantitySold"
-            + ${quantity}
-            + COALESCE((
-                SELECT SUM(r.quantity)
-                FROM "Reservation" r
-                WHERE r."ticketTypeId" = t.id
-                  AND r.status = 'HELD'
-                  AND r."expiresAt" > now()
-              ), 0)
-            <= "quantityTotal"
+    // Lock the ticket type row so concurrent holds are serialized.
+    const locked = await tx.$queryRaw<{ quantityTotal: number; quantitySold: number }[]>`
+      SELECT "quantityTotal", "quantitySold"
+      FROM "TicketType"
+      WHERE id = ${ticketTypeId}
+      FOR UPDATE
     `;
+    const tt = locked[0];
+    if (!tt) throw new Error("Unknown ticket type");
 
-    if (updated === 0) throw new SoldOutError();
+    const held = await tx.reservation.aggregate({
+      where: { ticketTypeId, status: "HELD", expiresAt: { gt: new Date() } },
+      _sum: { quantity: true },
+    });
+    const activeHolds = held._sum.quantity ?? 0;
+
+    if (tt.quantitySold + activeHolds + quantity > tt.quantityTotal) {
+      throw new SoldOutError();
+    }
 
     const expiresAt = new Date(Date.now() + HOLD_TTL_MINUTES * 60_000);
     return tx.reservation.create({
@@ -57,37 +56,43 @@ export async function holdSeats(ticketTypeId: string, quantity: number) {
   });
 }
 
-/** Convert a hold to confirmed once payment is verified. Idempotent-friendly. */
-export async function convertReservation(reservationId: string, orderId: string) {
-  return prisma.reservation.updateMany({
-    where: { id: reservationId, status: "HELD" },
-    data: { status: "CONVERTED", orderId },
-  });
-}
-
-/** Release a single hold back to the pool (abandoned checkout / failed payment). */
-export async function releaseReservation(reservationId: string) {
+/** On verified payment: mark the hold CONVERTED and add its seats to confirmed sales. */
+export async function confirmReservation(reservationId: string) {
   return prisma.$transaction(async (tx) => {
-    const res = await tx.reservation.findUnique({ where: { id: reservationId } });
-    if (!res || res.status !== "HELD") return;
-    await tx.reservation.update({
-      where: { id: reservationId },
-      data: { status: "EXPIRED" },
-    });
+    const r = await tx.reservation.findUnique({ where: { id: reservationId } });
+    if (!r || r.status !== "HELD") return;
+    await tx.reservation.update({ where: { id: r.id }, data: { status: "CONVERTED" } });
     await tx.ticketType.update({
-      where: { id: res.ticketTypeId },
-      data: { quantitySold: { decrement: res.quantity } },
+      where: { id: r.ticketTypeId },
+      data: { quantitySold: { increment: r.quantity } },
     });
   });
 }
 
-/** Cron sweep: expire stale holds and return their seats. Run every minute. */
-export async function sweepExpiredHolds() {
-  const expired = await prisma.reservation.findMany({
-    where: { status: "HELD", expiresAt: { lt: new Date() } },
+/** Abandoned/failed checkout — just retire the hold (quantitySold was never touched). */
+export async function releaseReservation(reservationId: string) {
+  await prisma.reservation.updateMany({
+    where: { id: reservationId, status: "HELD" },
+    data: { status: "EXPIRED" },
   });
-  for (const res of expired) {
-    await releaseReservation(res.id);
-  }
-  return expired.length;
+}
+
+/** Housekeeping: flip aged-out holds to EXPIRED. Availability already ignores them. */
+export async function sweepExpiredHolds() {
+  const res = await prisma.reservation.updateMany({
+    where: { status: "HELD", expiresAt: { lt: new Date() } },
+    data: { status: "EXPIRED" },
+  });
+  return res.count;
+}
+
+/** Seats currently available for sale (confirmed + active holds subtracted). */
+export async function availableSeats(ticketTypeId: string): Promise<number> {
+  const tt = await prisma.ticketType.findUnique({ where: { id: ticketTypeId } });
+  if (!tt) return 0;
+  const held = await prisma.reservation.aggregate({
+    where: { ticketTypeId, status: "HELD", expiresAt: { gt: new Date() } },
+    _sum: { quantity: true },
+  });
+  return tt.quantityTotal - tt.quantitySold - (held._sum.quantity ?? 0);
 }

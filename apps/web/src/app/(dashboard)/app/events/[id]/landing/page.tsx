@@ -24,9 +24,10 @@ export default async function LandingEditorPage({
 
   const lp = event.landingPage;
   const theme = (lp?.theme as { accent?: string } | null) ?? {};
-  const copy =
-    (lp?.copyBlocks as { tagline?: string; aboutHeading?: string; aboutBody?: string } | null) ??
-    {};
+  const copy = (lp?.copyBlocks as Record<string, unknown> | null) ?? {};
+  const socials = (copy.socials as Record<string, string> | undefined) ?? {};
+  const gallery = (copy.gallery as string[] | undefined) ?? [];
+  const faq = (copy.faq as { q: string; a: string }[] | undefined) ?? [];
 
   return (
     <div className="max-w-2xl">
@@ -36,8 +37,7 @@ export default async function LandingEditorPage({
       <h1 className="mt-2 text-2xl font-bold tracking-tight">Landing page</h1>
       <p className="mt-1 text-slate-600">
         Customize your public event page at{" "}
-        <span className="font-mono text-slate-700">/e/{event.slug}</span>. Same structure,
-        your content.
+        <span className="font-mono text-slate-700">/e/{event.slug}</span>.
       </p>
 
       <div className="mt-8">
@@ -46,11 +46,18 @@ export default async function LandingEditorPage({
           slug={event.slug}
           defaults={{
             accent: theme.accent ?? "#635bff",
-            tagline: copy.tagline ?? "",
-            aboutHeading: copy.aboutHeading ?? "",
-            aboutBody: copy.aboutBody ?? "",
+            tagline: (copy.tagline as string) ?? "",
+            aboutHeading: (copy.aboutHeading as string) ?? "",
+            aboutBody: (copy.aboutBody as string) ?? "",
+            doorsOpen: (copy.doorsOpen as string) ?? "",
+            highlights: ((copy.highlights as string[]) ?? []).join("\n"),
+            faq: faq.map((f) => `${f.q} :: ${f.a}`).join("\n"),
+            gallery,
             heroImageUrl: lp?.heroImageUrl ?? "",
             videoUrl: lp?.videoUrl ?? "",
+            instagram: socials.instagram ?? "",
+            facebook: socials.facebook ?? "",
+            website: socials.website ?? "",
             metaPixelId: lp?.metaPixelId ?? "",
             metaCapiToken: lp?.metaCapiToken ?? "",
             googleAdsId: lp?.googleAdsId ?? "",

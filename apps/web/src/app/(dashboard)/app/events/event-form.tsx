@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { VenueInput } from "@/components/venue-input";
 
 type ActionState = { error: string | null };
 type EventAction = (prev: ActionState, formData: FormData) => Promise<ActionState>;
@@ -9,6 +10,10 @@ export type EventDefaults = {
   title?: string;
   description?: string;
   venue?: string;
+  venueLat?: string;
+  venueLng?: string;
+  placeId?: string;
+  mapsUrl?: string;
   startsAt?: string; // datetime-local value (yyyy-MM-ddTHH:mm)
   endsAt?: string;
   currency?: string;
@@ -39,7 +44,15 @@ export function EventForm({
         />
       </label>
 
-      <Field label="Venue" name="venue" defaultValue={defaults?.venue} />
+      <VenueInput
+        defaults={{
+          venue: defaults?.venue,
+          venueLat: defaults?.venueLat,
+          venueLng: defaults?.venueLng,
+          placeId: defaults?.placeId,
+          mapsUrl: defaults?.mapsUrl,
+        }}
+      />
 
       <div className="grid gap-5 sm:grid-cols-2">
         <Field
