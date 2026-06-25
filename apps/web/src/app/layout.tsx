@@ -11,11 +11,11 @@ export const metadata: Metadata = {
     "Publeca grows your event end to end — Meta & Google ads, creative, photography and videography, ticketing, and door check-in. Done for you, or self-serve with our platform.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
   manifest: "/manifest.webmanifest",
-  icons: { icon: "/icon.svg" },
+  icons: { icon: "/publeca-icon.png", apple: "/publeca-icon.png" },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#635bff",
+  themeColor: "#ff0066",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

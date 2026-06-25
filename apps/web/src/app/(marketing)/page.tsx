@@ -27,7 +27,7 @@ export default function HomePage() {
           className="absolute inset-0 -z-10"
           style={{
             background:
-              "radial-gradient(1100px 520px at 78% -8%, #e0e3ff 0%, transparent 55%), radial-gradient(820px 460px at -5% 5%, #d7f5ec 0%, transparent 50%)",
+              "radial-gradient(1100px 520px at 78% -8%, #ffd9e8 0%, transparent 55%), radial-gradient(820px 460px at -5% 5%, #e0e3ff 0%, transparent 50%)",
           }}
         />
         <div className="mx-auto max-w-6xl px-6 pb-24 pt-20 md:pt-28">
@@ -39,7 +39,7 @@ export default function HomePage() {
             We promote, sell out,
             <br />
             and run your{" "}
-            <span className="bg-gradient-to-r from-brand-600 to-emerald-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-brand-500 to-accent-500 bg-clip-text text-transparent">
               events.
             </span>
           </h1>
@@ -128,7 +128,7 @@ export default function HomePage() {
           <div className="mt-12 grid gap-6 md:grid-cols-3 lg:grid-cols-5">
             {steps.map((s) => (
               <div key={s.n} className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                <span className="font-display text-2xl font-bold text-brand-400">{s.n}</span>
+                <span className="font-display text-2xl font-bold text-accent-400">{s.n}</span>
                 <p className="mt-3 text-lg font-semibold">{s.title}</p>
                 <p className="mt-2 text-sm leading-relaxed text-slate-300">{s.body}</p>
               </div>
@@ -190,7 +190,7 @@ export default function HomePage() {
             />
             <div className="rounded-3xl border border-slate-100 bg-white p-6 shadow-xl shadow-slate-200/60">
               {/* event hero */}
-              <div className="relative flex h-40 items-end overflow-hidden rounded-2xl bg-gradient-to-br from-brand-600 to-emerald-500 p-4">
+              <div className="relative flex h-40 items-end overflow-hidden rounded-2xl bg-gradient-to-br from-brand-500 to-accent-500 p-4">
                 <span className="absolute right-3 top-3 rounded-full bg-white/20 px-2.5 py-1 text-[11px] font-semibold text-white backdrop-blur">
                   Live
                 </span>
