@@ -1,6 +1,9 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@publeca/db";
+import { getProviderMeta } from "@publeca/payments";
 import { MetaPixel, GoogleGtag } from "@/lib/tracking";
+import { enabledProvidersForHost } from "@/lib/payment-config";
+import { SeatPicker } from "./seat-picker";
 
 const MAPS_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
@@ -39,6 +42,29 @@ export default async function EventLandingPage({
   const socials = (copy.socials as Record<string, string>) ?? {};
   const blocks: Block[] = (event.seatingMap as { blocks?: Block[] } | null)?.blocks ?? [];
   const ttById = new Map(event.ticketTypes.map((t) => [t.id, t]));
+
+  // Assigned seating: load generated seats and group them into the interactive picker.
+  const seatRows = await prisma.seat.findMany({
+    where: { eventId: event.id },
+    orderBy: [{ block: "asc" }, { row: "asc" }, { num: "asc" }],
+  });
+  const now = Date.now();
+  const seatedTtIds = new Set(seatRows.map((s) => s.ticketTypeId).filter(Boolean) as string[]);
+  const pickerBlocksMap = new Map<string, { name: string; price: number; seats: { id: string; row: number; num: number; taken: boolean }[] }>();
+  for (const s of seatRows) {
+    const tt = s.ticketTypeId ? ttById.get(s.ticketTypeId) : undefined;
+    if (!tt) continue;
+    if (!pickerBlocksMap.has(s.block))
+      pickerBlocksMap.set(s.block, { name: s.block, price: Number(tt.price), seats: [] });
+    const taken = s.status === "SOLD" || (s.status === "HELD" && s.holdExpiresAt != null && s.holdExpiresAt.getTime() > now);
+    pickerBlocksMap.get(s.block)!.seats.push({ id: s.id, row: s.row, num: s.num, taken });
+  }
+  const pickerBlocks = [...pickerBlocksMap.values()];
+
+  const methods = (await enabledProvidersForHost(event.hostId))
+    .map((id) => getProviderMeta(id))
+    .filter((m): m is NonNullable<typeof m> => !!m)
+    .map((m) => ({ id: m.id, label: m.label, kind: m.kind }));
 
   const mapEmbed =
     MAPS_KEY && (event.placeId || (event.venueLat != null && event.venueLng != null))
@@ -141,40 +167,47 @@ export default async function EventLandingPage({
         </Section>
       )}
 
-      {/* Seating map */}
-      {blocks.length > 0 && (
+      {/* Assigned seating — interactive seat picker */}
+      {pickerBlocks.length > 0 && (
+        <section id="tickets" className="mx-auto max-w-3xl px-6 py-12">
+          <div className="border-t border-slate-100 pt-8">
+            <h2 className="font-display text-2xl font-bold">Choose your seats</h2>
+            <div className="mb-4 mt-3 flex justify-center">
+              <span className="rounded-full bg-slate-800 px-6 py-1 text-xs font-semibold text-white">STAGE</span>
+            </div>
+            <SeatPicker blocks={pickerBlocks} currency={event.currency} accent={accent} methods={methods} />
+          </div>
+        </section>
+      )}
+
+      {/* Static seating preview (blocks defined but no seats generated) */}
+      {pickerBlocks.length === 0 && blocks.length > 0 && (
         <Section>
           <h2 className="font-display text-2xl font-bold">Seating</h2>
-          <p className="mt-1 text-sm text-slate-500">Tap a section to grab seats.</p>
           <div className="relative mt-5 h-72 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
             <div className="absolute left-1/2 top-3 -translate-x-1/2 rounded-full bg-slate-800 px-4 py-1 text-xs font-semibold text-white">
               STAGE
             </div>
-            {blocks.map((b) => {
-              const tt = b.ticketTypeId ? ttById.get(b.ticketTypeId) : undefined;
-              const href = tt ? `/e/${event.slug}/checkout?tt=${tt.id}` : "#tickets";
-              return (
-                <a
-                  key={b.id}
-                  href={href}
-                  className="absolute flex w-28 -translate-x-1/2 -translate-y-1/2 flex-col items-center rounded-lg border-2 px-2 py-1.5 text-center text-xs transition hover:scale-105"
-                  style={{ left: `${b.x}%`, top: `${b.y}%`, borderColor: accent, backgroundColor: "#fff" }}
-                >
-                  <span className="font-semibold text-slate-900">{b.name}</span>
-                  <span className="text-slate-500">{b.rows}×{b.seats} seats</span>
-                  {tt && <span className="font-medium" style={{ color: accent }}>{event.currency} {tt.price.toString()}</span>}
-                </a>
-              );
-            })}
+            {blocks.map((b) => (
+              <div
+                key={b.id}
+                className="absolute flex w-28 -translate-x-1/2 -translate-y-1/2 flex-col items-center rounded-lg border-2 px-2 py-1.5 text-center text-xs"
+                style={{ left: `${b.x}%`, top: `${b.y}%`, borderColor: accent, backgroundColor: "#fff" }}
+              >
+                <span className="font-semibold text-slate-900">{b.name}</span>
+                <span className="text-slate-500">{b.rows}×{b.seats} seats</span>
+              </div>
+            ))}
           </div>
         </Section>
       )}
 
-      {/* Tickets */}
-      <section id="tickets" className="mx-auto max-w-3xl px-6 py-12">
+      {/* General-admission tickets (excludes seated types) */}
+      {event.ticketTypes.some((t) => !seatedTtIds.has(t.id)) && (
+      <section id={pickerBlocks.length > 0 ? undefined : "tickets"} className="mx-auto max-w-3xl px-6 py-12">
         <h2 className="font-display text-2xl font-bold">Tickets</h2>
         <div className="mt-4 space-y-3">
-          {event.ticketTypes.map((t) => {
+          {event.ticketTypes.filter((t) => !seatedTtIds.has(t.id)).map((t) => {
             const remaining = t.quantityTotal - t.quantitySold;
             const soldOut = remaining <= 0;
             return (
@@ -200,9 +233,9 @@ export default async function EventLandingPage({
               </div>
             );
           })}
-          {event.ticketTypes.length === 0 && <p className="text-sm text-slate-500">Tickets coming soon.</p>}
         </div>
       </section>
+      )}
 
       {/* Venue map */}
       {(mapEmbed || mapsLink) && (

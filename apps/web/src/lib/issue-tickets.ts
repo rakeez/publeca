@@ -22,30 +22,50 @@ export async function issueTicketsForOrder(orderId: string, providerRef: string)
     include: { event: { include: { landingPage: true } }, tickets: true },
   });
 
-  // Convert this order's holds and mint a ticket per held seat.
-  const reservations = await prisma.reservation.findMany({
-    where: { orderId, status: "HELD" },
-  });
-
   const created = [];
-  for (const res of reservations) {
-    // Mark hold CONVERTED and add its seats to confirmed sales (quantitySold).
-    await confirmReservation(res.id);
 
-    for (let i = 0; i < res.quantity; i++) {
+  // Assigned-seating order: one ticket per held seat, marked SOLD.
+  const seats = await prisma.seat.findMany({ where: { orderId: order.id, status: "HELD" } });
+
+  if (seats.length > 0) {
+    for (const seat of seats) {
+      if (!seat.ticketTypeId) continue;
       const id = randomUUID();
       const qrToken = signTicketToken({ tid: id, eid: order.eventId, v: 1 });
       const ticket = await prisma.ticket.create({
         data: {
           id,
           orderId: order.id,
-          ticketTypeId: res.ticketTypeId,
+          ticketTypeId: seat.ticketTypeId,
           attendeeName: order.buyerName,
           attendeeEmail: order.buyerEmail,
+          seatLabel: `${seat.block} · Row ${seat.row} · Seat ${seat.num}`,
           qrToken,
         },
       });
+      await prisma.seat.update({ where: { id: seat.id }, data: { status: "SOLD", ticketId: id } });
       created.push(ticket);
+    }
+  } else {
+    // General-admission order: convert holds and mint a ticket per held seat.
+    const reservations = await prisma.reservation.findMany({ where: { orderId, status: "HELD" } });
+    for (const res of reservations) {
+      await confirmReservation(res.id);
+      for (let i = 0; i < res.quantity; i++) {
+        const id = randomUUID();
+        const qrToken = signTicketToken({ tid: id, eid: order.eventId, v: 1 });
+        const ticket = await prisma.ticket.create({
+          data: {
+            id,
+            orderId: order.id,
+            ticketTypeId: res.ticketTypeId,
+            attendeeName: order.buyerName,
+            attendeeEmail: order.buyerEmail,
+            qrToken,
+          },
+        });
+        created.push(ticket);
+      }
     }
   }
 

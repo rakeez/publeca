@@ -52,6 +52,11 @@ export default async function TicketPage({
           <p>
             <span className="font-medium text-slate-900">Attendee:</span> {ticket.attendeeName}
           </p>
+          {ticket.seatLabel && (
+            <p className="mt-1">
+              <span className="font-medium text-slate-900">Seat:</span> {ticket.seatLabel}
+            </p>
+          )}
           <p className="mt-1">
             <span className="font-medium text-slate-900">When:</span> {when}
           </p>

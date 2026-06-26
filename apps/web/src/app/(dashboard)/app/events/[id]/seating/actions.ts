@@ -39,11 +39,35 @@ export async function saveSeating(
 
   const result = z.array(blockSchema).safeParse(parsed);
   if (!result.success) return { error: "Invalid seating layout" };
+  const blocks = result.data;
 
   await prisma.event.update({
     where: { id: eventId },
-    data: { seatingMap: { blocks: result.data } },
+    data: { seatingMap: { blocks } },
   });
+
+  // Regenerate seat inventory from blocks that are linked to a ticket type.
+  // SOLD seats are preserved; everything else is rebuilt to match the layout.
+  await prisma.seat.deleteMany({ where: { eventId, status: { not: "SOLD" } } });
+
+  const seatRows: {
+    eventId: string;
+    block: string;
+    row: number;
+    num: number;
+    ticketTypeId: string;
+  }[] = [];
+  for (const b of blocks) {
+    if (!b.ticketTypeId) continue;
+    for (let r = 1; r <= b.rows; r++) {
+      for (let n = 1; n <= b.seats; n++) {
+        seatRows.push({ eventId, block: b.name, row: r, num: n, ticketTypeId: b.ticketTypeId });
+      }
+    }
+  }
+  if (seatRows.length > 0) {
+    await prisma.seat.createMany({ data: seatRows, skipDuplicates: true });
+  }
 
   revalidatePath(`/app/events/${eventId}/seating`);
   revalidatePath(`/e/${event.slug}`);

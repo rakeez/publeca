@@ -38,8 +38,8 @@ export default async function EventsPage() {
           </Link>
         </div>
       ) : (
-        <div className="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white">
-          <table className="w-full text-left text-sm">
+        <div className="mt-6 overflow-x-auto rounded-xl border border-slate-200 bg-white">
+          <table className="w-full min-w-[640px] text-left text-sm">
             <thead className="border-b border-slate-200 bg-slate-50 text-slate-500">
               <tr>
                 <th className="px-4 py-3 font-medium">Event</th>

@@ -75,8 +75,8 @@ export default async function AttendeesPage({
             )}
           </div>
 
-          <div className="mt-3 overflow-hidden rounded-xl border border-slate-200 bg-white">
-            <table className="w-full text-left text-sm">
+          <div className="mt-3 overflow-x-auto rounded-xl border border-slate-200 bg-white">
+            <table className="w-full min-w-[620px] text-left text-sm">
               <thead className="border-b border-slate-200 bg-slate-50 text-slate-500">
                 <tr>
                   <th className="px-4 py-3 font-medium">Attendee</th>

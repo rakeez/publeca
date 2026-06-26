@@ -25,3 +25,11 @@ body {
   font-family: var(--font-display);
   letter-spacing: -0.02em;
 }
+
+/* Hide scrollbars on horizontal snap rows (mobile card carousels) */
+.snap-x.overflow-x-auto {
+  scrollbar-width: none;
+}
+.snap-x.overflow-x-auto::-webkit-scrollbar {
+  display: none;
+}

@@ -39,9 +39,12 @@ export default async function DashboardLayout({
         </nav>
       </aside>
 
-      <div className="flex-1">
-        <header className="flex items-center justify-between border-b border-slate-200 bg-white px-6 py-3">
-          <span className="text-sm text-slate-500">{session.user?.email}</span>
+      <div className="min-w-0 flex-1">
+        <header className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 sm:px-6">
+          <Link href="/app" aria-label="Publeca" className="md:hidden">
+            <Logo markClassName="h-6 w-6" wordClassName="text-base font-bold tracking-tight" />
+          </Link>
+          <span className="hidden truncate text-sm text-slate-500 md:block">{session.user?.email}</span>
           <form
             action={async () => {
               "use server";
@@ -53,7 +56,23 @@ export default async function DashboardLayout({
             </button>
           </form>
         </header>
-        <main className="p-6">{children}</main>
+
+        {/* Mobile nav (sidebar is hidden on small screens) */}
+        <nav className="snap-x overflow-x-auto border-b border-slate-200 bg-white px-4 py-2 md:hidden">
+          <div className="flex gap-1">
+            {nav.map((n) => (
+              <Link
+                key={n.href}
+                href={n.href}
+                className="shrink-0 snap-start rounded-full px-3 py-1.5 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+              >
+                {n.label}
+              </Link>
+            ))}
+          </div>
+        </nav>
+
+        <main className="p-4 sm:p-6">{children}</main>
       </div>
     </div>
   );

@@ -86,6 +86,15 @@ export async function sweepExpiredHolds() {
   return res.count;
 }
 
+/** Release aged-out assigned-seat holds back to AVAILABLE. */
+export async function sweepExpiredSeatHolds() {
+  const res = await prisma.seat.updateMany({
+    where: { status: "HELD", holdExpiresAt: { lt: new Date() } },
+    data: { status: "AVAILABLE", holdExpiresAt: null, orderId: null },
+  });
+  return res.count;
+}
+
 /** Seats currently available for sale (confirmed + active holds subtracted). */
 export async function availableSeats(ticketTypeId: string): Promise<number> {
   const tt = await prisma.ticketType.findUnique({ where: { id: ticketTypeId } });

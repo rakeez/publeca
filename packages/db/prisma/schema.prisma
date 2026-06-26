@@ -83,6 +83,7 @@ model Event {
   status      EventStatus  @default(DRAFT)
   ticketTypes TicketType[]
   orders      Order[]
+  seats       Seat[]
   landingPage LandingPage?
   // Optional visual seating layout: { blocks: [{ id, name, rows, seats, x, y, ticketTypeId }] }
   seatingMap  Json?
@@ -107,10 +108,39 @@ model TicketType {
   salesEnd      DateTime?
   reservations  Reservation[]
   tickets       Ticket[]
+  seats         Seat[]
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 
   @@index([eventId])
+}
+
+// One assigned seat, generated from a seating-map block. Source of truth for
+// assigned-seating inventory (general-admission types still use quantitySold).
+enum SeatStatus {
+  AVAILABLE
+  HELD
+  SOLD
+}
+
+model Seat {
+  id            String      @id @default(cuid())
+  eventId       String
+  event         Event       @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  block         String
+  row           Int
+  num           Int
+  ticketTypeId  String?
+  ticketType    TicketType? @relation(fields: [ticketTypeId], references: [id], onDelete: SetNull)
+  status        SeatStatus  @default(AVAILABLE)
+  holdExpiresAt DateTime?
+  orderId       String? // set while held/sold for an order (no FK to keep it simple)
+  ticketId      String? // the issued ticket, once sold
+  createdAt     DateTime    @default(now())
+
+  @@unique([eventId, block, row, num])
+  @@index([eventId, status])
+  @@index([orderId])
 }
 
 // Time-boxed hold created when a buyer enters checkout. Counts against
@@ -178,6 +208,8 @@ model Ticket {
   ticketType    TicketType   @relation(fields: [ticketTypeId], references: [id], onDelete: Cascade)
   attendeeName  String
   attendeeEmail String
+  // For assigned-seating tickets, the human seat label e.g. "VIP · Row 2 · Seat 5".
+  seatLabel     String?
   // Signed token embedded in the QR; verified server-side at scan time.
   qrToken       String       @unique
   status        TicketStatus @default(VALID)
