@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { prisma, holdSeats, releaseReservation, SoldOutError } from "@publeca/db";
 import { getProvider, type ProviderId } from "@publeca/payments";
-import { enabledProvidersForHost, resolveCreds } from "@/lib/payment-config";
+import { enabledProvidersForEvent, resolveCreds } from "@/lib/payment-config";
 
 const buyerSchema = z.object({
   ticketTypeId: z.string().min(1),
@@ -35,7 +35,7 @@ export async function startCheckout(
   if (!tt || tt.event.status !== "LIVE") return { error: "This ticket is not on sale." };
   if (tt.salesEnd && tt.salesEnd < new Date()) return { error: "Sales have closed." };
 
-  const available = await enabledProvidersForHost(tt.event.hostId);
+  const available = await enabledProvidersForEvent(tt.event);
   if (available.length === 0) return { error: "Payments aren't set up for this event yet." };
   const provider: ProviderId =
     parsed.data.provider && available.includes(parsed.data.provider as ProviderId)

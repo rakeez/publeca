@@ -49,7 +49,7 @@ export async function resolveCreds(
   return null;
 }
 
-/** Provider ids the buyer can pay with for this host (enabled configs + platform PayHere). */
+/** Provider ids the host has available (enabled configs + platform PayHere fallback). */
 export async function enabledProvidersForHost(hostId: string): Promise<ProviderId[]> {
   const configs = await prisma.paymentConfig.findMany({
     where: { hostId, enabled: true },
@@ -58,4 +58,18 @@ export async function enabledProvidersForHost(hostId: string): Promise<ProviderI
   const ids = new Set<ProviderId>(configs.map((c) => c.provider as ProviderId));
   if (platformPayhere()) ids.add("payhere"); // platform fallback always offers PayHere
   return [...ids];
+}
+
+/**
+ * Provider ids offered to buyers for a SPECIFIC event: the host's available methods,
+ * narrowed to the per-event selection. Empty selection = offer all of them.
+ */
+export async function enabledProvidersForEvent(event: {
+  hostId: string;
+  paymentProviders: string[];
+}): Promise<ProviderId[]> {
+  const all = await enabledProvidersForHost(event.hostId);
+  const selected = event.paymentProviders ?? [];
+  if (selected.length === 0) return all;
+  return all.filter((id) => selected.includes(id));
 }

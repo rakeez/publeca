@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@publeca/db";
 import { getProviderMeta } from "@publeca/payments";
-import { enabledProvidersForHost } from "@/lib/payment-config";
+import { enabledProvidersForEvent } from "@/lib/payment-config";
 import { CheckoutForm } from "./checkout-form";
 
 export default async function CheckoutPage({
@@ -26,7 +26,7 @@ export default async function CheckoutPage({
 
   const soldOut = ticketType.quantityTotal - ticketType.quantitySold <= 0;
 
-  const methods = (await enabledProvidersForHost(event.hostId))
+  const methods = (await enabledProvidersForEvent(event))
     .map((id) => {
       const meta = getProviderMeta(id);
       return meta ? { id: meta.id, label: meta.label, kind: meta.kind } : null;

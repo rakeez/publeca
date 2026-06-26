@@ -1,10 +1,18 @@
 import Link from "next/link";
 import { redirect, notFound } from "next/navigation";
 import { prisma } from "@publeca/db";
+import { getProviderMeta } from "@publeca/payments";
 import { getCurrentHost } from "@/lib/session";
 import { accessibleHostIds } from "@/lib/access";
+import { enabledProvidersForHost } from "@/lib/payment-config";
 import { EventForm } from "../event-form";
-import { updateEvent, addTicketType, deleteTicketType, setEventStatus } from "../actions";
+import {
+  updateEvent,
+  addTicketType,
+  deleteTicketType,
+  setEventStatus,
+  updateEventPayments,
+} from "../actions";
 
 // datetime-local wants "yyyy-MM-ddTHH:mm". (UTC slice — local-tz polish comes later.)
 function toLocalInput(d: Date | null): string {
@@ -32,6 +40,11 @@ export default async function EventDetailPage({
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "";
   const liveUrl = `${appUrl}/e/${event.slug}`;
   const canPublish = event.ticketTypes.length > 0;
+
+  // Payment methods the host can offer + which are selected for this event.
+  const availableProviders = await enabledProvidersForHost(event.hostId);
+  const selectedProviders = event.paymentProviders ?? [];
+  const offerAll = selectedProviders.length === 0;
 
   return (
     <div className="max-w-3xl">
@@ -167,6 +180,66 @@ export default async function EventDetailPage({
             Add ticket type
           </button>
         </form>
+      </section>
+
+      {/* Payment methods for this event */}
+      <section className="mt-10">
+        <h2 className="text-lg font-semibold">Payment methods</h2>
+        <p className="mt-1 text-sm text-slate-500">
+          Choose which of your payment methods attendees can use for this event. Add or remove
+          methods on your{" "}
+          <Link href="/app/payments" className="font-medium text-brand-600 hover:underline">
+            Payments
+          </Link>{" "}
+          page.
+        </p>
+
+        {availableProviders.length === 0 ? (
+          <p className="mt-4 rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-800">
+            No payment methods connected yet.{" "}
+            <Link href="/app/payments" className="font-semibold underline">
+              Connect a gateway
+            </Link>{" "}
+            to start selling.
+          </p>
+        ) : (
+          <form
+            action={updateEventPayments.bind(null, event.id)}
+            className="mt-4 rounded-xl border border-slate-200 bg-white p-6"
+          >
+            <div className="space-y-3">
+              {availableProviders.map((id) => {
+                const meta = getProviderMeta(id);
+                const checked = offerAll || selectedProviders.includes(id);
+                return (
+                  <label key={id} className="flex items-center gap-3">
+                    <input
+                      type="checkbox"
+                      name="providers"
+                      value={id}
+                      defaultChecked={checked}
+                      className="h-4 w-4 rounded border-slate-300"
+                    />
+                    <span className="text-sm font-medium text-slate-800">
+                      {meta?.label ?? id}
+                    </span>
+                    {meta?.kind === "bnpl" && (
+                      <span className="rounded-full bg-violet-100 px-2 py-0.5 text-xs font-medium text-violet-700">
+                        BNPL
+                      </span>
+                    )}
+                  </label>
+                );
+              })}
+            </div>
+            <p className="mt-3 text-xs text-slate-400">
+              Leave all checked to offer every method. Unchecking everything also offers all.
+            </p>
+            <button className="mt-4 rounded-full bg-brand-500 px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-600">
+              Save payment methods
+            </button>
+          </form>
+        )}
       </section>
 
       {/* Edit event details */}

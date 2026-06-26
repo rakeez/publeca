@@ -7,6 +7,7 @@ import { prisma } from "@publeca/db";
 import { getCurrentHost } from "@/lib/session";
 import { uniqueEventSlug } from "@/lib/slug";
 import { manageableHostIds } from "@/lib/access";
+import { enabledProvidersForHost } from "@/lib/payment-config";
 
 type ActionState = { error: string | null };
 
@@ -170,4 +171,19 @@ export async function setEventStatus(
   await prisma.event.update({ where: { id: eventId }, data: { status } });
   revalidatePath(`/app/events/${eventId}`);
   revalidatePath("/app/events");
+}
+
+/** Choose which of the host's payment methods to offer for this event. Empty = all. */
+export async function updateEventPayments(eventId: string, formData: FormData): Promise<void> {
+  const host = await getCurrentHost();
+  const event = await assertEventOwned(eventId, host.id);
+
+  const available = new Set(await enabledProvidersForHost(event.hostId));
+  const providers = formData
+    .getAll("providers")
+    .map(String)
+    .filter((p) => available.has(p as never));
+
+  await prisma.event.update({ where: { id: eventId }, data: { paymentProviders: providers } });
+  revalidatePath(`/app/events/${eventId}`);
 }
