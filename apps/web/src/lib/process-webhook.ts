@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@publeca/db";
 import { getProvider, type ProviderId } from "@publeca/payments";
-import { resolveCreds } from "./payment-config";
+import { resolveAccountCreds } from "./payment-config";
 import { issueTicketsForOrder } from "./issue-tickets";
 
 /**
@@ -22,8 +22,9 @@ export async function processProviderWebhook(
   });
   if (!order) return new NextResponse("unknown order", { status: 404 });
 
-  const creds = await resolveCreds(order.event.hostId, provider);
-  if (!creds) return new NextResponse("provider not configured", { status: 400 });
+  // Use the exact account that took the payment so the signature verifies.
+  const creds = await resolveAccountCreds(order.paymentAccountId, order.event.hostId);
+  if (!creds) return new NextResponse("account not configured", { status: 400 });
 
   let result;
   try {

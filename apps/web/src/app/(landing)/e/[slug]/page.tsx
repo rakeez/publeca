@@ -1,8 +1,7 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@publeca/db";
-import { getProviderMeta } from "@publeca/payments";
 import { MetaPixel, GoogleGtag } from "@/lib/tracking";
-import { enabledProvidersForEvent } from "@/lib/payment-config";
+import { accountsForEvent } from "@/lib/payment-config";
 import { SeatPicker } from "./seat-picker";
 
 const MAPS_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
@@ -61,10 +60,11 @@ export default async function EventLandingPage({
   }
   const pickerBlocks = [...pickerBlocksMap.values()];
 
-  const methods = (await enabledProvidersForEvent(event))
-    .map((id) => getProviderMeta(id))
-    .filter((m): m is NonNullable<typeof m> => !!m)
-    .map((m) => ({ id: m.id, label: m.label, kind: m.kind }));
+  const methods = (await accountsForEvent(event)).map((a) => ({
+    id: a.id,
+    label: a.label,
+    kind: a.kind,
+  }));
 
   const mapEmbed =
     MAPS_KEY && (event.placeId || (event.venueLat != null && event.venueLng != null))

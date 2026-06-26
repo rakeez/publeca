@@ -1,10 +1,9 @@
 import Link from "next/link";
 import { redirect, notFound } from "next/navigation";
 import { prisma } from "@publeca/db";
-import { getProviderMeta } from "@publeca/payments";
 import { getCurrentHost } from "@/lib/session";
 import { accessibleHostIds } from "@/lib/access";
-import { enabledProvidersForHost } from "@/lib/payment-config";
+import { availableAccountsForHost } from "@/lib/payment-config";
 import { EventForm } from "../event-form";
 import {
   updateEvent,
@@ -41,10 +40,10 @@ export default async function EventDetailPage({
   const liveUrl = `${appUrl}/e/${event.slug}`;
   const canPublish = event.ticketTypes.length > 0;
 
-  // Payment methods the host can offer + which are selected for this event.
-  const availableProviders = await enabledProvidersForHost(event.hostId);
-  const selectedProviders = event.paymentProviders ?? [];
-  const offerAll = selectedProviders.length === 0;
+  // Payment accounts the host can offer + which are selected for this event.
+  const availableAccounts = await availableAccountsForHost(event.hostId);
+  const selectedAccounts = event.paymentAccountIds ?? [];
+  const offerAll = selectedAccounts.length === 0;
 
   return (
     <div className="max-w-3xl">
@@ -194,11 +193,11 @@ export default async function EventDetailPage({
           page.
         </p>
 
-        {availableProviders.length === 0 ? (
+        {availableAccounts.length === 0 ? (
           <p className="mt-4 rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-800">
-            No payment methods connected yet.{" "}
+            No payment accounts connected yet.{" "}
             <Link href="/app/payments" className="font-semibold underline">
-              Connect a gateway
+              Connect an account
             </Link>{" "}
             to start selling.
           </p>
@@ -208,22 +207,22 @@ export default async function EventDetailPage({
             className="mt-4 rounded-xl border border-slate-200 bg-white p-6"
           >
             <div className="space-y-3">
-              {availableProviders.map((id) => {
-                const meta = getProviderMeta(id);
-                const checked = offerAll || selectedProviders.includes(id);
+              {availableAccounts.map((a) => {
+                const checked = offerAll || selectedAccounts.includes(a.id);
                 return (
-                  <label key={id} className="flex items-center gap-3">
+                  <label key={a.id} className="flex items-center gap-3">
                     <input
                       type="checkbox"
-                      name="providers"
-                      value={id}
+                      name="accounts"
+                      value={a.id}
                       defaultChecked={checked}
                       className="h-4 w-4 rounded border-slate-300"
                     />
-                    <span className="text-sm font-medium text-slate-800">
-                      {meta?.label ?? id}
+                    <span className="text-sm font-medium text-slate-800">{a.label}</span>
+                    <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-500">
+                      {a.provider}
                     </span>
-                    {meta?.kind === "bnpl" && (
+                    {a.kind === "bnpl" && (
                       <span className="rounded-full bg-violet-100 px-2 py-0.5 text-xs font-medium text-violet-700">
                         BNPL
                       </span>

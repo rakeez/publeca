@@ -2,8 +2,8 @@
 
 import { z } from "zod";
 import { prisma } from "@publeca/db";
-import { getProvider, type ProviderId } from "@publeca/payments";
-import { enabledProvidersForEvent, resolveCreds } from "@/lib/payment-config";
+import { getProvider } from "@publeca/payments";
+import { accountsForEvent, resolveAccountCreds } from "@/lib/payment-config";
 
 export type SeatCheckoutState = {
   error: string | null;
@@ -12,7 +12,7 @@ export type SeatCheckoutState = {
 
 const schema = z.object({
   seatIds: z.string().min(1),
-  provider: z.string().optional(),
+  accountId: z.string().optional(),
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
   email: z.string().email("Valid email required"),
@@ -47,13 +47,10 @@ export async function startSeatedCheckout(
   if (seats.some((s) => s.eventId !== event.id)) return { error: "Invalid seat selection." };
   if (seats.some((s) => !s.ticketType)) return { error: "These seats aren't priced yet." };
 
-  const available = await enabledProvidersForEvent(event);
-  if (available.length === 0) return { error: "Payments aren't set up for this event yet." };
-  const provider: ProviderId =
-    parsed.data.provider && available.includes(parsed.data.provider as ProviderId)
-      ? (parsed.data.provider as ProviderId)
-      : available[0]!;
-  const creds = await resolveCreds(event.hostId, provider);
+  const accounts = await accountsForEvent(event);
+  if (accounts.length === 0) return { error: "Payments aren't set up for this event yet." };
+  const account = accounts.find((a) => a.id === parsed.data.accountId) ?? accounts[0]!;
+  const creds = await resolveAccountCreds(account.id, event.hostId);
   if (!creds) return { error: "This payment method isn't available right now." };
 
   const amount = seats.reduce((sum, s) => sum + Number(s.ticketType!.price), 0);
@@ -66,7 +63,8 @@ export async function startSeatedCheckout(
       amount: amount.toFixed(2),
       currency: event.currency,
       status: "PENDING",
-      provider,
+      provider: account.provider,
+      paymentAccountId: account.id,
     },
   });
 
@@ -90,7 +88,7 @@ export async function startSeatedCheckout(
   }
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-  const checkout = getProvider(provider).createCheckout(
+  const checkout = getProvider(account.provider).createCheckout(
     {
       orderId: order.id,
       amount,
@@ -99,7 +97,7 @@ export async function startSeatedCheckout(
       customer: { firstName, lastName, email, phone: phone ?? "" },
       returnUrl: `${appUrl}/pay/return?order=${order.id}`,
       cancelUrl: `${appUrl}/e/${event.slug}`,
-      notifyUrl: `${appUrl}/api/payments/${provider}/notify`,
+      notifyUrl: `${appUrl}/api/payments/${account.provider}/notify`,
     },
     creds
   );

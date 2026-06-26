@@ -142,13 +142,13 @@ export function SeatPicker({
               <div className="flex flex-wrap gap-2">
                 {methods.map((m, i) => (
                   <label key={m.id} className="flex cursor-pointer items-center gap-2 rounded-lg border border-slate-200 px-3 py-1.5 text-sm has-[:checked]:border-slate-400">
-                    <input type="radio" name="provider" value={m.id} defaultChecked={i === 0} />
+                    <input type="radio" name="accountId" value={m.id} defaultChecked={i === 0} />
                     {m.label}
                   </label>
                 ))}
               </div>
             )}
-            {methods.length === 1 && <input type="hidden" name="provider" value={methods[0]!.id} />}
+            {methods.length === 1 && <input type="hidden" name="accountId" value={methods[0]!.id} />}
 
             <div className="grid grid-cols-2 gap-3">
               <Input name="firstName" placeholder="First name" autoComplete="given-name" />

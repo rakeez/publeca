@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@publeca/db";
-import { getProviderMeta } from "@publeca/payments";
-import { enabledProvidersForEvent } from "@/lib/payment-config";
+import { accountsForEvent } from "@/lib/payment-config";
 import { CheckoutForm } from "./checkout-form";
 
 export default async function CheckoutPage({
@@ -26,12 +25,11 @@ export default async function CheckoutPage({
 
   const soldOut = ticketType.quantityTotal - ticketType.quantitySold <= 0;
 
-  const methods = (await enabledProvidersForEvent(event))
-    .map((id) => {
-      const meta = getProviderMeta(id);
-      return meta ? { id: meta.id, label: meta.label, kind: meta.kind } : null;
-    })
-    .filter((m): m is NonNullable<typeof m> => m !== null);
+  const methods = (await accountsForEvent(event)).map((a) => ({
+    id: a.id,
+    label: a.label,
+    kind: a.kind,
+  }));
 
   return (
     <main className="mx-auto max-w-md px-6 py-12">

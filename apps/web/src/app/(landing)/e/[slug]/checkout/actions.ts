@@ -2,12 +2,12 @@
 
 import { z } from "zod";
 import { prisma, holdSeats, releaseReservation, SoldOutError } from "@publeca/db";
-import { getProvider, type ProviderId } from "@publeca/payments";
-import { enabledProvidersForEvent, resolveCreds } from "@/lib/payment-config";
+import { getProvider } from "@publeca/payments";
+import { accountsForEvent, resolveAccountCreds } from "@/lib/payment-config";
 
 const buyerSchema = z.object({
   ticketTypeId: z.string().min(1),
-  provider: z.string().optional(),
+  accountId: z.string().optional(),
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
   email: z.string().email("Valid email required"),
@@ -35,18 +35,14 @@ export async function startCheckout(
   if (!tt || tt.event.status !== "LIVE") return { error: "This ticket is not on sale." };
   if (tt.salesEnd && tt.salesEnd < new Date()) return { error: "Sales have closed." };
 
-  const available = await enabledProvidersForEvent(tt.event);
-  if (available.length === 0) return { error: "Payments aren't set up for this event yet." };
-  const provider: ProviderId =
-    parsed.data.provider && available.includes(parsed.data.provider as ProviderId)
-      ? (parsed.data.provider as ProviderId)
-      : available[0]!;
+  const accounts = await accountsForEvent(tt.event);
+  if (accounts.length === 0) return { error: "Payments aren't set up for this event yet." };
+  const account =
+    accounts.find((a) => a.id === parsed.data.accountId) ?? accounts[0]!;
 
-  const creds = await resolveCreds(tt.event.hostId, provider);
+  const creds = await resolveAccountCreds(account.id, tt.event.hostId);
   if (!creds) return { error: "This payment method isn't available right now." };
 
-  // Reserve the seat (atomic; throws if sold out), then create the pending order and
-  // build the gateway checkout in one shot so the client can redirect immediately.
   let reservationId: string | null = null;
   try {
     const reservation = await holdSeats(ticketTypeId, 1);
@@ -60,7 +56,8 @@ export async function startCheckout(
         amount: tt.price,
         currency: tt.event.currency,
         status: "PENDING",
-        provider,
+        provider: account.provider,
+        paymentAccountId: account.id,
       },
     });
     await prisma.reservation.update({
@@ -69,7 +66,7 @@ export async function startCheckout(
     });
 
     const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-    const checkout = getProvider(provider).createCheckout(
+    const checkout = getProvider(account.provider).createCheckout(
       {
         orderId: order.id,
         amount: Number(order.amount),
@@ -78,7 +75,7 @@ export async function startCheckout(
         customer: { firstName, lastName, email, phone: phone ?? "" },
         returnUrl: `${appUrl}/pay/return?order=${order.id}`,
         cancelUrl: `${appUrl}/e/${tt.event.slug}`,
-        notifyUrl: `${appUrl}/api/payments/${provider}/notify`,
+        notifyUrl: `${appUrl}/api/payments/${account.provider}/notify`,
       },
       creds
     );

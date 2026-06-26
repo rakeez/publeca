@@ -87,9 +87,9 @@ model Event {
   landingPage LandingPage?
   // Optional visual seating layout: { blocks: [{ id, name, rows, seats, x, y, ticketTypeId }] }
   seatingMap  Json?
-  // Payment providers offered for THIS event (subset of the host's configured methods).
-  // Empty = offer all of the host's enabled methods.
-  paymentProviders String[] @default([])
+  // Payment accounts offered for THIS event (subset of the host's connected accounts,
+  // by PaymentConfig id or "platform-payhere"). Empty = offer all enabled accounts.
+  paymentAccountIds String[] @default([])
   // Set when the pre-event reminder email batch has been sent (cron idempotency).
   reminderSentAt DateTime?
   createdAt   DateTime     @default(now())
@@ -187,6 +187,8 @@ model Order {
   currency    String      @default("LKR")
   status      OrderStatus @default(PENDING)
   provider    String // "payhere" | "koko" | "mintpay" | ...
+  // Which connected account took this payment (PaymentConfig id, or "platform-payhere").
+  paymentAccountId String?
   // Gateway's own reference. Unique so a replayed webhook can't double-issue.
   providerRef String?     @unique
   tickets     Ticket[]
@@ -265,15 +267,18 @@ model LandingPage {
 
 // Per-host gateway / BNPL credentials. `credentials` is an encrypted JSON blob
 // (encrypted with CREDENTIALS_ENCRYPTION_KEY) — never returned to the client.
+// A named payment account a host has connected. A host can have several per
+// provider (e.g. two PayHere merchant accounts) and choose which to offer per event.
 model PaymentConfig {
   id          String   @id @default(cuid())
   hostId      String
   host        Host     @relation(fields: [hostId], references: [id], onDelete: Cascade)
+  label       String   @default("Default") // host-facing name, e.g. "Main PayHere"
   provider    String // "payhere" | "koko" | "mintpay" | "webxpay" | ...
   credentials String // encrypted JSON
   enabled     Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  @@unique([hostId, provider])
+  @@index([hostId])
 }

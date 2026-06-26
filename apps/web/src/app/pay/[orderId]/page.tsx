@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { prisma } from "@publeca/db";
 import { getProvider, type ProviderId } from "@publeca/payments";
-import { resolveCreds } from "@/lib/payment-config";
+import { resolveAccountCreds } from "@/lib/payment-config";
 
 // Builds the signed PayHere checkout form server-side (secret never reaches the client)
 // and auto-submits it to PayHere. PayHere then redirects back to /pay/return and
@@ -27,7 +27,7 @@ export default async function PayPage({
   const [firstName, ...rest] = order.buyerName.split(" ");
   const provider = order.provider as ProviderId;
 
-  const creds = await resolveCreds(order.event.hostId, provider);
+  const creds = await resolveAccountCreds(order.paymentAccountId, order.event.hostId);
   if (!creds) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-slate-50 px-6 text-center">

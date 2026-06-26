@@ -52,7 +52,7 @@ export function CheckoutForm({
                 key={m.id}
                 className="flex cursor-pointer items-center gap-3 rounded-lg border border-slate-200 px-3 py-2 text-sm has-[:checked]:border-brand-400 has-[:checked]:ring-2 has-[:checked]:ring-brand-100"
               >
-                <input type="radio" name="provider" value={m.id} defaultChecked={i === 0} />
+                <input type="radio" name="accountId" value={m.id} defaultChecked={i === 0} />
                 <span className="font-medium">{m.label}</span>
                 {m.kind === "bnpl" && (
                   <span className="rounded-full bg-violet-100 px-2 py-0.5 text-xs font-medium text-violet-700">
@@ -65,7 +65,7 @@ export function CheckoutForm({
         </fieldset>
       )}
       {methods.length === 1 && (
-        <input type="hidden" name="provider" value={methods[0]!.id} />
+        <input type="hidden" name="accountId" value={methods[0]!.id} />
       )}
 
       <div className="grid grid-cols-2 gap-3">
