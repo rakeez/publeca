@@ -2,6 +2,9 @@ import { notFound } from "next/navigation";
 import { prisma } from "@publeca/db";
 import { verifyTicketToken, qrDataUrl } from "@publeca/tickets";
 
+// Private ticket page — unguessable token; must never be indexed.
+export const metadata = { robots: { index: false, follow: false } };
+
 const statusLabel: Record<string, { text: string; cls: string }> = {
   VALID: { text: "Valid — not yet scanned", cls: "bg-emerald-100 text-emerald-700" },
   USED: { text: "Already checked in", cls: "bg-slate-200 text-slate-600" },

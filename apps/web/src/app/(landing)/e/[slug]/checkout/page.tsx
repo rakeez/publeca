@@ -4,6 +4,8 @@ import { prisma } from "@publeca/db";
 import { accountsForEvent } from "@/lib/payment-config";
 import { CheckoutForm } from "./checkout-form";
 
+export const metadata = { robots: { index: false, follow: false } };
+
 export default async function CheckoutPage({
   params,
   searchParams,

@@ -3,6 +3,8 @@ import { prisma } from "@publeca/db";
 import { MetaPixel, GoogleGtag } from "@/lib/tracking";
 import { FireConversion } from "@/lib/fire-conversion";
 
+export const metadata = { robots: { index: false, follow: false } };
+
 // Where PayHere sends the buyer after payment. Status here is informational only —
 // the notify webhook is authoritative — so we show a friendly state and tell them
 // to check their email for the ticket. When paid, we fire the purchase conversion.

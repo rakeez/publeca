@@ -3,6 +3,8 @@ import { prisma } from "@publeca/db";
 import { getProvider, type ProviderId } from "@publeca/payments";
 import { resolveAccountCreds } from "@/lib/payment-config";
 
+export const metadata = { robots: { index: false, follow: false } };
+
 // Builds the signed PayHere checkout form server-side (secret never reaches the client)
 // and auto-submits it to PayHere. PayHere then redirects back to /pay/return and
 // independently calls our notify webhook (the real source of truth).

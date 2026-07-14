@@ -1,6 +1,31 @@
 import Link from "next/link";
 import { SERVICES } from "@/lib/marketing-content";
 import { WhatsAppButton } from "@/components/whatsapp";
+import { JsonLd } from "@/components/json-ld";
+import { CONTACT, WHATSAPP_NUMBER } from "@/lib/brand";
+
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.publeca.com";
+
+const orgJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Publeca",
+  url: APP_URL,
+  logo: `${APP_URL}/publeca-icon.png`,
+  description:
+    "Full-service event growth partner in Sri Lanka: Meta & Google ads, creative, photography and videography, ticketing and door check-in — done for you, or self-serve.",
+  email: CONTACT.email,
+  telephone: `+${WHATSAPP_NUMBER}`,
+  areaServed: "LK",
+  sameAs: [] as string[],
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Publeca",
+  url: APP_URL,
+};
 
 const journey = [
   { step: "Promote", text: "Meta & Google ads, influencers and a campaign built to fill the room." },
@@ -21,6 +46,8 @@ const steps = [
 export default function HomePage() {
   return (
     <main>
+      <JsonLd data={orgJsonLd} />
+      <JsonLd data={websiteJsonLd} />
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div

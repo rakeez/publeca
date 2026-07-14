@@ -3,6 +3,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { POSTS, getPost } from "@/lib/marketing-content";
 import { WhatsAppButton } from "@/components/whatsapp";
+import { JsonLd } from "@/components/json-ld";
+
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.publeca.com";
 
 export function generateStaticParams() {
   return POSTS.map((p) => ({ slug: p.slug }));
@@ -26,8 +29,24 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
   const date = new Date(post.date).toLocaleDateString("en-GB", { dateStyle: "long" });
 
+  const postJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.date,
+    author: { "@type": "Organization", name: post.author, url: APP_URL },
+    publisher: {
+      "@type": "Organization",
+      name: "Publeca",
+      logo: { "@type": "ImageObject", url: `${APP_URL}/publeca-icon.png` },
+    },
+    mainEntityOfPage: `${APP_URL}/blog/${post.slug}`,
+  };
+
   return (
     <main className="mx-auto max-w-2xl px-6 py-16">
+      <JsonLd data={postJsonLd} />
       <Link href="/blog" className="text-sm font-medium text-slate-500 hover:text-slate-900">
         ← Blog
       </Link>

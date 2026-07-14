@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import { auth, signOut } from "@/auth";
 import { Logo } from "@/components/logo";
 
+export const metadata = { robots: { index: false, follow: false } };
+
 const nav = [
   { href: "/app", label: "Overview" },
   { href: "/app/events", label: "Events" },

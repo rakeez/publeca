@@ -1,10 +1,45 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { prisma } from "@publeca/db";
 import { MetaPixel, GoogleGtag } from "@/lib/tracking";
 import { accountsForEvent } from "@/lib/payment-config";
+import { JsonLd } from "@/components/json-ld";
 import { SeatPicker } from "./seat-picker";
 
 const MAPS_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.publeca.com";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const event = await prisma.event.findUnique({
+    where: { slug },
+    include: { landingPage: true, host: true },
+  });
+  if (!event || event.status !== "LIVE") return {};
+
+  const copy = (event.landingPage?.copyBlocks as { tagline?: string } | null) ?? {};
+  const when = new Date(event.startsAt).toLocaleDateString("en-GB", { dateStyle: "long" });
+  const description =
+    copy.tagline ??
+    event.description?.slice(0, 155) ??
+    `${event.title} — ${when}${event.venue ? ` at ${event.venue}` : ""}. Tickets on Publeca.`;
+
+  return {
+    title: event.title,
+    description,
+    openGraph: {
+      title: event.title,
+      description,
+      type: "website",
+      images: event.landingPage?.heroImageUrl ? [{ url: event.landingPage.heroImageUrl }] : undefined,
+    },
+    twitter: { card: event.landingPage?.heroImageUrl ? "summary_large_image" : "summary" },
+  };
+}
 
 function videoEmbed(url: string) {
   const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
@@ -76,8 +111,61 @@ export default async function EventLandingPage({
     event.mapsUrl ||
     (event.venue ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.venue)}` : null);
 
+  // schema.org Event — makes event pages eligible for rich results in Search.
+  const prices = event.ticketTypes.map((t) => Number(t.price));
+  const anyAvailable = event.ticketTypes.some((t) => t.quantityTotal - t.quantitySold > 0);
+  const eventJsonLd: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: event.title,
+    startDate: event.startsAt.toISOString(),
+    ...(event.endsAt ? { endDate: event.endsAt.toISOString() } : {}),
+    eventStatus: "https://schema.org/EventScheduled",
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    description: copy.tagline ?? event.description ?? undefined,
+    ...(lp?.heroImageUrl ? { image: [lp.heroImageUrl] } : {}),
+    location: {
+      "@type": "Place",
+      name: event.venue ?? "Venue to be announced",
+      ...(event.venueLat != null && event.venueLng != null
+        ? { geo: { "@type": "GeoCoordinates", latitude: event.venueLat, longitude: event.venueLng } }
+        : {}),
+      address: event.venue ?? "Sri Lanka",
+    },
+    organizer: { "@type": "Organization", name: event.host.name },
+    ...(prices.length > 0
+      ? {
+          offers: {
+            "@type": "AggregateOffer",
+            url: `${APP_URL}/e/${event.slug}`,
+            priceCurrency: event.currency,
+            lowPrice: Math.min(...prices),
+            highPrice: Math.max(...prices),
+            availability: anyAvailable
+              ? "https://schema.org/InStock"
+              : "https://schema.org/SoldOut",
+          },
+        }
+      : {}),
+  };
+
+  const faqJsonLd =
+    faq.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faq.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }
+      : null;
+
   return (
     <main className="min-h-screen bg-white">
+      <JsonLd data={eventJsonLd} />
+      {faqJsonLd && <JsonLd data={faqJsonLd} />}
       <MetaPixel id={lp?.metaPixelId} />
       <GoogleGtag id={lp?.googleAdsId} />
 

@@ -1,0 +1,9 @@
+// Renders a schema.org JSON-LD block. Keep payloads server-built (no user JS needed).
+export function JsonLd({ data }: { data: Record<string, unknown> }) {
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data).replace(/</g, "\\u003c") }}
+    />
+  );
+}
