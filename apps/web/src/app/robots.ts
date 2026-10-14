@@ -3,6 +3,10 @@ import type { MetadataRoute } from "next";
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.publeca.com";
 
 export default function robots(): MetadataRoute.Robots {
+  // Non-production (preview / dev.publeca.com): block all crawling.
+  if (process.env.VERCEL_ENV !== "production") {
+    return { rules: [{ userAgent: "*", disallow: "/" }] };
+  }
   return {
     rules: [
       {

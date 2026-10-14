@@ -5,7 +5,12 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
 const sora = Sora({ subsets: ["latin"], variable: "--font-display", display: "swap" });
 
+// Preview/dev builds (dev.publeca.com, *.vercel.app) are public for review but must never be
+// indexed as duplicates of www.publeca.com.
+const IS_PRODUCTION = process.env.VERCEL_ENV === "production";
+
 export const metadata: Metadata = {
+  ...(IS_PRODUCTION ? {} : { robots: { index: false, follow: false } }),
   title: {
     default: "Publeca — Growth Consulting Firm | Marketing, Management & Events",
     template: "%s — Publeca",
