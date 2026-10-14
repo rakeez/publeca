@@ -37,19 +37,22 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
     <div className="min-h-screen">
       <MarketingMotion />
       <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur-md">
-        <nav className="mx-auto flex h-16 max-w-page items-center justify-between px-6">
+        <nav className="relative mx-auto flex h-16 max-w-page items-center justify-between px-6">
           <Link href="/" aria-label="Publeca home">
             <Logo />
           </Link>
 
           {/* Desktop navigation */}
           <div className="hidden items-center gap-1 text-[15px] font-medium text-slate-800 lg:flex">
-            {/* Services menu, grouped by value bucket */}
-            <div className="group relative">
+            {/* Services menu, grouped by value bucket. The group is static so the panel anchors to
+                the header (centered on the page, capped to the screen), not to this item, which
+                sits left of center. It starts right under the item so hovering into it never
+                crosses a gap. */}
+            <div className="group">
               <Link href="/services" className={`${NAV_PILL} inline-flex items-center gap-1`}>
                 What we deliver <span className="text-xs text-slate-400" aria-hidden>▾</span>
               </Link>
-              <div className="invisible absolute left-1/2 top-full w-[980px] -translate-x-1/2 pt-3 opacity-0 transition group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
+              <div className="invisible absolute left-1/2 top-12 w-[min(980px,calc(100vw-3rem))] -translate-x-1/2 pt-4 opacity-0 transition group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
                 <div className="grid grid-cols-5 gap-5 rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_24px_48px_-24px_rgba(0,0,0,0.25)]">
                   {BUCKET_GROUPS.map((b) => (
                     <div key={b.id}>
