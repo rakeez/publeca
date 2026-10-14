@@ -6,7 +6,38 @@ import { brandLine } from "./site";
 // patterns follow docs/playbook.md (P1 hero diagram, P2 bucket tabs, P3 demos, P6, P7).
 const home: HomeContent = {
   hero: {
-    who: "For directors and CEOs who want the next stage of growth explained in plain English, technical founders scaling without trading equity for a co-founder, and the investors who back them.",
+    // Who + what + how, shown in the hero card (user direction, 2026-10-14): the three readers
+    // from the old "who" line, each with the need in their words, the value they get, the teams
+    // involved and where it starts. Team names must match `departments` below.
+    audiences: [
+      {
+        segment: "ceos",
+        label: "Directors & CEOs",
+        need: "For directors and CEOs who want the next stage of growth explained in plain English.",
+        gets: "Know which growth opportunity is worth your money, and get a senior executive who delivers it and reports in plain English.",
+        teams: ["Growth Consulting", "Analytics & Data Science", "Marketing & Brand", "Engineering"],
+        start: "Growth Diagnostic",
+        shape: "Fixed fee. About three weeks.",
+      },
+      {
+        segment: "technical-founders",
+        label: "Technical founders",
+        need: "For technical founders scaling without trading equity for a co-founder.",
+        gets: "Keep 100% of your equity: a growth team that runs positioning, demand and tracking instead of a business co-founder.",
+        teams: ["Growth Consulting", "Marketing & Brand", "Analytics & Data Science"],
+        start: "Go-to-Market Sprint",
+        shape: "About six weeks. Fixed scope, no equity.",
+      },
+      {
+        segment: "investors",
+        label: "Investors & VCs",
+        need: "For the investors who back them, and want a growth team their portfolio companies can call on.",
+        gets: "A senior growth team portfolio companies can call on, with a short brief a partner can read in minutes.",
+        teams: ["Growth Consulting", "Analytics & Data Science", "Marketing & Brand", "Engineering"],
+        start: "Portfolio Growth Review",
+        shape: "About two weeks per company.",
+      },
+    ],
     headline:
       "Revenue and market share you can see, from a growth consulting firm that executes its own plan",
     headlineAccent: "you can see",
@@ -125,32 +156,22 @@ const home: HomeContent = {
     {
       title: "Growth Consulting",
       body: "Diagnosis, opportunity sizing, and growth planning, plus the forward-deployed growth executives who lead each engagement from inside the client's business.",
-      outcome: "Decides where your next growth comes from, sizes it in money, and owns the plan.",
-      stages: ["Diagnose", "Prioritize", "Deploy"],
     },
     {
       title: "Marketing & Brand",
       body: "Branding, content, social media ads, Google Ads, SEO, AEO/GEO, and product marketing, each judged on tracked sales and leads rather than reach.",
-      outcome: "Brand, content and ads judged on the sales they bring in, not the reach they buy.",
-      stages: ["Deploy", "Scale"],
     },
     {
       title: "Engineering",
       body: "Web development, software development, and AI solutions, built to convert, rank, and measure, and to remove the system bottlenecks that cap growth.",
-      outcome: "Builds the website, software and AI the plan calls for, ready to measure from day one.",
-      stages: ["Deploy", "Scale"],
     },
     {
       title: "Analytics & Data Science",
       body: "Conversion tracking and analytics for websites and apps, attribution, dashboards, and modeling, so every growth decision is tied to revenue.",
-      outcome: "Puts tracking in place before spend scales, so every decision ties back to revenue.",
-      stages: ["Diagnose", "Measure", "Scale"],
     },
     {
       title: "Events",
       body: "Publeca's original arm: event marketing, event photo and video, and the Publeca ticketing platform.",
-      outcome: "Fills rooms, and runs the ticketing platform where your ads learn who actually buys.",
-      stages: ["Deploy", "Measure"],
     },
   ],
 

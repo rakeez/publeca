@@ -104,13 +104,8 @@ export interface DemoSection extends Heading {
   items: DemoId[];
 }
 
-/** One of Publeca's five departments. Read by the hero diagram and the firm bento. */
-export interface Department extends TitledText {
-  /** One-line outcome for the reader, revealed on hover in the bento (always shown on touch). */
-  outcome: string;
-  /** The method stages this department does most of its work in (names from home.process). */
-  stages: string[];
-}
+/** One of Publeca's five departments. Titles are referenced by HeroAudience.teams. */
+export type Department = TitledText;
 
 export interface Service extends ValueFirst {
   slug: string;
@@ -213,10 +208,28 @@ export interface Post {
   seo: SeoMeta;
 }
 
+/** One reader in the home hero card: who, what they get, and how it is delivered. */
+export interface HeroAudience {
+  segment: SegmentSlug;
+  label: string;
+  /** Who they are and what they need, as a full sentence in their words ("For … who …"). */
+  need: string;
+  /** The value they get. An outcome, never an activity. */
+  gets: string;
+  /** Departments involved; titles must match HomeContent.departments. */
+  teams: string[];
+  /** The recommended first package, and its commercial shape (no prices). */
+  start: string;
+  shape: string;
+}
+
 export interface HomeContent {
   hero: {
-    /** Who we're for — rendered above the headline. */
-    who: string;
+    /**
+     * Who we're for, what each gets and how: rendered in the hero card beside the H1 (and
+     * directly after it on phones), so the reader finds themselves in the first screen.
+     */
+    audiences: HeroAudience[];
     /** H1 — the value. Must naturally include "growth consulting firm". */
     headline: string;
     /** Optional phrase inside `headline` rendered in gradient ink (one per page). */

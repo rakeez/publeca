@@ -48,7 +48,7 @@ uppercase meta labels (`.mono-label`: 11px, +0.08em) and status pills. Loaded wi
 | `Eyebrow`, `.mono-label` | Mono uppercase meta label with a pink dot |
 | `StatusPill` | Status pill (mono, tinted fill): stage numbers, departments, "In plan" |
 | `BenefitList` | Checkmark list item: bold lead + regular descriptor (hero) |
-| `GrowthDiagram` | Product screenshot card, inside the `.conic-frame` rotating border |
+| `HeroCard` | Product screenshot card, inside the `.conic-frame` rotating border: who → what → how for each reader |
 | `PanelTabs` + `BucketPanel` + `HowWeDoIt` | Feature list / tabs: value buckets with their capabilities |
 | `DemoCard` | Product window with chrome and a "Sample data" label |
 | `CtaBand` | Dark feature card (charcoal-to-black fade, white display heading) |

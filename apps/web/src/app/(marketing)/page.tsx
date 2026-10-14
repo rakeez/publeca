@@ -3,7 +3,7 @@ import Link from "next/link";
 import { JsonLd } from "@/components/json-ld";
 import { BucketPanel } from "@/components/marketing/buckets";
 import { DemoSection } from "@/components/marketing/demo-section";
-import { GrowthDiagram } from "@/components/marketing/growth-diagram";
+import { HeroCard } from "@/components/marketing/hero-card";
 import { PanelTabs } from "@/components/marketing/tabs";
 import {
   BenefitList,
@@ -78,7 +78,6 @@ function Headline({ text, accent }: { text: string; accent?: string }) {
 
 export default function HomePage() {
   const insights = POSTS.filter((p) => !p.audience.includes("events")).slice(0, 3);
-  const stageNames = home.process.steps.map((s) => s.title);
 
   return (
     <main>
@@ -87,13 +86,22 @@ export default function HomePage() {
 
       {/* ── Hero: who + value + checkmark benefits, the product card beside it (P1) ── */}
       <section className="bg-white">
-        <Container className="grid gap-12 pb-16 pt-12 md:pt-16 lg:grid-cols-[1.2fr_1fr] lg:items-center lg:gap-16 lg:pb-24">
-          <div>
-            <p className="max-w-xl text-base font-medium text-slate-600 md:text-lg">{home.hero.who}</p>
-            <h1 className="font-display tracking-display mt-4 text-[2.6rem] font-extrabold leading-[1.02] text-onyx md:text-6xl lg:text-[4.25rem]">
+        {/* Who we serve is told by the card (who → what → how). DOM order puts it right after the
+            H1, so on phones the reader finds themselves before the benefits; from lg it sits in
+            the right column beside both. */}
+        <Container className="grid gap-10 pb-16 pt-12 md:pt-16 lg:grid-cols-[1.15fr_1fr] lg:gap-x-16 lg:gap-y-0 lg:pb-24">
+          <div className="lg:col-start-1 lg:row-start-1 lg:self-end">
+            <h1 className="font-display tracking-display text-[2.6rem] font-extrabold leading-[1.02] text-onyx md:text-6xl lg:text-[4.25rem]">
               <Headline text={home.hero.headline} accent={home.hero.headlineAccent} />
             </h1>
-            <div className="mt-7">
+          </div>
+
+          <div className="lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-center">
+            <HeroCard audiences={home.hero.audiences} departments={home.departments} />
+          </div>
+
+          <div className="lg:col-start-1 lg:row-start-2 lg:pt-7">
+            <div>
               <BenefitList items={home.hero.benefits} />
             </div>
             <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-slate-500">{home.hero.subhead}</p>
@@ -122,8 +130,6 @@ export default function HomePage() {
               </ul>
             </div>
           </div>
-
-          <GrowthDiagram departments={home.departments} stages={stageNames} />
         </Container>
       </section>
 

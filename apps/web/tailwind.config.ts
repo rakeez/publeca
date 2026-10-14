@@ -79,17 +79,18 @@ export default {
           "0%": { opacity: "0", transform: "translateY(105%)", filter: "blur(3px)" },
           "100%": { opacity: "1", transform: "translateY(0)", filter: "blur(0)" },
         },
-        "spine-pulse": {
-          "0%": { transform: "translateY(0)", opacity: "0" },
-          "15%": { opacity: "1" },
-          "85%": { opacity: "1" },
-          "100%": { transform: "translateY(calc(var(--dist) * -1))", opacity: "0" },
+        // A dot running down the hero card's who → what → how rail.
+        "rail-flow": {
+          "0%": { top: "0%", opacity: "0" },
+          "12%": { opacity: "1" },
+          "88%": { opacity: "1" },
+          "100%": { top: "100%", opacity: "0" },
         },
       },
       animation: {
         "fade-up": "fade-up 0.6s cubic-bezier(.16, 1, .3, 1) both",
         "word-in": "word-in 0.68s cubic-bezier(.16, 1, .3, 1) both",
-        "spine-pulse": "spine-pulse 1.4s cubic-bezier(.4, 0, .6, 1) infinite",
+        "rail-flow": "rail-flow 1.6s cubic-bezier(.4, 0, .6, 1) both",
       },
     },
   },

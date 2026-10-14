@@ -106,6 +106,9 @@ session** so every future session writes the way they want. Note the change in t
   footer and three meta descriptions); redesigned to the ClickUp-style system keeping pink
   (`docs/design-system.md`); services reorganized into five value buckets with "How we do it"
   breakdowns (`buckets.ts`). Recorded in playbook §15.2.
+- 2026-10-14 — User feedback: the hero "who" line is no longer a separate paragraph; it is
+  told by the hero card as who → what → how per reader (`home.hero.audiences`). Keep the card
+  directly after the H1 on phones so who + value still lead.
 
 ---
 

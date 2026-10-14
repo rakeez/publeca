@@ -1200,6 +1200,13 @@ decisions**, not defaults, and they override the matching rows of 15.1.
   of the capabilities (service pages) and the in-house department behind each. The
   home page, `/services`, the nav menu, the footer and each service page's eyebrow
   and "more ways to …" row all read from the buckets.
+- **Hero card = who → what → how** (user direction, same day). The "For directors and
+  CEOs …, technical founders …, and the investors who back them" line moved off the hero
+  and into the card (`components/marketing/hero-card.tsx`, content `home.hero.audiences`):
+  01 who it's for (the three readers, each need in their words), 02 what you get, 03 how
+  it's done (the growth executive, the teams involved, the package it starts with). It
+  rotates through the readers; it replaces the department/stage diagram (R3). The card
+  follows the H1 directly on phones, so the reader still finds themselves first.
 - **Patterns retired by the redesign:** R2 cursor spotlight, R6 bento, R7 services
   marquee, the hero aura and the home "value" and "capabilities" sections (folded
   into the buckets). P2 tabs now switch between buckets instead of readers; "Who we
