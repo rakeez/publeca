@@ -17,9 +17,9 @@ const service: Service = {
     "Rank for the searches your buyers already make, so organic demand compounds and paid ads become a choice, not a dependency.",
 
   outcomes: [
-    "Your pages appear for the searches buyers make when they are comparing options and ready to act, not only for broad terms that never convert.",
+    "Your pages appear for the searches buyers make when they are comparing options and ready to act, not only for broad terms that rarely convert.",
     "Organic leads and sales visible in your analytics and tied to revenue, so SEO is judged on the same numbers as every other channel.",
-    "Every page you have paid to build is crawlable, rendered and indexed, so none of it is invisible to Google for a technical reason.",
+    "Every page you want found can be crawled and rendered, with no technical fault keeping it out of Google's index.",
     "A lower blended cost per acquisition as organic search carries more of your demand and ad budgets go only where they still earn a return.",
   ],
 
@@ -38,15 +38,15 @@ const service: Service = {
     },
     {
       title: "Structured data for rich results",
-      body: "Schema.org markup for your organization, services or products, articles, events and breadcrumbs, validated in Google's Rich Results Test so your listings are eligible for richer search results. Eligibility is the part anyone can control; Google decides when to show them.",
+      body: "Schema.org markup for your organization or local business, products, articles, events and breadcrumbs, validated in Google's Rich Results Test so the pages that qualify are eligible for rich results. Eligibility is the part anyone can control; Google decides when to show them.",
     },
     {
       title: "Local SEO and Google Business Profile",
-      body: "Categories, services, photos, posts and a steady review routine on your Business Profile, matched to consistent business details on your site, so you appear in Maps and the local results when nearby customers search.",
+      body: "Categories, services, photos, posts and a steady routine for asking real customers for reviews on your Business Profile, matched to consistent business details on your site, so Google has what it needs to show you in Maps and local results when nearby customers search.",
     },
     {
       title: "Search Console monitoring tied to revenue",
-      body: "Indexing errors, coverage drops and query trends watched in Search Console, then joined with conversion data by our Analytics & Data Science team, so you see which searches produce leads and sales, not just traffic.",
+      body: "Indexing errors, drops in indexed pages and query trends watched in Search Console, then joined with conversion data at the landing-page level by our Analytics & Data Science team, so you see which pages, and the searches that reach them, produce leads and sales, not just traffic.",
     },
   ],
 
@@ -82,7 +82,7 @@ const service: Service = {
     },
     {
       q: "How long before SEO starts paying back?",
-      a: "Google's own guidance says that in most cases it takes four months to a year to implement improvements and see the benefit. Technical fixes that unblock pages you already have can register sooner, once Google recrawls them. That is why SEO works best alongside paid media at first, not as a replacement on day one.",
+      a: "Google's own guidance says that in most cases it takes four months to a year to implement improvements and then see potential benefit. Technical fixes that unblock pages you already have can register sooner, once Google recrawls them. That is why SEO works best alongside paid media at first, not as a replacement on day one.",
     },
     {
       q: "We already run Google Ads. Why invest in SEO as well?",

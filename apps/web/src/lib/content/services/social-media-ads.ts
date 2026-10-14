@@ -26,7 +26,7 @@ const service: Service = {
   includes: [
     {
       title: "Server-side conversion tracking",
-      body: "Meta Conversions API, TikTok Events API and LinkedIn Conversions API connected to your checkout, CRM or backend. Purchases and qualified leads are sent from your server, deduplicated against the browser pixel, and checked for match quality before any budget scales — so sales lost to ad blockers and privacy settings still reach the algorithm.",
+      body: "Meta Conversions API, TikTok Events API and LinkedIn Conversions API connected to your checkout, CRM or backend. Purchases and qualified leads are sent from your server, deduplicated against the browser pixel, and checked for match quality before any budget scales, so sales the pixel misses because of ad blockers, cookie limits or switched devices can still reach the platforms, within the consent your customers have given.",
     },
     {
       title: "Optimization event design",

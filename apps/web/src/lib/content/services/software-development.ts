@@ -46,7 +46,7 @@ const service: Service = {
     },
     {
       title: "Tracking built in from the first release",
-      body: "Server-side conversion tracking set up with our Analytics & Data Science team, so you can see what the software does for revenue. It is the same tracking that tells Meta and Google which event buyers actually paid.",
+      body: "Server-side conversion tracking set up with our Analytics & Data Science team, so you can see what the software does for revenue. Our events platform already works this way for organizers: only payments the provider has confirmed are reported, to Meta through its server-side Conversions API and to Google Ads as a purchase conversion, so both learn which buyers actually paid.",
     },
   ],
 
@@ -90,7 +90,7 @@ const service: Service = {
     },
     {
       q: "Can you work with our existing systems and developers?",
-      a: "Yes. Most projects start inside an existing stack. We read the code, document what is there, and either extend it or integrate around it. If you already have developers, our engineers work alongside them and leave the codebase easier for them to maintain.",
+      a: "Yes. Often the right first move is inside the stack you already have: we read the code, document what is there, and either extend it or integrate around it. If you already have developers, our engineers work alongside them and leave the codebase easier for them to maintain.",
     },
   ],
 

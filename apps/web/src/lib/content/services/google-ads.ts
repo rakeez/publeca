@@ -9,7 +9,7 @@ const service: Service = {
   who: "For directors, CEOs and founders who spend on Google Ads every month but can't say which campaigns produce customers rather than clicks.",
   value: "Google Ads that optimize to the sales in your CRM, not to clicks and form fills",
   valueDetail:
-    "Google Ads management built on your real sales data: qualified leads and closed deals flow back from your CRM, so Smart Bidding learns which searches bring buyers and moves budget toward them. You see cost per sale by campaign, not just cost per click.",
+    "Google Ads management built on your real sales data: qualified leads and closed deals flow back from your CRM, so Google's automated bidding learns which searches bring buyers and bids more for them. You see cost per sale by campaign, not just cost per click.",
   problem:
     "The dashboard says conversions are up, but sales haven't moved. Nobody can tell you which keywords bring customers, the monthly report is clicks and impressions, and Performance Max is a black box you're asked to trust while the budget keeps growing.",
 
@@ -19,7 +19,7 @@ const service: Service = {
   outcomes: [
     "Cost per qualified lead and cost per sale for every campaign, every week, not only cost per click.",
     "Bidding that chases revenue and lead quality, because outcomes from your CRM are fed back to Google.",
-    "Less budget lost to irrelevant searches, junk placements and campaigns bidding against each other.",
+    "Less budget lost to irrelevant searches, junk placements and overlapping campaigns that split the data bidding learns from.",
     "An account you own outright, structured so new campaigns learn quickly and every result can be explained.",
   ],
 
@@ -42,7 +42,7 @@ const service: Service = {
     },
     {
       title: "Search, Performance Max, YouTube and Demand Gen, each with a job",
-      body: "Search captures demand that already exists. Performance Max and Demand Gen extend reach using your best-converting audiences and assets. YouTube builds the demand Search later captures. Brand and non-brand results are reported separately, so Performance Max cannot take credit for searches you would have won anyway.",
+      body: "Search captures demand that already exists. Performance Max and Demand Gen extend reach using your best-converting audiences and assets. YouTube builds the demand Search later captures. Brand exclusions keep Performance Max off searches for your name, and brand and non-brand results are reported separately, so no campaign takes credit for customers who were already looking for you.",
     },
     {
       title: "Search term and negative keyword hygiene",
@@ -104,7 +104,7 @@ const service: Service = {
   seo: {
     title: "Google Ads Management That Optimizes to Revenue",
     description:
-      "Google Ads management that bids on the sales in your CRM: enhanced conversions, offline conversion import, value-based bidding and cost per sale by campaign.",
+      "Google Ads management trained on the sales in your CRM: enhanced conversions, offline conversion import, value-based bidding and cost per sale by campaign.",
     keywords: [
       "Google Ads management",
       "Google Ads agency",

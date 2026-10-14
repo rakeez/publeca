@@ -15,7 +15,7 @@ const post: Post = {
   body: [
     {
       paragraphs: [
-        "If you built the product and keep hearing that you need a business co-founder, here is the short answer: what you are missing is usually four jobs, not one person. Positioning, demand, a sales motion and measurement. Each of those can be defined, staffed, measured and replaced if it underperforms. Equity can't be taken back.",
+        "If you built the product and keep hearing that you need a business co-founder, here is the short answer: what you are missing is usually four jobs, not one person. Positioning, demand, a sales motion and measurement. Each of those can be defined, staffed, measured and replaced if it underperforms. Vested equity can't be taken back.",
         "So before you trade a permanent share of the company for those jobs, work out whether your gap is person-shaped or function-shaped. Below is a test that separates the two, the cases where a co-founder genuinely is the better answer, and the order to build the function in when it isn't.",
       ],
     },

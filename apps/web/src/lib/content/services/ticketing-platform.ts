@@ -7,20 +7,20 @@ const service: Service = {
   shortName: "Ticketing platform",
 
   who: "For event organizers, promoters and venues in Sri Lanka who sell their own tickets and are done matching bank-transfer slips to names, running the door off a printed list, and guessing which ads filled the room.",
-  value: "Sell tickets under your own brand, get paid into your own account, and know which ads sold them",
+  value: "Get paid directly and see which ads sell your tickets, on an event ticketing platform built for Sri Lanka",
   valueDetail:
     "Card payments through PayHere and installments through Koko and Mintpay settle into your own merchant accounts, buyers get a QR e-ticket by email the moment they pay, and your door staff check them in from their phones. Because this ticketing platform reports every paid order to Meta and Google Ads as a purchase, your campaigns learn who actually buys a ticket, not who clicks.",
   problem:
     "Tickets sell through DMs and bank transfers, someone reconciles payment screenshots against a spreadsheet late at night, and the door becomes a queue around a printed list. Move to a ticketing site and it often holds the money until after the event, keeps the buyer list, and puts its brand above yours. Either way, Meta and Google never see a ticket purchase, so your ads keep optimizing for clicks and you cannot tell which campaign paid for itself.",
 
   cardSummary:
-    "Sell tickets on your own event page, paid into your own merchant accounts, with every sale reported to Meta and Google as a purchase.",
+    "Ticket money paid into your own merchant accounts, and Meta and Google Ads told who actually bought, all from one event page.",
 
   outcomes: [
     "Ticket revenue paid into your own PayHere, Koko and Mintpay merchant accounts on your own terms, instead of sitting with a ticketing site until its payout date.",
     "Premium and group tickets within reach of more buyers, who can split the price into installments with Koko or Mintpay at checkout.",
     "Ad budgets that buy tickets rather than clicks, because Meta and Google Ads receive every paid order with its value and bid toward people who actually purchase.",
-    "A door that moves quickly and cannot be gamed: each QR ticket checks in once, and a reused, refunded or forged code is caught on the scanner before it gets through.",
+    "A door that moves quickly and is hard to game: each QR ticket checks in once, and a reused, refunded or forged code is stopped at the scanner.",
   ],
 
   includes: [
@@ -42,7 +42,7 @@ const service: Service = {
     },
     {
       title: "QR e-tickets, reminders and door scanning",
-      body: "Buyers are emailed one QR ticket per attendee the instant payment clears, and a reminder with a link to their ticket goes out automatically shortly before the event. At the door, staff open the scanner in their phone's browser, with nothing to install, and every scan returns a clear result: checked in, already checked in with the time, invalid, or a ticket for a different event.",
+      body: "Buyers are emailed a separate QR code for every ticket they buy as soon as payment is confirmed, and a reminder with a link to their tickets goes out automatically in the two days before the event. At the door, staff open the scanner in their phone's browser, with nothing to install, and every scan returns a clear result: checked in, already checked in with the time, invalid, or a ticket that belongs to another organizer.",
     },
     {
       title: "Orders, refunds, team and attendee export",
@@ -86,7 +86,7 @@ const service: Service = {
     },
     {
       q: "How do you stop shared screenshots and fake tickets at the door?",
-      a: "Every ticket carries its own signed QR code, which checks in once. If the same code is scanned again, the scanner shows that it was already used and when; a refunded ticket is voided and will not check in; a made-up code or a ticket for another event is rejected. Door staff need only a phone with a camera and their own staff login.",
+      a: "Every ticket carries its own signed QR code, which checks in once. If the same code is scanned again, the scanner shows that it was already used and when; a refunded ticket is voided and will not check in; a made-up code, or a ticket from another organizer's event, is rejected. Door staff need only a phone with a camera and their own staff login.",
     },
     {
       q: "Do I need a developer to set up the Meta Pixel and Google Ads tracking?",

@@ -22,14 +22,14 @@ const post: Post = {
     {
       heading: "What the round actually changes",
       paragraphs: [
-        "Before the round, capital is the constraint, and the founder compensates with attention. They read every lead, sit in every sales call and rewrite the landing page on a Sunday night. That attention is the hidden engine of early traction, and it never appears in the plan.",
+        "Before the round, capital is the constraint, and the founder compensates with attention. They read every lead, sit in on every sales call and rewrite the landing page on a Sunday night. That attention is the hidden engine of early traction, and it never appears in the plan.",
         "After the round, money stops being the constraint. The new constraint is the company's ability to turn spend into reliable learning: knowing which customers came from where, why they bought, and what the next dollar will return. Plans built on the seed-stage motion tend to assume it will scale in proportion to budget. The four patterns below are what happens when it does not.",
       ],
     },
     {
       heading: "1. Spend scales before tracking can be trusted",
       paragraphs: [
-        "This is the most expensive pattern, because it compounds. Budget on Meta, Google or LinkedIn goes up, and the platform dashboards keep reporting healthy conversion numbers. Meanwhile the conversions those platforms count do not reconcile with the CRM, and the CRM does not reconcile with what finance actually invoiced.",
+        "This pattern compounds, which is what makes it expensive. Budget on Meta, Google or LinkedIn goes up, and the platform dashboards keep reporting healthy conversion numbers. Meanwhile the gap between what those platforms count, what the CRM records and what finance actually invoiced keeps widening, and nobody on the team can say why.",
         "The causes are mundane: browser-only pixels that lose signal to ad blockers, consent banners and iOS privacy controls; events that fire twice; campaigns optimized toward form fills rather than qualified opportunities or paid orders; app installs tracked separately from in-app purchases. Ad platform bidding algorithms learn from whatever event they are given. Feed them the wrong one and every budget increase teaches them to find more of the wrong people, efficiently.",
         "From the board seat, this looks like a cost-per-lead chart that holds steady while pipeline quality quietly declines.",
       ],

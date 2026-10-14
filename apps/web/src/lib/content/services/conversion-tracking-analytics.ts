@@ -9,9 +9,9 @@ const service: Service = {
   who: "For founders and CEOs putting serious money into ads, a website or an app, who still cannot get a straight answer to which of that spend comes back as revenue.",
   value: "See which spend actually makes money, measured against real orders on your website and app",
   valueDetail:
-    "Purchases, qualified leads and app installs are recorded on your server, counted once, and tied to the campaign that produced them, so Meta, Google and TikTok optimize toward buyers instead of clicks. Marketing, finance and the board read one set of numbers that reconciles to your actual orders.",
+    "Purchases and qualified leads are recorded once through server-side conversion tracking, app installs are linked to what those users later spend, and sales are tied to the campaigns that produced them, so Meta, Google and TikTok optimize toward buyers instead of clicks. Marketing, finance and the board read one set of numbers that reconciles to your actual orders.",
   problem:
-    "Every ad platform claims credit for the same sale, GA4 disagrees with your order system, and the app reports installs but not which of those users ever paid. Budget goes to whichever channel has the most convincing dashboard, and the bidding algorithms keep chasing clicks because they never see the purchase.",
+    "Every ad platform claims credit for the same sale, GA4 disagrees with your order system, and the app reports installs but not which of those users ever paid. Budget goes to whichever channel has the most convincing dashboard, and the bidding algorithms keep chasing clicks because the sales they should learn from arrive incomplete, double counted or not at all.",
 
   cardSummary:
     "Know which spend makes money: server-side tracking for websites and apps, so ad platforms learn from real sales, not clicks.",
@@ -30,15 +30,15 @@ const service: Service = {
     },
     {
       title: "Server-side tracking for your website",
-      body: "GA4 and Google Tag Manager with a server-side container, Meta Conversions API, Google Ads enhanced conversions and TikTok Events API. Browser and server events share one event ID, so a sale the pixel misses is recovered and a sale both sides see is counted once, not twice.",
+      body: "GA4 and Google Tag Manager with a server-side container, Meta Conversions API, Google Ads enhanced conversions and TikTok Events API. Browser and server events carry the same ID (the event ID for Meta and TikTok, the order's transaction ID for Google), so a sale the pixel misses is recovered and a sale both sides see is counted once, not twice.",
     },
     {
       title: "App measurement and install attribution",
-      body: "Firebase and GA4 for in-app events, plus a mobile measurement partner such as AppsFlyer or Adjust to attribute installs to campaigns, including the privacy-preserving attribution Apple requires on iOS. Installs are linked to what those users later spend, so you can see which campaigns bring paying users rather than downloads.",
+      body: "Firebase and GA4 for in-app events, plus a mobile measurement partner such as AppsFlyer or Adjust to attribute installs to campaigns, including Apple's privacy-preserving attribution for iOS users who don't opt in to tracking. Installs are linked to what those users later spend, user by user where consent allows and through Apple's coarser conversion values where it doesn't, so you can see which campaigns bring paying users rather than downloads.",
     },
     {
       title: "Consent-aware setup",
-      body: "Your consent banner and Google Consent Mode wired into every tag, and personal data such as email hashed before it reaches any ad platform. You collect only what users agreed to, and the platforms can still model the conversions they are not allowed to observe directly.",
+      body: "Your consent banner and Google Consent Mode wired into every tag, and personal data such as email hashed before it reaches any ad platform. You collect only what users agreed to, and Google Ads and GA4 can still model the conversions they are not allowed to observe directly.",
     },
     {
       title: "CRM and offline conversions",
@@ -86,7 +86,7 @@ const service: Service = {
     },
     {
       q: "How does this handle consent and user privacy?",
-      a: "Tags fire according to the choices users make in your consent banner, personal data such as email is hashed before it is sent to any ad platform, and Google's Consent Mode lets the platforms model conversions from users who decline. The aim is accurate measurement within what users have agreed to, not around it.",
+      a: "Tags fire according to the choices users make in your consent banner, personal data such as email is hashed before it is sent to any ad platform, and Google's Consent Mode lets Google Ads and GA4 model conversions from users who decline. The aim is accurate measurement within what users have agreed to, not around it.",
     },
     {
       q: "Have you built this kind of tracking before?",

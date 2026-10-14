@@ -65,7 +65,7 @@ const service: Service = {
     },
     {
       title: "Measure what sells",
-      body: "Run the cuts on your event page and in ads. When tickets sell through Publeca, conversion tracking on paid bookings shows which clips bring buyers, not just views.",
+      body: "Run each cut as its own ad and put the strongest on your event page. When tickets sell through Publeca, confirmed bookings are reported to Meta and Google with their value, so you can see which clip's ad brings buyers, not just views.",
     },
     {
       title: "Scale the library",

@@ -43,7 +43,7 @@ const post: Post = {
     {
       heading: "Questions about cause: which channels really produced the sales",
       paragraphs: [
-        "Every advertising platform reports its own results, and each one credits itself, under its own rules, for sales it had any part in. A customer who saw an Instagram ad, later searched your company name on Google and then bought can be counted as a sale in both dashboards. Neither platform is breaking its rules. Together, they overstate.",
+        "Every advertising platform reports its own results, and each one, under its own rules and time windows, takes credit for sales its ads touched. A customer who saw an Instagram ad, later searched your company name on Google and then bought can be counted as a sale in both dashboards. Neither platform is breaking its rules. Together, they overstate.",
         "Here is a test you can run yourself. Ask for the number of sales each platform claims for last month, add them up, and compare the total with the sales in your accounting system. If the platforms claim more sales than you made, your reports double-count, and budget drifts toward whichever channel claims credit most generously.",
         "A good answer names the channels, names the method (normally your own tracking, which records each sale once against its source) and shows where the platforms disagree with it.",
         "The follow-up, \"what would we lose if we paused our biggest channel for a month\", separates the sales your marketing caused from the sales that would have happened anyway. The classic case is paying for ads on searches for your own company name: many of those people were already looking for you. A good team has a view, ideally backed by a controlled test: pause spend in one region or for one period, and compare. The red flag is \"we'd lose everything\", said with no test behind it.",
@@ -52,7 +52,7 @@ const post: Post = {
     {
       heading: "The question most teams can't answer: has anyone verified the tracking?",
       paragraphs: [
-        "Every number above depends on tracking: the code on your website and in your app that records a sale and reports where it came from. Tracking breaks quietly. A website redesign, a new checkout, a change of payment provider or an app update can stop sales being recorded, or record them twice, while the dashboards keep showing tidy charts.",
+        "Every channel figure above depends on tracking: the code on your website and in your app that records a sale and reports where it came from. Tracking breaks quietly. A website redesign, a new checkout, a change of payment provider or an app update can stop sales being recorded, or record them twice, while the dashboards keep showing tidy charts.",
         "The cost goes beyond bad reports. Google's and Meta's ad systems learn from the sales you report back and look for more people like those buyers. Feed them wrong data and your spend drifts toward people who don't buy.",
         "A good answer names a date, a person and a method. A hypothetical example: \"Last month our analyst compared tracked purchases with orders in the payment system, week by week. Most purchases are recorded; the gap comes mainly from visitors who decline cookies, and here is how we account for it.\"",
       ],
@@ -67,7 +67,7 @@ const post: Post = {
       heading: "Questions about judgment: what was stopped, and what is being tested",
       paragraphs: [
         "Ask what the team stopped doing last quarter. It is the best single test of whether anyone is managing your budget or simply spending it. Every marketing program accumulates campaigns, audiences and channels; the ones that don't pay should be cut and the money moved.",
-        "A good answer is specific and stated in money. A hypothetical example: \"We stopped the awareness campaign on one social platform because it brought visitors who never bought, and moved that budget into search, where each customer costs us less.\" The red flag is \"nothing, everything is being optimized\". A team that never stops anything isn't making decisions; it is accumulating activity.",
+        "A good answer is specific and stated in money. A hypothetical example: \"We switched off one social campaign in two regions for a month and sales there held up, so we stopped it everywhere and moved its budget to the channel where the same test showed sales drop without the spend.\" The red flag is \"nothing, everything is being optimized\". A team that never stops anything isn't making decisions; it is accumulating activity.",
         "Then ask what is being tested next. A good answer has three parts, agreed before the test starts: what the team believes, the result that would prove it, and the date you will know. Another hypothetical: \"We think a shorter checkout will lift online sales. If the share of visitors who buy hasn't improved by the end of next month, we switch back.\" The red flag is a test with no stopping rule, where success is defined after the results come in.",
       ],
     },

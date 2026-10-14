@@ -9,7 +9,7 @@ const segment: Segment = {
   who: "For directors and CEOs who run an established company, want the next stage of growth, and are tired of paying for marketing nobody can explain in plain English.",
   value: "Know exactly where your next growth comes from, and have a senior team accountable for it",
   valueDetail:
-    "You get a clear answer, in money terms, on which growth opportunities are worth backing and which are not. Then a senior growth executive works inside your business, owns the plan, and directs our marketing, engineering and analytics teams until the result shows up in your sales figures.",
+    "You get a clear answer, in money terms, on which growth opportunities are worth backing and which are not: growth consulting that ends in a decision, not a slide deck. Then a senior growth executive works inside your business, owns the plan, and directs our marketing, engineering and analytics teams, with success judged on your sales figures.",
   problem:
     "The business works, but growth has leveled off. You pay an agency, maybe two, and the monthly reports are full of clicks, impressions and acronyms that never answer the one question that matters: did this make us money? Everyone has a different idea of what to do next, from a new market to a new website to more advertising, and nobody senior inside the company owns growth from the decision to the result. So it lands back on your desk, on top of running everything else.",
 
@@ -50,7 +50,7 @@ const segment: Segment = {
       value: "Know which growth opportunity to back first, what it should be worth to the business, and exactly what the next 90 days look like.",
       commitment: "About 3 weeks · fixed fee",
       includes: [
-        "Working sessions with you, your leadership team and a sample of your customers",
+        "Working sessions with you and your leadership team, plus interviews with a sample of your customers",
         "A review of your sales, marketing spend, website and data, explained in plain English",
         "An opportunity map: every realistic growth option, ranked by expected revenue, cost and risk",
         "A financial model of the leading options that your finance lead can check line by line",

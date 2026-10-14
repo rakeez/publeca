@@ -115,7 +115,11 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
         <div className={`mt-12 rounded-2xl border p-7 ${quiet ? "border-slate-200 bg-white" : "border-brand-100 bg-brand-50/40"}`}>
           <p className="font-display text-lg font-semibold text-slate-900">
-            {quiet ? "If this matches what you're seeing in your portfolio, we're happy to compare notes." : "Want this applied to your business?"}
+            {quiet
+              ? post.audience.every((a) => a === "investors")
+                ? "If this matches what you're seeing in your portfolio, it may help to compare notes."
+                : "If you're weighing this for your company or a portfolio company, it may help to talk it through."
+              : "Want this applied to your business?"}
           </p>
           <div className="mt-5">
             <CtaButton cta={post.cta} variant={quiet ? "quiet" : "primary"} />

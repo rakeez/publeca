@@ -98,7 +98,7 @@ const eventsHub: EventsHubContent = {
   seo: {
     title: "Event Marketing, Management & Ticketing in Sri Lanka",
     description:
-      "Sell out your event in Sri Lanka: event marketing and ticketing with Meta and Google tracking on every paid booking, so your ads find buyers and cost per ticket falls.",
+      "Sell out your event in Sri Lanka: event marketing and ticketing that report paid bookings to Meta and Google, so ads find buyers and cost per ticket falls.",
     keywords: [
       "event management Sri Lanka",
       "event marketing Sri Lanka",

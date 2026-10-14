@@ -17,7 +17,7 @@ const service: Service = {
     "Measurable hours and cost out of support, sales and back-office work, with AI that is tested, monitored and reviewed by people.",
 
   outcomes: [
-    "Customers get accurate answers in minutes, at any hour, and complex or sensitive cases reach a person with the conversation already summarized.",
+    "Customers get answers drawn from your approved content in minutes, at any hour, and complex or sensitive cases reach a person with the conversation already summarized.",
     "Invoices, forms, contracts and applications arrive in your systems as clean, validated data, without anyone retyping them.",
     "Staff find the right policy, price or past answer in seconds, with a link to the source document so they can check it before they use it.",
     "A monthly report of hours saved, error rate and AI running cost against the original baseline, so you know whether to scale a use case or switch it off.",
@@ -30,7 +30,7 @@ const service: Service = {
     },
     {
       title: "Customer support and sales assistants",
-      body: "Assistants on your website, WhatsApp or inbox that answer only from your approved content, qualify leads, book appointments and hand off to your team with full context. When the answer isn't in your content, they say so instead of inventing one.",
+      body: "Assistants on your website, WhatsApp or inbox that answer from your approved content, qualify leads, book appointments and hand off to your team with full context. They are built and tested to say when the answer isn't in your content and pass the question to a person, rather than guess.",
     },
     {
       title: "Document and data extraction",

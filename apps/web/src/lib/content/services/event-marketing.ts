@@ -7,9 +7,9 @@ const service: Service = {
   shortName: "Event marketing",
 
   who: "For event organizers, promoters and companies running ticketed events who need every seat sold, and need to know which ads are actually selling them.",
-  value: "Event marketing that fills the room, with every ticket traced to the ad that sold it",
+  value: "Event marketing that fills the room and shows which ads are selling the tickets",
   valueDetail:
-    "Full event marketing, from positioning and creative to Meta and Google ads, influencers and launch, run by one team on an event page with conversion tracking built in. Every confirmed booking is reported back to Meta and Google with its ticket value, so the platforms learn who actually buys and budget moves to the ads that are selling seats.",
+    "You see what each ad costs per ticket sold while there's still time to act, and budget moves to the ads that are filling seats. One team runs the whole event marketing campaign, from positioning and creative to Meta and Google ads and influencers, on an event page that reports paid bookings back to Meta and Google with their ticket value, so the platforms learn who actually buys.",
   problem:
     "The venue is booked, the lineup is announced and the on-sale date is fixed. You're spending on ads, but the dashboard shows reach and clicks while the sales sheet shows a slow trickle, and nobody can tell you which ad sold a single ticket. Two weeks out, you're guessing whether to spend more or cut your losses.",
 
@@ -17,8 +17,8 @@ const service: Service = {
     "Fill the room with a full event campaign where every paid booking is traced back to the ad, creator or channel that sold it.",
 
   outcomes: [
-    "A true cost per ticket for every ad, audience and channel, counted on confirmed payments, not clicks or abandoned carts.",
-    "Meta and Google optimizing toward people who buy tickets, because every paid booking is reported back with its value.",
+    "A cost per ticket for every ad and audience, counted on confirmed payments rather than clicks or abandoned carts, and checked against your real ticket sales so two platforms can't both take credit for the same buyer.",
+    "Meta and Google optimizing toward people who actually buy tickets, because paid bookings are reported back to them with their ticket value.",
     "Sales paced against a ticket target for each phase of the on-sale, so you know weeks out whether you're on track and what changes if you're not.",
     "A buyer audience, proven creative and clean campaign data that give your next event's on-sale a head start.",
   ],
@@ -34,15 +34,15 @@ const service: Service = {
     },
     {
       title: "Meta and Google ads, each with a job",
-      body: "Instagram and Facebook create demand and retarget everyone who watched a video or visited the event page. Google Search, Performance Max and YouTube catch people already looking for something to do. Spend shifts between them as the on-sale heats up.",
+      body: "Instagram and Facebook create demand and retarget people who watched a video or visited the event page. Google Search catches people already looking for something to do on that date, while YouTube and Performance Max extend reach and bring event-page visitors back. Spend shifts between them as the on-sale heats up.",
     },
     {
       title: "Influencers and partners judged on tickets",
-      body: "Creators and partners chosen for whether their audience buys, not for their follower count. Each one gets a tracked link, so the report shows the visits and sales they drove rather than the views they collected.",
+      body: "Creators and partners chosen for whether their audience buys, not for their follower count. Each one gets their own tracked link, so you can see how many people each creator sent to the event page and how ticket sales moved after they posted, rather than the views they collected.",
     },
     {
       title: "Conversion tracking on paid bookings",
-      body: "Meta Pixel, Meta Conversions API and Google Ads conversions on your event page. A purchase fires only when payment is verified, carries the ticket value, and is deduplicated by order across browser and server, so it still counts when an ad blocker stops the pixel and is never counted twice.",
+      body: "Meta Pixel, Meta Conversions API and Google Ads conversion tracking on your event page. A purchase is sent only after payment is verified, with the ticket value and order ID attached. Meta also receives it from the server, so the sale still counts when an ad blocker stops the pixel, and the shared order ID stops it being counted twice. Google Ads receives it from the buyer's browser on the confirmation page, with the order ID as the transaction ID so a page reload is never counted as a second sale.",
     },
     {
       title: "Launch management and daily optimization",
@@ -86,7 +86,7 @@ const service: Service = {
     },
     {
       q: "Do we have to sell tickets through Publeca?",
-      a: "No, but it's where tracking is strongest. On Publeca's checkout, purchase events are sent from our server when payment is verified, so they count even when a browser blocks the pixel, and buyers can pay by card through PayHere or in installments through Koko or Mintpay, settled to your own merchant accounts. If you're committed to another ticketing provider, we track as far as that provider allows and tell you upfront what can and can't be measured.",
+      a: "No, but it's where tracking is strongest. On Publeca's checkout, the Meta purchase event is sent from our server when payment is verified, so it counts even when a browser blocks the pixel, and Google Ads receives the same purchase, with its order ID, from the confirmation page. Buyers can pay by card through PayHere or in installments through Koko or Mintpay, settled to your own merchant accounts. If you're committed to another ticketing provider, we track as far as that provider allows and tell you upfront what can and can't be measured.",
     },
     {
       q: "Can you cover the event itself as well?",

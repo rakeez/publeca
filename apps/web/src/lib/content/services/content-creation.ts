@@ -19,7 +19,7 @@ const service: Service = {
   outcomes: [
     "Sales conversations start further along, because buyers have already seen clear answers to the questions that usually stall a deal.",
     "A plain read on which topics and formats produce leads and sales, so content budget follows revenue instead of reach.",
-    "Ad creative refreshed before performance fades, so paid campaigns never stall while someone waits on new assets.",
+    "Fresh ad creative ready before performance fades, so paid campaigns aren't left running tired ads while someone waits on new assets.",
     "Case studies built from your own verified results that give a hesitant buyer proof they can check for themselves.",
   ],
 
@@ -38,7 +38,7 @@ const service: Service = {
     },
     {
       title: "Articles and buyer guides",
-      body: "Long-form answers to what buyers search for before choosing a supplier, written with your subject-matter experts and coordinated with our SEO and AEO/GEO work so each piece is the clearest, most citable answer to its question.",
+      body: "Long-form answers to what buyers search for before choosing a supplier, drafted with your subject-matter experts and coordinated with our SEO and AEO/GEO work, so each piece aims to be the clearest, most complete answer to its question.",
     },
     {
       title: "Ad creative in testable batches",

@@ -7,7 +7,7 @@ const service: Service = {
   shortName: "Branding",
 
   who: "For directors, CEOs and technical founders whose company has outgrown its brand: the business is stronger than its logo, website and sales deck make it look.",
-  value: "Branding that earns trust at first glance, holds a premium price and wins better hires",
+  value: "Branding that earns trust at first glance, supports premium pricing and attracts better candidates",
   valueDetail:
     "Buyers, candidates and investors decide how established you are before they read a word. You get branding built on clear positioning: an identity and a voice that make the company look and sound like the serious option everywhere buyers and candidates meet you, from the first ad to the signed contract.",
   problem:
@@ -82,7 +82,7 @@ const service: Service = {
     },
     {
       q: "How will we know the rebrand paid for itself?",
-      a: "Decide up front what it should change, such as win rate, price realization or the quality of job applicants, and measure it. Our analytics & data science team records branded search, direct traffic, site conversion and proposal outcomes before launch so the effect is visible afterward instead of assumed.",
+      a: "Agree up front what it should change, such as proposal win rate, how often your team discounts to win, or the number of qualified job applicants. Before launch, our Analytics & Data Science team records those figures alongside searches for your company name, direct traffic and site conversion. After launch it reports the change next to anything else that moved in the same period, such as new campaigns or seasonality, so you judge the effect on evidence instead of assuming it.",
     },
     {
       q: "I'm a technical founder. Isn't branding just a logo I can sort out later?",

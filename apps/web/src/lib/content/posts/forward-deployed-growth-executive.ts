@@ -36,7 +36,7 @@ const post: Post = {
       paragraphs: [
         "The salary is the visible cost. Three others matter more.",
         "Time. Add up the search, the interviews, the candidate's notice period and the onboarding. A capable new CMO then spends their first stretch learning your customers, your margins and your sales process before making the decisions you hired them to make. The growth problem waits through all of it.",
-        "Mis-hire risk. Strong CMO candidates usually come from one of two worlds: large companies with established brands and big budgets, or startups where one channel worked. Either can be the wrong fit for a business at your stage. A mis-hire is also slow to reveal itself, because the strategy sounds right and the activity is visible long before revenue tells the truth. By the time it does, you have lost the salary, the time, and the budget spent executing the wrong plan.",
+        "Mis-hire risk. Many strong CMO candidates come from large companies with established brands and big budgets, or from startups where one channel worked. Either background can be the wrong fit for a business at your stage. A mis-hire is also slow to reveal itself, because the strategy sounds right and the activity is visible long before revenue tells the truth. By the time it does, you have lost the salary, the time, and the budget spent executing the wrong plan.",
         "The team underneath. A CMO is a leader, and leaders need people. In a company without a marketing department, a new CMO's first plan is often a hiring plan: a performance marketer, a content lead, an analyst, perhaps a developer. Each is another search, another salary and another risk. The alternative is that the CMO hires agencies, which brings its own problem.",
       ],
     },

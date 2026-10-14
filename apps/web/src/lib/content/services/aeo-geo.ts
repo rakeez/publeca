@@ -6,11 +6,11 @@ const service: Service = {
   name: "AEO & GEO (AI search optimization)",
   shortName: "AEO / GEO",
 
-  who: "For founders and CEOs whose buyers now ask Google's AI Overviews, AI Mode and AI assistants for a shortlist, and who want their company in that answer without paying for tricks.",
+  who: "For founders and CEOs whose buyers now get their shortlist from Google's AI Overviews, AI Mode or an AI assistant, and who want their company in that answer without paying for tricks.",
   value:
-    "Become a source AI answers draw on when buyers research your category, without the gimmicks",
+    "Be a source AI search can find and cite when buyers research your category, with no gimmicks",
   valueDetail:
-    "Your key pages become indexed, crawlable and worth citing in Google's AI Overviews and AI Mode, which run on the same ranking and quality systems as Google Search. Your budget goes only to the expert content and technical fixes that move visibility, and you judge the result in your own Search Console data, not in a vendor's score.",
+    "Your key pages are cleared of every technical blocker that keeps pages out of Google's AI Overviews and AI Mode, which are rooted in the same ranking and quality systems as Google Search, and they carry expertise worth citing. Your budget goes only to the expert content and technical fixes that move visibility, and you judge the result in your own Search Console data, not in a vendor's score.",
   problem:
     "Buyers ask AI which firm to call and another name comes back. Meanwhile your inbox fills with offers for llms.txt files, AI rewrites and \"AI visibility scores\", and you have no way to tell which of them would make any difference.",
 
@@ -18,7 +18,7 @@ const service: Service = {
     "Be a source Google's AI Overviews and AI assistants can find and cite, through expert content and sound technicals, not gimmicks.",
 
   outcomes: [
-    "Every page you want found is indexed, crawlable and eligible to be shown with a snippet, the baseline Google requires before a page can appear in AI Overviews or AI Mode.",
+    "Every page you want found clears the technical bar Google sets for AI Overviews and AI Mode, with nothing on your side keeping it out of the index or the answer.",
     "Content that gives an AI answer a reason to cite you: first-hand expertise on the questions your buyers ask, which a competitor cannot copy from the same sources.",
     "Spend that goes only to work that moves visibility, with every gimmick you are being pitched named and ruled out in writing.",
     "Visibility you can verify in your own Search Console data and analytics, including the visits and enquiries AI answers send you, instead of a third-party score.",
@@ -31,7 +31,7 @@ const service: Service = {
     },
     {
       title: "Technical foundation fixes",
-      body: "Our engineering team fixes what the audit finds: crawl paths, page speed, mobile responsiveness, canonical URLs, rendering, and structured data where it earns rich results. Clean, semantic HTML also matters for agentic browsing, which may read the rendered page, the DOM and the accessibility tree.",
+      body: "Our engineering team fixes what the audit finds: crawl paths, page speed, mobile responsiveness, canonical URLs, rendering, and structured data where it earns rich results. Clean, semantic HTML also helps AI agents, which Google notes may read the rendered page, the DOM and the accessibility tree.",
     },
     {
       title: "Buyer question map",

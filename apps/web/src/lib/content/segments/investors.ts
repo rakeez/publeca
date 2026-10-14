@@ -11,7 +11,7 @@ const segment: Segment = {
   valueDetail:
     "A portfolio company that needs growth help gets a senior operator backed by marketing, engineering and analytics specialists, without waiting out a hiring cycle or adding an agency for the founder to manage. The founder keeps the decisions. You get a short brief in the same format each time: what was found, what changed, and what it did to the commercial numbers.",
   problem:
-    "Most portfolio companies do not stall for lack of product. They stall in the space between the product and the market: positioning that never quite settled, tracking nobody fully trusts, a senior growth hire that takes months to land, and agency reports that describe activity rather than results. From the outside, all of it arrives as a board update that is hard to read with any confidence.",
+    "When a portfolio company stalls, the product is often not the cause. The gap sits between the product and the market: positioning that never quite settled, a funnel nobody has mapped end to end, and tracking nobody fully trusts. From the outside, it all arrives as a board update that is hard to read with any confidence.",
 
   cardSummary:
     "A senior growth team portfolio companies can call on: faster than a hire, more accountable than an agency, reported in plain terms.",
@@ -35,7 +35,7 @@ const segment: Segment = {
     },
     {
       title: "Numbers that hold up before spend scales",
-      body: "Conversion tracking for the website and the app is put in place first, by Publeca's own Analytics & Data Science team. Every read-out ties work to revenue and acquisition cost, and states plainly where the data is incomplete.",
+      body: "Conversion tracking for the website and, where there is one, the app is put in place first, by Publeca's own Analytics & Data Science team. Every read-out ties work to revenue and acquisition cost, and states plainly where the data is incomplete.",
     },
     {
       title: "Briefs written for a partner, comparable across companies",
@@ -71,7 +71,7 @@ const segment: Segment = {
       includes: [
         "A forward-deployed growth lead working with the founder, on-site or remote",
         "Specialists from Marketing & Brand, Engineering and Analytics & Data Science as the plan requires",
-        "Conversion tracking for the website and app set up before spend scales",
+        "Conversion tracking for the website and any app, set up before spend scales",
         "A 90-day plan agreed with the founder before work begins",
         "Weekly read-outs to the founder and a monthly brief for the partner",
         "Handover documentation, so the work outlasts the engagement and informs the eventual hire",
@@ -82,7 +82,7 @@ const segment: Segment = {
       bestFor:
         "A deal team before an investment decision, when the commercial story needs an operator's check alongside the financial one.",
       value:
-        "An operator's view of whether the market, positioning, funnel and unit economics hold up, so the questions that matter are raised before the term sheet rather than after it.",
+        "The commercial questions that matter raised before the investment decision, not after the round closes: an operator's check of whether the market, positioning, funnel and unit economics hold up.",
       commitment: "Scoped to your deal timeline · fixed fee",
       includes: [
         "Market and positioning review from the buyer's point of view",

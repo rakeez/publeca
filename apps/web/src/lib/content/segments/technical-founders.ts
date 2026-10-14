@@ -31,7 +31,7 @@ const segment: Segment = {
     },
     {
       title: "Numbers you would accept in a code review",
-      body: "A written event schema, server-side tracking with deduplicated event IDs across web and app, and conversions reconciled against your database and billing system. It is documented like any other production system you run, so you can inspect every assumption.",
+      body: "A written event schema, server-side tracking that sends the same event ID from browser and server so each conversion is counted once, on web and in your app, and conversions reconciled against your database and billing system. It is documented like any other production system you run, so you can inspect every assumption.",
     },
     {
       title: "Marketing you can reason about",
@@ -128,7 +128,7 @@ const segment: Segment = {
     },
     {
       q: "How is this different from bringing in a business co-founder?",
-      a: "A co-founder is one person, with one skill set, who joins permanently and holds equity whether or not the go-to-market works. Here you get a growth lead plus marketing, engineering and analytics capacity, judged on metrics agreed up front. If it stops being the right fit, you end a commercial agreement instead of unwinding a shareholding.",
+      a: "A co-founder is one person, with one skill set, whose equity vests whether or not the go-to-market works, and whose vested shares stay on your cap table even if they leave. Here you get a growth lead plus marketing, engineering and analytics capacity, judged on metrics agreed up front. If it stops being the right fit, you end a commercial agreement instead of unwinding a shareholding.",
     },
     {
       q: "Can we hire our own growth team later?",

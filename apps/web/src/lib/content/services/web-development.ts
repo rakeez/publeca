@@ -38,7 +38,7 @@ const service: Service = {
     },
     {
       title: "Technical SEO and structured data",
-      body: "Clean URLs, unique titles and descriptions, an XML sitemap, deliberate internal linking and schema.org markup that matches what is on the page, so search engines and AI answers can read, trust and cite it.",
+      body: "Clean URLs, unique titles and descriptions, an XML sitemap, deliberate internal linking and schema.org markup that matches what is on the page, so search engines, including Google's AI features, can crawl and understand every page, and eligible pages can show as rich results.",
     },
     {
       title: "A CMS your team will actually use",
@@ -82,7 +82,7 @@ const service: Service = {
     },
     {
       q: "Will we lose our Google rankings if you rebuild the site?",
-      a: "Not if the migration is planned. Before launch, every existing URL is mapped to its new address with a 301 redirect, titles and content on pages that already rank are carried over, and Search Console is checked after launch for crawl errors. Rankings are usually lost when that step is skipped.",
+      a: "A planned migration protects them. Before launch, every existing URL is mapped to its new address with a 301 redirect, and the titles and content of pages that already rank are carried over. After launch, the new sitemap is submitted and Search Console is watched for crawl errors. Expect some temporary movement while Google recrawls the new URLs; lasting losses usually come from skipping these steps.",
     },
     {
       q: "Can our team update the site without you?",

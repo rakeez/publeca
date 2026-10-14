@@ -80,17 +80,17 @@ const post: Post = {
       ],
       bullets: [
         "Alternatives: a senior engineer hand-reviews every migration; risky changes wait for a late-night maintenance window; a staging database without production-scale data; or ship it and roll back if it breaks.",
-        "Unique capabilities: tests each migration against real production traffic, which staging cannot; runs on every pull request, which manual review cannot sustain; estimates lock time against actual table sizes.",
+        "Unique capabilities: replays recorded production query patterns against each migration, which a staging database without production data cannot; runs on every pull request, which manual review cannot sustain; estimates lock time against actual table sizes.",
         "Value: schema changes ship during business hours without outage risk, and senior engineers stop being the bottleneck on every migration.",
         "Customers who care most: teams changing schemas often on large, busy Postgres databases, where downtime hits customers or an SLA. Not early startups with small tables, where most migrations are already safe.",
         "Category: not “AI code analysis,” which invites comparison with general code review tools; instead “migration safety for Postgres,” a frame where the buyer instantly knows what it replaces.",
-        "Headline: “Ship Postgres migrations during business hours, without the outage risk.” Subhead: “For teams running busy production databases. Every migration is tested against your real traffic on each pull request, so there is no maintenance window and nobody hand-reviews every change.” The feature list moves below the fold, where it supports a claim instead of trying to be one.",
+        "Headline: “Ship Postgres migrations during business hours, without the outage risk.” Subhead: “For teams running busy production databases. Every pull request's migrations are checked against your recorded production query patterns, so risky changes are caught before merge, not in a late-night maintenance window, and nobody hand-reviews every change.” The feature list moves below the fold, where it supports a claim instead of trying to be one.",
       ],
     },
     {
       heading: "If you want a second pair of hands",
       paragraphs: [
-        "Positioning is the piece of go-to-market technical founders most often hand to a business co-founder, and equity is an expensive way to pay for it. Publeca's Go-to-Market Sprint runs this method with you on your own customer interviews, wins and lost deals, then carries it into market: a defined ideal customer, a landing page rewritten around the new position, conversion tracking you can trust, and a launch campaign. Fixed scope, fixed fee, and your cap table stays exactly as it is.",
+        "Positioning is one of the first jobs technical founders expect a business co-founder to take on, and equity is an expensive way to pay for it. Publeca's Go-to-Market Sprint runs this method with you on your own customer interviews, wins and lost deals, then carries it into market: a defined ideal customer, a landing page rewritten around the new position, conversion tracking you can trust, and a launch campaign. Fixed scope, fixed fee, and your cap table stays exactly as it is.",
       ],
     },
   ],
@@ -103,7 +103,7 @@ const post: Post = {
   seo: {
     title: "Positioning a Technical Product: A Founder's Method",
     description:
-      "A positioning method for technical founders: map competitive alternatives, unique capabilities, value and best-fit customers, then write a homepage headline.",
+      "Technical founders: turn your feature list into the reason a buyer pays. A five-step product positioning method, from alternatives to category to headline.",
     keywords: [
       "product positioning",
       "positioning for technical founders",

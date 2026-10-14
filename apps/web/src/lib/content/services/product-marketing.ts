@@ -86,7 +86,7 @@ const service: Service = {
     },
     {
       q: "Will you set our prices?",
-      a: "We give pricing and packaging input: the value metric, the tiers, what goes in each package and how buyers will compare it. The decision is yours. Where it helps, we test packages on live pages with tracking, so the choice rests on what buyers do rather than on opinion.",
+      a: "We give pricing and packaging input: the value metric, the tiers, what goes in each package and how buyers will compare it. The decision is yours. Where you have enough traffic to read a result, we test how packages are presented on live pages, with tracking, so the choice rests on what buyers do rather than on opinion.",
     },
     {
       q: "How is this different from hiring a product marketing manager?",

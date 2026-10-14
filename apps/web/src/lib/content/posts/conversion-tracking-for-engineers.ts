@@ -42,7 +42,7 @@ const post: Post = {
       bullets: [
         "Google click IDs from the landing URL: gclid, plus gbraid and wbraid, which can appear on iOS traffic.",
         "Meta's _fbp cookie and the _fbc value derived from fbclid, plus client IP address and user agent.",
-        "The GA4 client ID from the _ga cookie, which the Measurement Protocol needs to attach a server event to the right user and session.",
+        "The GA4 client ID and session ID (from the _ga and _ga_<measurement ID> cookies, or gtag's get command), which the Measurement Protocol needs to attach a server event to the right user and session.",
         "The consent choices in force when those identifiers were collected.",
       ],
     },
