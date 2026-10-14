@@ -28,7 +28,7 @@ function PostCard({ p }: { p: Post }) {
   return (
     <Link
       href={`/blog/${p.slug}`}
-      className={`${scrollItem} group flex flex-col rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-brand-100 hover:shadow-md`}
+      className={`${scrollItem} group flex flex-col rounded-2xl border border-slate-200 bg-white p-6 transition hover:border-slate-400`}
     >
       <p className="font-display text-lg font-semibold leading-snug text-slate-900 group-hover:text-brand-600">{p.title}</p>
       <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-600">{p.value}</p>
@@ -56,7 +56,7 @@ export default function BlogPage() {
           }}
         />
         <Container className="pb-14 pt-14 md:pb-16 md:pt-20">
-          <p className="font-display text-xs font-semibold uppercase tracking-[0.14em] text-brand-600">Insights</p>
+          <p className="font-display mono-label text-brand-600">Insights</p>
           <p className="mt-5 max-w-3xl text-lg font-medium text-slate-700">
             For CEOs, technical founders and investors who would rather make growth decisions on
             evidence than on opinion.

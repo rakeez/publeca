@@ -123,7 +123,7 @@ export default async function SegmentPage({ params }: { params: Promise<{ segmen
       <Container className="grid gap-8 py-14 md:py-20 lg:grid-cols-2 lg:gap-12">
         <ProblemCallout label={quiet ? "What we often see" : "The problem we solve"} problem={s.problem} />
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-600">
+          <p className="mono-label text-brand-600">
             {quiet ? "Patterns worth recognizing" : "Sound familiar?"}
           </p>
           <ul className="mt-4 space-y-3">
@@ -189,7 +189,7 @@ export default async function SegmentPage({ params }: { params: Promise<{ segmen
                   key={p.name}
                   data-reveal
                   className={`${scrollItem} relative flex flex-col rounded-3xl border p-7 ${
-                    p.highlight ? "border-brand-200 bg-white shadow-xl shadow-brand-500/10" : "border-slate-200 bg-white"
+                    p.highlight ? "border-slate-900 bg-white ring-1 ring-slate-900" : "border-slate-200 bg-white"
                   }`}
                 >
                   {p.highlight && (
@@ -260,7 +260,7 @@ export default async function SegmentPage({ params }: { params: Promise<{ segmen
                 <Link
                   key={sv!.slug}
                   href={`/services/${sv!.slug}`}
-                  className={`${scrollItem} group rounded-2xl border border-slate-100 bg-white p-5 shadow-sm transition hover:border-brand-100 hover:shadow-md`}
+                  className={`${scrollItem} group rounded-2xl border border-slate-200 bg-white p-5 transition hover:border-slate-400`}
                 >
                   <p className="font-semibold text-slate-900 group-hover:text-brand-600">{sv!.shortName}</p>
                   <p className="mt-1.5 text-sm leading-relaxed text-slate-500">{sv!.cardSummary}</p>
@@ -282,7 +282,7 @@ export default async function SegmentPage({ params }: { params: Promise<{ segmen
                   <Link
                     key={p.slug}
                     href={`/blog/${p.slug}`}
-                    className={`${scrollItem} group flex flex-col rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition hover:shadow-md`}
+                    className={`${scrollItem} group flex flex-col rounded-2xl border border-slate-200 bg-white p-6 transition`}
                   >
                     <p className="font-display text-lg font-semibold leading-snug text-slate-900 group-hover:text-brand-600">{p.title}</p>
                     <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-500">{p.value}</p>

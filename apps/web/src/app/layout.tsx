@@ -1,9 +1,17 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Sora } from "next/font/google";
+import { Inter, JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
-const sora = Sora({ subsets: ["latin"], variable: "--font-display", display: "swap" });
+// Plus Jakarta Sans for display (700–800, tight tracking), Inter for body, a mono for the
+// uppercase meta labels and status pills (docs/design-system.md).
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["500", "600", "700", "800"],
+  variable: "--font-display",
+  display: "swap",
+});
+const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-mono", display: "swap" });
 
 // Preview/dev builds (dev.publeca.com, *.vercel.app) are public for review but must never be
 // indexed as duplicates of www.publeca.com.
@@ -41,7 +49,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${sora.variable}`}>
+    <html lang="en" className={`${inter.variable} ${jakarta.variable} ${mono.variable}`}>
       <body>{children}</body>
     </html>
   );

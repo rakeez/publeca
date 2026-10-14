@@ -45,7 +45,6 @@ export default function EventsPage() {
           </Link>
         }
         note={eventsHub.cta.note}
-        spotlight
       >
         <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Events", href: "/events" }]} />
       </ValueHero>
@@ -118,13 +117,13 @@ export default function EventsPage() {
       {/* Two paths */}
       <Container className="grid gap-6 py-14 md:grid-cols-2 md:py-20">
         <div className="flex flex-col rounded-3xl border border-slate-200 bg-white p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-600">Done for you</p>
+          <p className="mono-label text-brand-600">Done for you</p>
           <h2 className="font-display mt-3 text-2xl font-bold text-slate-900">{eventsHub.paths.doneForYou.title}</h2>
           <p className="mt-3 flex-1 leading-relaxed text-slate-600">{eventsHub.paths.doneForYou.body}</p>
           <CtaButton cta={eventsHub.cta} className="mt-7 w-fit" source="paths" />
         </div>
         <div className="flex flex-col rounded-3xl border border-slate-200 bg-white p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent-600">Self-serve</p>
+          <p className="mono-label text-accent-600">Self-serve</p>
           <h2 className="font-display mt-3 text-2xl font-bold text-slate-900">{eventsHub.paths.selfServe.title}</h2>
           <p className="mt-3 flex-1 leading-relaxed text-slate-600">{eventsHub.paths.selfServe.body}</p>
 
@@ -134,7 +133,7 @@ export default function EventsPage() {
               <span className="absolute right-2 top-2 rounded-full bg-white/20 px-2 py-0.5 text-[10px] font-semibold text-white">Live</span>
               <p className="text-sm font-bold text-white">Your event page</p>
             </div>
-            <div className="mt-3 flex items-center justify-between rounded-lg border border-slate-100 bg-white p-2.5">
+            <div className="mt-3 flex items-center justify-between rounded-lg border border-slate-200 bg-white p-2.5">
               <div>
                 <p className="text-xs font-semibold text-slate-900">General Admission</p>
                 <p className="text-[11px] text-slate-500">Card or pay later</p>
@@ -170,7 +169,7 @@ export default function EventsPage() {
                   <Link
                     key={s!.slug}
                     href={`/services/${s!.slug}`}
-                    className={`${scrollItem} group rounded-2xl border border-slate-200 bg-white p-6 transition hover:border-brand-200 hover:shadow-md`}
+                    className={`${scrollItem} group rounded-2xl border border-slate-200 bg-white p-6 transition hover:border-slate-400`}
                   >
                     <p className="font-display text-lg font-semibold text-slate-900 group-hover:text-brand-600">{s!.name}</p>
                     <p className="mt-2 text-sm leading-relaxed text-slate-600">{s!.cardSummary}</p>
@@ -191,7 +190,7 @@ export default function EventsPage() {
                 <Link
                   key={p.slug}
                   href={`/blog/${p.slug}`}
-                  className={`${scrollItem} group flex flex-col rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition hover:shadow-md`}
+                  className={`${scrollItem} group flex flex-col rounded-2xl border border-slate-200 bg-white p-6 transition`}
                 >
                   <p className="font-display text-lg font-semibold leading-snug text-slate-900 group-hover:text-brand-600">{p.title}</p>
                   <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-500">{p.value}</p>

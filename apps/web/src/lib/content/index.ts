@@ -3,7 +3,7 @@
  * /CLAUDE.md and the types in ./types.ts) and register it here.
  */
 import type { PostAudience, Post, Segment, SegmentSlug, Service, ServiceCategory } from "./types";
-import { CATEGORIES } from "./categories";
+import { BUCKETS } from "./buckets";
 
 // Services — strategy
 import growthConsulting from "./services/growth-consulting";
@@ -50,11 +50,12 @@ import home from "./home";
 import eventsHub from "./events-hub";
 
 export * from "./types";
-export { CATEGORIES, getCategory } from "./categories";
+export { CATEGORIES, departmentOf, getCategory } from "./categories";
 export { home, eventsHub };
 export { brandLine } from "./site";
 export { DEMO_COPY } from "./demos";
 export { intakePage } from "./intake";
+export { BUCKETS } from "./buckets";
 
 export const SERVICES: Service[] = [
   growthConsulting,
@@ -88,10 +89,14 @@ export const servicesIn = (category: ServiceCategory) => SERVICES.filter((s) => 
 export const servicesFor = (segment: SegmentSlug) => SERVICES.filter((s) => s.forSegments.includes(segment));
 export const postsFor = (audience: PostAudience) => POSTS.filter((p) => p.audience.includes(audience));
 
-/** Categories that actually have services, in display order. */
-export const SERVICE_GROUPS = CATEGORIES.map((c) => ({ ...c, services: servicesIn(c.id) })).filter(
-  (g) => g.services.length > 0
-);
+/** Value buckets with their services resolved, in display order (see ./buckets.ts). */
+export const BUCKET_GROUPS = BUCKETS.map((b) => ({
+  ...b,
+  services: b.services.map((slug) => SERVICES.find((s) => s.slug === slug)).filter((s): s is Service => !!s),
+}));
+
+/** The bucket a service belongs to. Every service is in exactly one (tested). */
+export const bucketOf = (slug: string) => BUCKET_GROUPS.find((b) => b.services.some((s) => s.slug === slug));
 
 export const AUDIENCE_LABELS: Record<PostAudience, string> = {
   ceos: "For CEOs",

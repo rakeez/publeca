@@ -41,7 +41,7 @@ export function MobileMenu({ groups, cta }: { groups: Group[]; cta: { label: str
         <div className="fixed inset-x-0 bottom-0 top-[61px] z-50 overflow-y-auto border-t border-slate-100 bg-white px-6 pb-10 pt-4">
           {groups.map((g) => (
             <div key={g.title} className="border-b border-slate-100 py-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">{g.title}</p>
+              <p className="mono-label text-slate-400">{g.title}</p>
               <div className="mt-2 grid grid-cols-2 gap-x-4">
                 {g.links.map((l) => (
                   <Link key={l.href} href={l.href} className="py-2 text-[15px] font-medium text-slate-800">

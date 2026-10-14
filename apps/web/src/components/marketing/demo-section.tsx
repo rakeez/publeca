@@ -14,18 +14,23 @@ export function DemoCard({ id, index = 0 }: { id: DemoId; index?: number }) {
       data-reveal
       style={{ "--reveal-i": index } as React.CSSProperties}
       aria-label={copy.label}
-      className={`flex flex-col rounded-3xl border border-slate-200 bg-white p-4 shadow-sm md:p-5`}
+      className="flex flex-col rounded-3xl border border-slate-200 bg-white p-3 md:p-4"
     >
-      <div className="relative rounded-2xl bg-slate-50 p-3.5 pt-9 ring-1 ring-slate-100 md:p-4 md:pt-10">
-        <span className="absolute left-4 top-3 inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">
-          <span className="h-1.5 w-1.5 rounded-full bg-slate-300" />
-          Sample data
+      <div className="relative rounded-2xl bg-slate-50 p-3.5 pt-11 md:p-4 md:pt-12">
+        {/* Window chrome: the demos read as product screenshots (docs/design-system.md). */}
+        <span className="absolute inset-x-0 top-0 flex items-center justify-between border-b border-slate-200 px-4 py-2.5">
+          <span className="flex gap-1.5" aria-hidden>
+            <span className="h-2 w-2 rounded-full bg-slate-300" />
+            <span className="h-2 w-2 rounded-full bg-slate-300" />
+            <span className="h-2 w-2 rounded-full bg-slate-300" />
+          </span>
+          <span className="mono-label text-slate-400">Sample data</span>
         </span>
         <Demo id={id} />
       </div>
-      <figcaption className="mt-4 flex flex-1 flex-col px-1">
+      <figcaption className="mt-4 flex flex-1 flex-col px-2 pb-2">
         <p className="leading-relaxed text-slate-600">
-          <strong className="font-semibold text-slate-900">{copy.title}.</strong> {copy.body}
+          <strong className="font-bold text-slate-900">{copy.title}.</strong> {copy.body}
         </p>
         <p className="mt-2 text-sm leading-relaxed text-slate-500">{copy.note}</p>
       </figcaption>

@@ -2,16 +2,21 @@ import type { HomeContent } from "./types";
 import { brandLine } from "./site";
 
 // Homepage copy. Follows the writing rule in /CLAUDE.md: who + value first, then the
-// problem, then the details, then the CTA. Section patterns and two-tone headings follow
-// docs/playbook.md (P1 hero diagram, P2 tabs, P3 demos, P4 bento, P6 commitments, P7 stages).
+// problem, then the details, then the CTA. Layout follows docs/design-system.md; section
+// patterns follow docs/playbook.md (P1 hero diagram, P2 bucket tabs, P3 demos, P6, P7).
 const home: HomeContent = {
   hero: {
-    eyebrow: brandLine.line.replace(/.$/, ""),
     who: "For directors and CEOs who want the next stage of growth explained in plain English, technical founders scaling without trading equity for a co-founder, and the investors who back them.",
     headline:
       "Revenue and market share you can see, from a growth consulting firm that executes its own plan",
+    headlineAccent: "you can see",
+    benefits: [
+      { lead: "A costed answer", rest: "on where your next growth comes from, before you fund it." },
+      { lead: "A senior growth executive", rest: "inside your business who owns the plan, without a C-level hire." },
+      { lead: "Spend traced to sales,", rest: "measured by our own analytics team from day one." },
+    ],
     subhead:
-      "Get a costed answer to where your next growth comes from, then a senior growth executive inside your business who delivers it with our own marketing, engineering, and analytics & data science teams. Strategy and execution sit in one firm, so one firm answers for the result.",
+      "Strategy and execution sit in one firm, with our own marketing, engineering, and analytics & data science teams, so one firm answers for the result.",
     primaryCta: {
       label: "Book a growth diagnostic",
       message:
@@ -19,12 +24,6 @@ const home: HomeContent = {
       note: "Fixed fee. About three weeks. Ends with a 90-day plan.",
     },
     secondaryCta: { label: "See how an engagement runs", href: "#how-we-work" },
-    chips: [
-      "Forward-deployed growth executives",
-      "In-house engineering department",
-      "Analytics & data science team",
-      "Conversion tracking for websites and apps",
-    ],
   },
 
   audiences: {
@@ -49,30 +48,6 @@ const home: HomeContent = {
       {
         title: "The developers build without the market",
         body: "The website or app is built to spec, but nobody briefed the developers on the market, the funnel or what a conversion is worth. It works. It just doesn't sell, and nothing in it is set up to show why.",
-      },
-    ],
-  },
-
-  value: {
-    heading: "What changes when one firm owns the result:",
-    headingDim: "one set of numbers, and one party answering for them.",
-    intro: "You stop managing three vendors and the gaps between them. Specifically, you get:",
-    items: [
-      {
-        title: "A clear answer on where growth comes from",
-        body: "Opportunities ranked by financial impact, effort, and risk, each with a financial model behind it, so leadership puts money behind the right bet instead of the loudest one.",
-      },
-      {
-        title: "Senior growth leadership without a C-level hire",
-        body: "A forward-deployed growth executive works inside your business, owns the plan, and directs the specialists who execute it, without the search, cost, and risk of recruiting a full-time executive.",
-      },
-      {
-        title: "Spend you can trace to sales",
-        body: "Conversion tracking on your website and apps goes live before spend scales, set up by our own analytics & data science team, so you see cost per sale and revenue by channel instead of likes, reach and clicks.",
-      },
-      {
-        title: "Growth that stays built into the business",
-        body: "What works is turned into systems, software, and AI automations that run in your accounts, so results repeat without depending on a single campaign or a single person.",
       },
     ],
   },
@@ -138,57 +113,46 @@ const home: HomeContent = {
     ],
   },
 
-  capabilities: {
-    heading: "Every capability the plan calls for,",
-    headingDim: "built in-house.",
+  buckets: {
+    heading: "Five ways to grow,",
+    headingDim: "one firm accountable for all of them.",
     intro:
-      "When the diagnosis points to a rebuilt website, server-side tracking, a product launch or an AI workflow, the team that recommended it is the team that builds it. Each capability has its own page covering what's included and how it's measured.",
+      "Pick the outcome you need. Under each one is how it gets done: the capabilities involved and the in-house department that delivers each, all answering to one growth plan.",
   },
 
-  firm: {
-    heading: "Five departments, one growth plan,",
-    headingDim: "one firm accountable.",
-    intro:
-      "Every department answers to the plan your forward-deployed growth executive owns. Work moves between desks, not between companies, so nothing gets lost in a handover and no one can blame another vendor.",
-    departments: [
-      {
-        title: "Growth Consulting",
-        body: "Diagnosis, opportunity sizing, and growth planning, plus the forward-deployed growth executives who lead each engagement from inside the client's business.",
-        outcome: "Decides where your next growth comes from, sizes it in money, and owns the plan.",
-        stages: ["Diagnose", "Prioritize", "Deploy"],
-      },
-      {
-        title: "Marketing & Brand",
-        body: "Branding, content, social media ads, Google Ads, SEO, AEO/GEO, and product marketing, each judged on tracked sales and leads rather than reach.",
-        outcome: "Brand, content and ads judged on the sales they bring in, not the reach they buy.",
-        stages: ["Deploy", "Scale"],
-      },
-      {
-        title: "Engineering",
-        body: "Web development, software development, and AI solutions, built to convert, rank, and measure, and to remove the system bottlenecks that cap growth.",
-        outcome: "Builds the website, software and AI the plan calls for, ready to measure from day one.",
-        stages: ["Deploy", "Scale"],
-      },
-      {
-        title: "Analytics & Data Science",
-        body: "Conversion tracking and analytics for websites and apps, attribution, dashboards, and modeling, so every growth decision is tied to revenue.",
-        outcome: "Puts tracking in place before spend scales, so every decision ties back to revenue.",
-        stages: ["Diagnose", "Measure", "Scale"],
-      },
-      {
-        title: "Events",
-        body: "Publeca's original arm: event marketing, event photo and video, and the Publeca ticketing platform.",
-        outcome: "Fills rooms, and runs the ticketing platform where your ads learn who actually buys.",
-        stages: ["Deploy", "Measure"],
-      },
-    ],
-  },
-
-  eventsArm: {
-    heading: "Sell out the room: the events arm Publeca started with",
-    body: "For event organizers who need ticket sales, not likes, there are two paths: done-for-you event marketing, or the self-serve Publeca ticketing platform. Publeca is the only place to build an event page with paid-booking conversion tracking built in, so Meta and Google learn who actually buys a ticket and your cost per ticket falls. Local payments and buy-now-pay-later through your own merchant accounts, QR e-tickets, door scanning, and assigned seating come with it.",
-    ctaLabel: "Plan your event",
-  },
+  // Read by the hero diagram. Every department answers to the plan the growth executive owns.
+  departments: [
+    {
+      title: "Growth Consulting",
+      body: "Diagnosis, opportunity sizing, and growth planning, plus the forward-deployed growth executives who lead each engagement from inside the client's business.",
+      outcome: "Decides where your next growth comes from, sizes it in money, and owns the plan.",
+      stages: ["Diagnose", "Prioritize", "Deploy"],
+    },
+    {
+      title: "Marketing & Brand",
+      body: "Branding, content, social media ads, Google Ads, SEO, AEO/GEO, and product marketing, each judged on tracked sales and leads rather than reach.",
+      outcome: "Brand, content and ads judged on the sales they bring in, not the reach they buy.",
+      stages: ["Deploy", "Scale"],
+    },
+    {
+      title: "Engineering",
+      body: "Web development, software development, and AI solutions, built to convert, rank, and measure, and to remove the system bottlenecks that cap growth.",
+      outcome: "Builds the website, software and AI the plan calls for, ready to measure from day one.",
+      stages: ["Deploy", "Scale"],
+    },
+    {
+      title: "Analytics & Data Science",
+      body: "Conversion tracking and analytics for websites and apps, attribution, dashboards, and modeling, so every growth decision is tied to revenue.",
+      outcome: "Puts tracking in place before spend scales, so every decision ties back to revenue.",
+      stages: ["Diagnose", "Measure", "Scale"],
+    },
+    {
+      title: "Events",
+      body: "Publeca's original arm: event marketing, event photo and video, and the Publeca ticketing platform.",
+      outcome: "Fills rooms, and runs the ticketing platform where your ads learn who actually buys.",
+      stages: ["Deploy", "Measure"],
+    },
+  ],
 
   insights: {
     heading: "Thinking you can use",

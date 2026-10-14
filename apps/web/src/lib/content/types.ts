@@ -69,6 +69,25 @@ export interface Heading {
   headingDim?: string;
 }
 
+/**
+ * A value bucket: services pooled by the value the customer gets (./buckets.ts). Opens with
+ * who + value + problem; its "How we do it" breakdown lists the services that deliver it.
+ */
+export interface Bucket {
+  /** Anchor id, e.g. "spend-to-sales". */
+  id: string;
+  /** Short outcome label for tabs, pills and nav, e.g. "Turn spend into sales". */
+  label: string;
+  who: string;
+  /** The exact value, as a headline. An outcome, never an activity. */
+  value: string;
+  problem: string;
+  /** 3–4 outcome bullets. */
+  outcomes: string[];
+  /** Service slugs, in display order. Every service belongs to exactly one bucket. */
+  services: string[];
+}
+
 /** The deliverable micro-demos (playbook P3). Copy and sample values live in ./demos.ts. */
 export type DemoId =
   | "opportunity-map"
@@ -196,21 +215,23 @@ export interface Post {
 
 export interface HomeContent {
   hero: {
-    eyebrow: string;
-    /** Who we're for — rendered above/with the headline. */
+    /** Who we're for — rendered above the headline. */
     who: string;
     /** H1 — the value. Must naturally include "growth consulting firm". */
     headline: string;
+    /** Optional phrase inside `headline` rendered in gradient ink (one per page). */
+    headlineAccent?: string;
+    /** Checkmark list: bold lead + regular descriptor. 3 items, outcomes not activities. */
+    benefits: { lead: string; rest: string }[];
     subhead: string;
     primaryCta: Cta;
     secondaryCta: { label: string; href: string };
-    /** 3–4 short proof-of-capability chips (capabilities, not invented stats). */
-    chips: string[];
   };
-  /** "Who we help" tabs. Each panel is built from that segment's own content. */
+  /** "Who we help": one card per segment, built from that segment's own content. */
   audiences: Heading & { intro: string };
   problem: Heading & { intro: string; points: TitledText[] };
-  value: Heading & { intro: string; items: TitledText[] };
+  /** The value buckets section (./buckets.ts). */
+  buckets: Heading & { intro: string };
   /** "What you'd actually receive": the deliverables, demonstrated. */
   demos: DemoSection;
   process: Heading & { intro: string; steps: TitledText[] };
@@ -219,9 +240,8 @@ export interface HomeContent {
    * can hold us to, and the primary CTA repeated.
    */
   commitments: Heading & { intro: string; promises: TitledText[] };
-  capabilities: Heading & { intro: string };
-  firm: Heading & { intro: string; departments: Department[] };
-  eventsArm: { heading: string; body: string; ctaLabel: string };
+  /** The five departments, read by the hero diagram. */
+  departments: Department[];
   insights: Heading & { intro: string };
   faqs: FAQ[];
   finalCta: { heading: string; body: string; cta: Cta };

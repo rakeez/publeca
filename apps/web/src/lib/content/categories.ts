@@ -45,3 +45,13 @@ export const CATEGORIES: {
 export function getCategory(id: ServiceCategory) {
   return CATEGORIES.find((c) => c.id === id)!;
 }
+
+/**
+ * The in-house department that delivers a service (docs/positioning.md §1.3). Usually the
+ * category's department; product marketing is grouped under strategy on the site but is
+ * delivered by Marketing & Brand.
+ */
+export function departmentOf(service: { slug: string; category: ServiceCategory }) {
+  if (service.slug === "product-marketing") return "Marketing & Brand";
+  return getCategory(service.category).department;
+}

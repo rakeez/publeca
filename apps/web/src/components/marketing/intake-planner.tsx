@@ -55,7 +55,7 @@ export function IntakePlanner() {
     if (plan.kind === "events") {
       return (
         <Panel>
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-600">Where to start</p>
+          <p className="mono-label text-brand-600">Where to start</p>
           <p className="font-display mt-3 text-2xl font-bold tracking-tight text-slate-900">
             For ticketed events, start with the events arm.
           </p>
@@ -84,7 +84,7 @@ export function IntakePlanner() {
 
     return (
       <Panel>
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-600">What a diagnostic would look at first</p>
+        <p className="mono-label text-brand-600">What a diagnostic would look at first</p>
         <p className="mt-2 text-sm text-slate-500">
           A starting list, not a verdict: the diagnostic itself confirms it or replaces it. No score, no forecast.
         </p>
@@ -117,7 +117,7 @@ export function IntakePlanner() {
 
         <div className="mt-6 grid gap-4 rounded-2xl bg-slate-50 p-5 sm:grid-cols-2">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Where to start</p>
+            <p className="mono-label text-slate-400">Where to start</p>
             <p className="mt-1.5 font-semibold text-slate-900">{plan.start.pkg}</p>
             <p className="mt-1 text-sm text-slate-600">{plan.start.shape}</p>
             <Link
@@ -128,7 +128,7 @@ export function IntakePlanner() {
             </Link>
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">What you would get each week</p>
+            <p className="mono-label text-slate-400">What you would get each week</p>
             <div className="mt-2 text-sm">
               <CheckList items={[plan.reporting]} />
             </div>
@@ -155,7 +155,7 @@ export function IntakePlanner() {
   return (
     <Panel>
       <div className="flex items-center justify-between gap-4">
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">
+        <p className="mono-label text-slate-400">
           Question {step + 1} of {total}
         </p>
         <div className="flex gap-1" aria-hidden>

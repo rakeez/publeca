@@ -105,18 +105,18 @@ function OpportunityMap() {
             <li
               key={o.name}
               className={`absolute inset-x-0 flex flex-col justify-center gap-1 rounded-xl border bg-white px-3 transition-all ${EASE} ${
-                inPlan ? "border-accent-200 shadow-sm" : "border-slate-100"
+                inPlan ? "border-slate-900" : "border-slate-200"
               } ${dropped ? "opacity-50" : "opacity-100"}`}
               style={{ top: pos * ROW_H, height: ROW_H - 6 }}
             >
-              <span className="flex items-baseline justify-between gap-2">
+              <span className="flex items-center justify-between gap-2">
                 <span className="truncate text-[13px] font-semibold text-slate-900">{o.name}</span>
                 <span
-                  className={`shrink-0 text-[10.5px] font-medium transition-opacity duration-500 ${
+                  className={`shrink-0 rounded-full px-2 py-0.5 font-mono text-[9.5px] font-medium uppercase tracking-[0.06em] transition-opacity duration-500 ${
                     labelled ? "opacity-100" : "opacity-0"
-                  } ${inPlan ? "text-accent-600" : "text-slate-500"}`}
+                  } ${inPlan ? "bg-brand-50 text-brand-700" : "bg-slate-100 text-slate-500"}`}
                 >
-                  {inPlan ? "In the 90-day plan" : "Dropped"}
+                  {inPlan ? "In plan" : "Dropped"}
                 </span>
               </span>
               <span className="flex items-center gap-x-2.5 whitespace-nowrap text-[10px] font-medium text-slate-400">
@@ -149,8 +149,8 @@ function WeeklyReadout() {
   const shown = (n: number) => step >= n;
 
   return (
-    <div ref={ref} className="rounded-xl border border-slate-100 bg-white p-4">
-      <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+    <div ref={ref} className="rounded-xl border border-slate-200 bg-white p-4">
+      <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
         <p className="text-[13px] font-semibold text-slate-900">Weekly read-out</p>
         <p className="text-[11px] font-medium text-slate-400">{READOUT.week}</p>
       </div>
@@ -203,7 +203,7 @@ function VerifiedSale() {
                   ? isSale
                     ? "border-brand-200 bg-brand-50"
                     : "border-slate-200 bg-white"
-                  : "border-slate-100 bg-white/60"
+                  : "border-slate-200 bg-white/60"
               }`}
             >
               <span
@@ -300,12 +300,12 @@ function VerifiedTicket() {
 
   return (
     <div ref={ref} className="space-y-3">
-      <div className="rounded-xl border border-slate-100 bg-white p-3">
+      <div className="rounded-xl border border-slate-200 bg-white p-3">
         <div className="relative flex h-16 items-end overflow-hidden rounded-lg bg-gradient-to-br from-brand-500 to-accent-500 p-2.5">
           <span className="absolute right-2 top-2 rounded-full bg-white/20 px-2 py-0.5 text-[10px] font-semibold text-white">Live</span>
           <p className="text-[13px] font-bold text-white">{TICKET_FLOW.event}</p>
         </div>
-        <div className="mt-2.5 flex items-center justify-between rounded-lg border border-slate-100 p-2.5">
+        <div className="mt-2.5 flex items-center justify-between rounded-lg border border-slate-200 p-2.5">
           <div>
             <p className="text-[12px] font-semibold text-slate-900">{TICKET_FLOW.tier}</p>
             <p className="text-[11px] text-slate-500">Card or pay later</p>
@@ -393,7 +393,7 @@ function CostPerSale() {
             <li
               key={c.name}
               className={`absolute inset-x-0 rounded-xl border bg-white px-3 py-2 transition-all ${EASE} ${
-                flagged ? "border-brand-200" : "border-slate-100"
+                flagged ? "border-brand-200" : "border-slate-200"
               }`}
               style={{ top: pos.get(i)! * CPS_ROW, height: CPS_ROW - 6 }}
             >
@@ -434,7 +434,7 @@ function SeatHold() {
 
   return (
     <div ref={ref}>
-      <div className="rounded-xl border border-slate-100 bg-white p-3">
+      <div className="rounded-xl border border-slate-200 bg-white p-3">
         <div className="mx-auto mb-3 h-1.5 w-full max-w-[190px] rounded-full bg-slate-200" title="Stage" />
         <div className="mx-auto grid max-w-[280px] gap-1.5" style={{ gridTemplateColumns: `repeat(${SEAT_MAP.cols}, minmax(0, 1fr))` }}>
           {Array.from({ length: SEAT_MAP.rows * SEAT_MAP.cols }, (_, i) => (

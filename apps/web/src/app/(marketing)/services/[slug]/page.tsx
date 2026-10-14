@@ -17,7 +17,7 @@ import {
   ValueHero,
   scrollItem,
 } from "@/components/marketing/ui";
-import { SERVICES, getCategory, getSegment, getService, servicesIn } from "@/lib/content";
+import { SERVICES, bucketOf, departmentOf, getSegment, getService } from "@/lib/content";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.publeca.com";
 
@@ -43,8 +43,9 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
   const s = getService(slug);
   if (!s) notFound();
 
-  const category = getCategory(s.category);
-  const related = servicesIn(s.category).filter((x) => x.slug !== s.slug).slice(0, 3);
+  // Services are organized by the value bucket they deliver (lib/content/buckets.ts).
+  const bucket = bucketOf(s.slug);
+  const related = (bucket?.services ?? []).filter((x) => x.slug !== s.slug).slice(0, 3);
   const segments = s.forSegments.map((id) => getSegment(id)).filter((x) => !!x);
 
   return (
@@ -63,7 +64,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       />
 
       <ValueHero
-        eyebrow={`${category.name} · ${s.shortName}`}
+        eyebrow={`${bucket?.label ?? "Services"} · ${departmentOf(s)}`}
         who={s.who}
         value={s.value}
         valueDetail={s.valueDetail}
@@ -91,7 +92,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       <Container className="grid gap-8 py-14 md:py-20 lg:grid-cols-2 lg:gap-12">
         <ProblemCallout problem={s.problem} />
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-600">What you get</p>
+          <p className="mono-label text-brand-600">What you get</p>
           <div className="mt-4">
             <CheckList items={s.outcomes} />
           </div>
@@ -153,7 +154,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
                   <Link
                     key={seg!.slug}
                     href={`/for/${seg!.slug}`}
-                    className={`${scrollItem} group rounded-2xl border border-slate-200 bg-white p-6 transition hover:border-brand-200 hover:shadow-md`}
+                    className={`${scrollItem} group rounded-2xl border border-slate-200 bg-white p-6 transition hover:border-slate-400`}
                   >
                     <p className="font-display font-semibold text-slate-900 group-hover:text-brand-600">{seg!.name}</p>
                     <p className="mt-2 text-sm leading-relaxed text-slate-600">{seg!.cardSummary}</p>
@@ -173,14 +174,14 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       {related.length > 0 && (
         <section className="border-t border-slate-100">
           <Container className="py-14">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">More in {category.name}</p>
+            <p className="mono-label text-slate-400">More ways to {bucket?.label.toLowerCase()}</p>
             <div className="mt-6">
               <ScrollRow cols={3}>
                 {related.map((r) => (
                   <Link
                     key={r.slug}
                     href={`/services/${r.slug}`}
-                    className={`${scrollItem} group rounded-2xl border border-slate-100 bg-white p-5 shadow-sm transition hover:border-brand-100 hover:shadow-md`}
+                    className={`${scrollItem} group rounded-2xl border border-slate-200 bg-white p-5 transition hover:border-slate-400`}
                   >
                     <p className="font-semibold text-slate-900 group-hover:text-brand-600">{r.shortName}</p>
                     <p className="mt-1.5 text-sm leading-relaxed text-slate-500">{r.cardSummary}</p>

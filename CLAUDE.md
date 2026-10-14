@@ -5,8 +5,9 @@ data science teams, plus an **events arm** (event marketing + a self-serve ticke
 This repo is the website (`apps/web`, Next.js) and the events platform (dashboard, checkout,
 tickets, scanner). Positioning, audiences, services and offers are defined in
 [`docs/positioning.md`](docs/positioning.md) — read it before writing any public copy.
-Section patterns, motion, demos and tools follow [`docs/playbook.md`](docs/playbook.md),
-which ranks **below** this file and `positioning.md` (where they disagree, they win).
+Section patterns, motion, demos and tools follow [`docs/playbook.md`](docs/playbook.md); the
+visual system follows [`docs/design-system.md`](docs/design-system.md). Both rank **below** this
+file and `positioning.md` (where they disagree, they win).
 
 ---
 
@@ -65,6 +66,10 @@ made with confidence, control kept, **equity kept**. "Grow your business" is not
 - `apps/web/src/lib/content/segments/*.ts` — one file per audience page (`/for/[segment]`).
 - `apps/web/src/lib/content/posts/*.ts` — one file per article (`/blog/[slug]`).
 - `apps/web/src/lib/content/home.ts`, `events-hub.ts` — homepage and events arm.
+- `apps/web/src/lib/content/buckets.ts` — services pooled into **value buckets** (what the customer
+  gets, not which department). Each bucket: who + value + problem + outcomes, then "How we do
+  it" (its services + the department behind each). Every service belongs to exactly one bucket
+  (tested). Home, `/services`, nav, footer and service pages all read from it.
 - `apps/web/src/lib/content/site.ts` — the repeated line (*Consulting that builds what it
   recommends.*) and the enemy line. Footer on every page; meta descriptions of `/`,
   `/services/growth-consulting` and `/for/ceos` only. Never in investor headings or meta.
@@ -97,6 +102,10 @@ session** so every future session writes the way they want. Note the change in t
   line and enemy in the footer, two-tone headings, fear-answering segment headings,
   sample-data demos (no figures), the `/diagnostic` planner and show-your-working copy in
   the ticketing platform. Decisions are recorded in playbook §15.1, pending confirmation.
+- 2026-10-14 — User feedback: removed the hero eyebrow pill (the repeated line stays in the
+  footer and three meta descriptions); redesigned to the ClickUp-style system keeping pink
+  (`docs/design-system.md`); services reorganized into five value buckets with "How we do it"
+  breakdowns (`buckets.ts`). Recorded in playbook §15.2.
 
 ---
 
@@ -107,7 +116,8 @@ session** so every future session writes the way they want. Note the change in t
   (`vercel deploy --prod --scope publeca`), not git-connected.
 - Inventory: `quantitySold` counts confirmed sales only; holds never touch it (see `packages/db/src/inventory.ts`).
 - Payments: named accounts per host (multiple per provider), selected per event; webhook verifies with the order's exact account.
-- Brand: pink `brand-500` (#ff0066, logo) + blue `accent-500` (#635bff). Real logo is `apps/web/public/publeca-logo.png` — never recreate it.
+- Brand: pink `brand-500` (#ff0066, logo; also the primary CTA) + violet `accent-500` (#635bff, badges only). Real logo is `apps/web/public/publeca-logo.png` — never recreate it.
+- Design system: `docs/design-system.md`. `slate-*` is remapped to a neutral grayscale; Plus Jakarta Sans display, Inter body, JetBrains Mono labels; flat cards, pill buttons, one conic border per page.
 - SEO: `robots.ts`, `sitemap.ts`, JSON-LD via `components/json-ld.tsx`. Follow Google's guidance: no AEO hacks, unique non-commodity content.
 - Motion: server renders the finished state; `prefers-reduced-motion` shows it with no
   movement; loops stop off-screen and on hidden tabs; hover gated to fine pointers. Runtime in

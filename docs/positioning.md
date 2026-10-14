@@ -135,7 +135,10 @@ QR e-tickets, door scanning, assigned seating, Meta/Google conversion tracking).
 - **Repeated line:** *Consulting that builds what it recommends.* Enemy line: *Growth stalls
   in the gaps between the firms you hire.* Both live in `lib/content/site.ts`; footer on every
   page, and the meta descriptions of `/`, `/services/growth-consulting` and `/for/ceos`.
-  Investor page: footer only.
+  Not in the home hero (removed by the user, 2026-10-14). Investor page: footer only.
+- **Value buckets** (`lib/content/buckets.ts`) organize the services for readers: Know where
+  to grow · Turn spend into sales · Be found and chosen · Remove what caps growth · Sell out the
+  room. The §4 categories remain the department/SEO grouping behind them.
 - Prefilled WhatsApp messages are written in the reader's voice with a slot to fill, e.g.
   "Hi Publeca, I run [type of business] and want to know where our next growth will come from."
 - **Payments accuracy:** organizers *can* take every payment into their own merchant accounts,

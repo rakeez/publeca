@@ -4,7 +4,8 @@
 
 :root {
   --font-sans: "Inter", system-ui, sans-serif;
-  --font-display: "Sora", var(--font-sans);
+  --font-display: "Plus Jakarta Sans", var(--font-sans);
+  --font-mono: ui-monospace, monospace;
 }
 
 html {
@@ -20,10 +21,62 @@ body {
   color: #fff;
 }
 
-/* Display font for marketing headings */
+/* Display font for marketing headings: Plus Jakarta Sans, tight tracking (docs/design-system.md).
+   Sizes 48px+ pull to -0.04em via the .tracking-display utility below. */
 .font-display {
   font-family: var(--font-display);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
+}
+.tracking-display {
+  letter-spacing: -0.04em;
+}
+
+/* Uppercase mono meta label (eyebrows, "Sample data", status). Positive tracking only here. */
+.mono-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Gradient text for the one emphasized phrase in a hero headline: pink → violet. */
+.text-gradient {
+  background: linear-gradient(83deg, #ff0066 0%, #c13cff 55%, #635bff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Rotating conic border (the system's one dramatic animation; at most one per page).
+   A 2px frame around the hero product card, pink-led to keep the Publeca palette. */
+@property --conic-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+.conic-frame {
+  padding: 2px;
+  background: conic-gradient(
+    from var(--conic-angle),
+    #ff0066 0%,
+    #ff7aac 18%,
+    #c13cff 36%,
+    #635bff 54%,
+    #0091ff 70%,
+    #e8e8e8 84%,
+    #ff0066 100%
+  );
+}
+@media (prefers-reduced-motion: no-preference) {
+  .conic-frame {
+    animation: conic-spin 6s linear infinite;
+  }
+}
+@keyframes conic-spin {
+  to {
+    --conic-angle: 360deg;
+  }
 }
 
 /* ─── Scroll reveal (playbook §10.3) ───────────────────────────────────────────
@@ -73,69 +126,6 @@ body {
   }
 }
 
-/* Bento (R6): on fine pointers the tile lifts and its outcome line rises into full ink on
-   hover. The outcome is always visible, so touch and keyboard readers never miss it. */
-@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .bento-tile {
-    transition:
-      transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-      box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .bento-tile:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 32px -12px rgba(15, 23, 42, 0.18);
-  }
-  .bento-outcome {
-    transition:
-      color 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-      transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .bento-tile .bento-outcome {
-    color: #64748b;
-  }
-  .bento-tile:hover .bento-outcome {
-    color: #0f172a;
-    transform: translateY(-8px);
-  }
-}
-
-/* Cursor spotlight (R2): a soft brand glow and a masked dot grid that follow the pointer.
-   Fine pointers only; off under reduced motion. */
-.spotlight {
-  --spot-x: 70%;
-  --spot-y: 20%;
-}
-.spotlight::before,
-.spotlight::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-.spotlight::before {
-  background: radial-gradient(420px 320px at var(--spot-x) var(--spot-y), rgba(255, 0, 102, 0.1), transparent 70%);
-}
-.spotlight::after {
-  background-image: radial-gradient(rgba(99, 91, 255, 0.35) 1px, transparent 1.4px);
-  background-size: 18px 18px;
-  -webkit-mask-image: radial-gradient(260px 200px at var(--spot-x) var(--spot-y), #000, transparent 75%);
-  mask-image: radial-gradient(260px 200px at var(--spot-x) var(--spot-y), #000, transparent 75%);
-}
-@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .spotlight.is-active::before,
-  .spotlight.is-active::after {
-    opacity: 1;
-  }
-}
-
-/* Marquee (R7): pause on hover. */
-.marquee:hover .marquee-track {
-  animation-play-state: paused;
-}
-
 /* ─── Reduced motion: one global switch (required before any motion ships) ──── */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -146,9 +136,6 @@ body {
     transition-duration: 0.01ms !important;
     transition-delay: 0ms !important;
     scroll-behavior: auto !important;
-  }
-  .marquee-track {
-    animation: none !important;
   }
 }
 

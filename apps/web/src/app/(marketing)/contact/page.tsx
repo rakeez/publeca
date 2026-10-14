@@ -53,7 +53,7 @@ export default function ContactPage() {
           }}
         />
         <Container className="pb-14 pt-14 md:pb-16 md:pt-20">
-          <p className="font-display text-xs font-semibold uppercase tracking-[0.14em] text-brand-600">Contact</p>
+          <p className="font-display mono-label text-brand-600">Contact</p>
           <p className="mt-5 max-w-3xl text-lg font-medium text-slate-700">
             For leaders who want a straight answer on whether we can help — and what the first step would be.
           </p>
@@ -71,7 +71,7 @@ export default function ContactPage() {
         <div className="grid gap-5 md:grid-cols-2">
           {STARTS.map((s) => (
             <div key={s.who} className="flex flex-col rounded-2xl border border-slate-200 bg-white p-7">
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-600">{s.who}</p>
+              <p className="mono-label text-brand-600">{s.who}</p>
               <p className="font-display mt-3 text-lg font-semibold leading-snug text-slate-900">{s.value}</p>
               <a
                 href={s.href}

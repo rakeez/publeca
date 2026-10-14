@@ -68,7 +68,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           ]}
         />
 
-        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-600">{AUDIENCE_LABELS[post.audience[0]!]}</p>
+        <p className="mono-label text-brand-600">{AUDIENCE_LABELS[post.audience[0]!]}</p>
         <h1 className="font-display mt-3 text-3xl font-bold leading-tight tracking-tight text-slate-900 md:text-[2.6rem]">
           {post.title}
         </h1>
@@ -76,11 +76,11 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         {/* Writing rule: who it's for and what they get — before anything else */}
         <div className="mt-6 grid gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-5 sm:grid-cols-2">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">Who this is for</p>
+            <p className="mono-label text-slate-400">Who this is for</p>
             <p className="mt-1.5 text-sm leading-relaxed text-slate-800">{post.who}</p>
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">What you'll get</p>
+            <p className="mono-label text-slate-400">What you'll get</p>
             <p className="mt-1.5 text-sm leading-relaxed text-slate-800">{post.value}</p>
           </div>
         </div>
@@ -131,13 +131,13 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       {related.length > 0 && (
         <section className="border-t border-slate-100 bg-slate-50">
           <div className="mx-auto max-w-6xl px-6 py-14">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Keep reading</p>
+            <p className="mono-label text-slate-400">Keep reading</p>
             <div className="mt-6 grid gap-5 md:grid-cols-3">
               {related.map((p) => (
                 <Link
                   key={p.slug}
                   href={`/blog/${p.slug}`}
-                  className="group rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition hover:shadow-md"
+                  className="group rounded-2xl border border-slate-200 bg-white p-6 transition"
                 >
                   <p className="font-display font-semibold leading-snug text-slate-900 group-hover:text-brand-600">{p.title}</p>
                   <p className="mt-2 text-sm leading-relaxed text-slate-500">{p.value}</p>

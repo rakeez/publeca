@@ -1180,6 +1180,31 @@ recorded here with its date.
 - "Most clients start with the first and grow from there" (package intro) implied
   a client base; replaced with why the first package is the recommended start.
 
+### 15.2 User direction: redesign (2026-10-14, later the same day)
+
+The user reviewed the first preview and directed a redesign. These are **user
+decisions**, not defaults, and they override the matching rows of 15.1.
+
+- **Hero eyebrow pill removed.** *Consulting that builds what it recommends.* no
+  longer sits above the home H1. It stays in the footer on every page and in the
+  three meta descriptions (15.1 row 2, otherwise unchanged).
+- **Visual system: the ClickUp style reference, keeping Publeca's pink** as brand
+  and primary CTA color. Codified in `docs/design-system.md`. Section 10.1–10.2 of
+  this playbook (light pink-and-blue system with radial glows, Sora display) is
+  superseded by it: Plus Jakarta Sans display, neutral grayscale, flat 1px-border
+  cards, pills, mono meta labels, one rotating conic border per page.
+- **Information architecture: services pooled into value buckets**
+  (`lib/content/buckets.ts`): *Know where to grow*, *Turn spend into sales*, *Be
+  found and chosen*, *Remove what caps growth*, *Sell out the room*. Each bucket
+  leads with who + value + problem + outcomes, then a **"How we do it"** breakdown
+  of the capabilities (service pages) and the in-house department behind each. The
+  home page, `/services`, the nav menu, the footer and each service page's eyebrow
+  and "more ways to …" row all read from the buckets.
+- **Patterns retired by the redesign:** R2 cursor spotlight, R6 bento, R7 services
+  marquee, the hero aura and the home "value" and "capabilities" sections (folded
+  into the buckets). P2 tabs now switch between buckets instead of readers; "Who we
+  help" is three cards.
+
 ---
 
 ## Appendix A — Implementation notes for Claude Code
