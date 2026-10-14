@@ -1,138 +1,178 @@
-import Link from "next/link";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { SERVICES, getService } from "@/lib/marketing-content";
-import { WhatsAppButton } from "@/components/whatsapp";
+import { JsonLd } from "@/components/json-ld";
+import {
+  Breadcrumbs,
+  CheckList,
+  Container,
+  CtaBand,
+  FaqList,
+  NumberedCards,
+  ProblemCallout,
+  ScrollRow,
+  SectionHeading,
+  ValueHero,
+  scrollItem,
+} from "@/components/marketing/ui";
+import { SERVICES, getCategory, getSegment, getService, servicesIn } from "@/lib/content";
+
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.publeca.com";
 
 export function generateStaticParams() {
   return SERVICES.map((s) => ({ slug: s.slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const service = getService(slug);
-  if (!service) return { title: "Services — Publeca" };
-  return { title: `${service.name} — Publeca`, description: service.summary };
+  const s = getService(slug);
+  if (!s) return {};
+  return {
+    title: s.seo.title,
+    description: s.seo.description,
+    keywords: s.seo.keywords,
+    alternates: { canonical: `/services/${s.slug}` },
+    openGraph: { title: s.seo.title, description: s.seo.description, url: `/services/${s.slug}` },
+  };
 }
 
-export default async function ServiceDetailPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default async function ServicePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const service = getService(slug);
-  if (!service) notFound();
+  const s = getService(slug);
+  if (!s) notFound();
 
-  const others = SERVICES.filter((s) => s.slug !== slug).slice(0, 3);
-  const isPlatform = service.slug === "ticketing-platform";
+  const category = getCategory(s.category);
+  const related = servicesIn(s.category).filter((x) => x.slug !== s.slug).slice(0, 3);
+  const segments = s.forSegments.map((id) => getSegment(id)).filter((x) => !!x);
 
   return (
     <main>
-      <section className="relative overflow-hidden border-b border-slate-100">
-        <div
-          className="absolute inset-0 -z-10"
-          style={{ background: "radial-gradient(700px 380px at 82% -10%, #ffd9e8 0%, transparent 55%), radial-gradient(620px 360px at 8% 0%, #e0e3ff 0%, transparent 55%)" }}
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Service",
+          name: s.name,
+          serviceType: s.name,
+          description: s.seo.description,
+          url: `${APP_URL}/services/${s.slug}`,
+          provider: { "@type": "Organization", name: "Publeca", url: APP_URL },
+          audience: { "@type": "Audience", audienceType: s.who },
+        }}
+      />
+
+      <ValueHero
+        eyebrow={`${category.name} · ${s.shortName}`}
+        who={s.who}
+        value={s.value}
+        valueDetail={s.valueDetail}
+        primary={s.cta}
+        secondary={
+          <a
+            href="#how-it-works"
+            className="inline-flex items-center rounded-full border border-slate-200 bg-white px-7 py-3.5 text-base font-semibold text-slate-800 transition hover:border-slate-300"
+          >
+            How it works
+          </a>
+        }
+        note={s.cta.note}
+      >
+        <Breadcrumbs
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Services", href: "/services" },
+            { name: s.shortName, href: `/services/${s.slug}` },
+          ]}
         />
-        <div className="mx-auto max-w-4xl px-6 py-16">
-          <Link href="/services" className="text-sm font-medium text-slate-500 hover:text-slate-900">
-            ← All services
-          </Link>
-          <p className="mt-6 text-sm font-medium text-brand-600">{service.tagline}</p>
-          <h1 className="font-display mt-2 text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
-            {service.name}
-          </h1>
-          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate-600">{service.summary}</p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            {isPlatform ? (
-              <Link
-                href="/signup"
-                className="rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-600"
-              >
-                Start free
-              </Link>
-            ) : (
-              <WhatsAppButton className="px-6 py-3 text-base">Contact now</WhatsAppButton>
-            )}
-            <Link
-              href="/contact"
-              className="rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300"
-            >
-              Get in touch
-            </Link>
+      </ValueHero>
+
+      {/* Problem → value */}
+      <Container className="grid gap-8 py-14 md:py-20 lg:grid-cols-2 lg:gap-12">
+        <ProblemCallout problem={s.problem} />
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-600">What you get</p>
+          <div className="mt-4">
+            <CheckList items={s.outcomes} />
           </div>
         </div>
-      </section>
+      </Container>
 
-      {/* What's included */}
-      <section className="mx-auto max-w-4xl px-6 py-16">
-        <h2 className="font-display text-2xl font-bold tracking-tight text-slate-900">What's included</h2>
-        <div className="mt-8 grid gap-5 sm:grid-cols-3">
-          {service.includes.map((i) => (
-            <div key={i.title} className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
-              <p className="font-display font-semibold text-slate-900">{i.title}</p>
-              <p className="mt-2 text-sm leading-relaxed text-slate-500">{i.body}</p>
-            </div>
-          ))}
-        </div>
-
-        <h2 className="font-display mt-14 text-2xl font-bold tracking-tight text-slate-900">
-          What you get
-        </h2>
-        <ul className="mt-6 space-y-3">
-          {service.outcomes.map((o) => (
-            <li key={o} className="flex gap-3 text-slate-700">
-              <span className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-100 text-xs font-bold text-brand-600">
-                ✓
-              </span>
-              <span className="text-sm leading-relaxed">{o}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      {/* CTA */}
+      {/* Details */}
       <section className="border-y border-slate-100 bg-slate-50">
-        <div className="mx-auto flex max-w-4xl flex-col items-center gap-4 px-6 py-14 text-center">
-          <h2 className="font-display text-2xl font-bold text-slate-900">
-            {isPlatform ? "Launch your event today" : "Let's make your event a sell-out"}
-          </h2>
-          <p className="max-w-xl text-slate-600">
-            Tell us what you're planning and we'll come back with a plan.
-          </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            <WhatsAppButton className="px-6 py-3 text-base">Contact now</WhatsAppButton>
-            <Link
-              href="/signup"
-              className="rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-brand-600"
-            >
-              Start free
-            </Link>
+        <Container className="py-14 md:py-20">
+          <SectionHeading eyebrow="What's included" heading={`What ${s.shortName} includes`} />
+          <div className="mt-8">
+            <ScrollRow cols={s.includes.length % 3 === 0 ? 3 : s.includes.length === 4 ? 4 : 3}>
+              {s.includes.map((i) => (
+                <div key={i.title} className={`${scrollItem} rounded-2xl border border-slate-200 bg-white p-6`}>
+                  <p className="font-display font-semibold text-slate-900">{i.title}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-600">{i.body}</p>
+                </div>
+              ))}
+            </ScrollRow>
           </div>
-        </div>
+        </Container>
       </section>
 
-      {/* Other services */}
-      <section className="mx-auto max-w-6xl px-6 py-16">
-        <h2 className="font-display text-xl font-bold text-slate-900">More services</h2>
-        <div className="mt-6 grid gap-5 md:grid-cols-3">
-          {others.map((s) => (
-            <Link
-              key={s.slug}
-              href={`/services/${s.slug}`}
-              className="group rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition hover:border-brand-100 hover:shadow-md"
-            >
-              <p className="font-display font-semibold text-slate-900">{s.name}</p>
-              <p className="mt-2 text-sm leading-relaxed text-slate-500">{s.tagline}</p>
-              <span className="mt-3 inline-block text-sm font-semibold text-brand-600">Learn more →</span>
-            </Link>
-          ))}
-        </div>
+      <section id="how-it-works" className="scroll-mt-20">
+        <Container className="py-14 md:py-20">
+          <SectionHeading eyebrow="How it works" heading="How we work with you" />
+          <div className="mt-8">
+            <NumberedCards steps={s.process} />
+          </div>
+        </Container>
       </section>
+
+      {/* Who it's for */}
+      {segments.length > 0 && (
+        <section className="border-t border-slate-100 bg-slate-50">
+          <Container className="py-14 md:py-20">
+            <SectionHeading eyebrow="Who it's for" heading="Built around the people we work with" />
+            <div className="mt-8">
+              <ScrollRow cols={3}>
+                {segments.map((seg) => (
+                  <Link
+                    key={seg!.slug}
+                    href={`/for/${seg!.slug}`}
+                    className={`${scrollItem} group rounded-2xl border border-slate-200 bg-white p-6 transition hover:border-brand-200 hover:shadow-md`}
+                  >
+                    <p className="font-display font-semibold text-slate-900 group-hover:text-brand-600">{seg!.name}</p>
+                    <p className="mt-2 text-sm leading-relaxed text-slate-600">{seg!.cardSummary}</p>
+                  </Link>
+                ))}
+              </ScrollRow>
+            </div>
+          </Container>
+        </section>
+      )}
+
+      <Container className="grid gap-10 py-14 md:py-20 lg:grid-cols-[1fr_1.6fr]">
+        <SectionHeading eyebrow="Questions" heading={`${s.shortName}: what buyers ask`} />
+        <FaqList faqs={s.faqs} />
+      </Container>
+
+      {related.length > 0 && (
+        <section className="border-t border-slate-100">
+          <Container className="py-14">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">More in {category.name}</p>
+            <div className="mt-6">
+              <ScrollRow cols={3}>
+                {related.map((r) => (
+                  <Link
+                    key={r.slug}
+                    href={`/services/${r.slug}`}
+                    className={`${scrollItem} group rounded-2xl border border-slate-100 bg-white p-5 shadow-sm transition hover:border-brand-100 hover:shadow-md`}
+                  >
+                    <p className="font-semibold text-slate-900 group-hover:text-brand-600">{r.shortName}</p>
+                    <p className="mt-1.5 text-sm leading-relaxed text-slate-500">{r.cardSummary}</p>
+                  </Link>
+                ))}
+              </ScrollRow>
+            </div>
+          </Container>
+        </section>
+      )}
+
+      <CtaBand heading={s.value} body={s.valueDetail} cta={s.cta} />
     </main>
   );
 }

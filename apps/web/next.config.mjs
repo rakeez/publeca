@@ -15,6 +15,13 @@ const nextConfig = {
       { protocol: "https", hostname: "cdn.publeca.com" },
     ],
   },
+  // Retired service URLs from the events-era site → their successors (keeps link equity).
+  async redirects() {
+    return [
+      { source: "/services/paid-ads", destination: "/services/social-media-ads", permanent: true },
+      { source: "/services/creative-content", destination: "/services/content-creation", permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;

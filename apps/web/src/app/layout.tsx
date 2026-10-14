@@ -7,11 +7,11 @@ const sora = Sora({ subsets: ["latin"], variable: "--font-display", display: "sw
 
 export const metadata: Metadata = {
   title: {
-    default: "Publeca — Promote, sell out, and run your events",
+    default: "Publeca — Growth Consulting Firm | Marketing, Management & Events",
     template: "%s — Publeca",
   },
   description:
-    "Publeca grows your event end to end — Meta & Google ads, creative, photography and videography, ticketing, and door check-in. Done for you, or self-serve with our platform.",
+    "Publeca is a growth consulting firm with its own marketing, engineering and analytics teams — we find where your next growth comes from, then build it. Events too.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
   manifest: "/manifest.webmanifest",
   icons: { icon: "/publeca-icon.png", apple: "/publeca-icon.png" },
@@ -24,9 +24,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "Publeca — Promote, sell out, and run your events",
+    title: "Publeca — Growth Consulting Firm",
     description:
-      "Event marketing, ticketing and check-in for Sri Lanka — done for you, or self-serve.",
+      "Strategy and execution from one firm: growth consulting, marketing, engineering, analytics and AI — plus our events arm.",
   },
 };
 

@@ -1,44 +1,124 @@
 import Link from "next/link";
 import { Logo, LogoMark } from "@/components/logo";
 import { WhatsAppButton, WhatsAppFab } from "@/components/whatsapp";
-import { CONTACT } from "@/lib/brand";
+import { MobileMenu } from "@/components/marketing/mobile-menu";
+import { CONTACT, whatsappUrl } from "@/lib/brand";
+import { SEGMENTS, SERVICE_GROUPS } from "@/lib/content";
 
-const navLinks = [
-  { href: "/services", label: "Services" },
-  { href: "/#how-it-works", label: "How it works" },
-  { href: "/#platform", label: "Platform" },
-  { href: "/blog", label: "Blog" },
-];
+const DIAGNOSTIC_MESSAGE =
+  "Hi Publeca, I'd like to book a growth diagnostic. Here's a bit about my business:";
 
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
+  const mobileGroups = [
+    {
+      title: "Who we help",
+      links: SEGMENTS.map((s) => ({ label: s.name, href: `/for/${s.slug}` })),
+    },
+    ...SERVICE_GROUPS.filter((g) => g.id !== "events").map((g) => ({
+      title: g.name,
+      links: g.services.map((s) => ({ label: s.shortName, href: `/services/${s.slug}` })),
+    })),
+    {
+      title: "Events",
+      links: [
+        { label: "Events arm", href: "/events" },
+        ...(SERVICE_GROUPS.find((g) => g.id === "events")?.services ?? []).map((s) => ({
+          label: s.shortName,
+          href: `/services/${s.slug}`,
+        })),
+      ],
+    },
+    {
+      title: "Company",
+      links: [
+        { label: "All services", href: "/services" },
+        { label: "Insights", href: "/blog" },
+        { label: "Contact", href: "/contact" },
+      ],
+    },
+  ];
+
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 z-40 border-b border-slate-100 bg-white/80 backdrop-blur-md">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5">
+      <header className="sticky top-0 z-40 border-b border-slate-100 bg-white/85 backdrop-blur-md">
+        <nav className="mx-auto flex h-[60px] max-w-6xl items-center justify-between px-6">
           <Link href="/" aria-label="Publeca home">
             <Logo />
           </Link>
-          <div className="hidden items-center gap-8 text-sm font-medium text-slate-600 lg:flex">
-            {navLinks.map((l) => (
-              <Link key={l.href} href={l.href} className="transition hover:text-slate-900">
-                {l.label}
+
+          {/* Desktop navigation */}
+          <div className="hidden items-center gap-1 text-sm font-medium text-slate-600 lg:flex">
+            {/* Services mega menu */}
+            <div className="group relative">
+              <Link href="/services" className="rounded-full px-3 py-2 transition hover:text-slate-900">
+                Services
               </Link>
-            ))}
+              <div className="invisible absolute left-1/2 top-full w-[860px] -translate-x-1/2 pt-3 opacity-0 transition group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
+                <div className="grid grid-cols-5 gap-6 rounded-2xl border border-slate-100 bg-white p-6 shadow-2xl shadow-slate-200/70">
+                  {SERVICE_GROUPS.map((g) => (
+                    <div key={g.id}>
+                      <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">{g.name}</p>
+                      <ul className="mt-3 space-y-2">
+                        {g.services.map((s) => (
+                          <li key={s.slug}>
+                            <Link href={`/services/${s.slug}`} className="text-[13.5px] text-slate-700 hover:text-brand-600">
+                              {s.shortName}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                  <div className="col-span-5 -mb-1 border-t border-slate-100 pt-4">
+                    <Link href="/services" className="text-sm font-semibold text-slate-900 hover:text-brand-600">
+                      See every capability →
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Who we help */}
+            <div className="group relative">
+              <button type="button" className="rounded-full px-3 py-2 transition hover:text-slate-900">
+                Who we help
+              </button>
+              <div className="invisible absolute left-0 top-full w-[360px] pt-3 opacity-0 transition group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
+                <div className="rounded-2xl border border-slate-100 bg-white p-2 shadow-2xl shadow-slate-200/70">
+                  {SEGMENTS.map((s) => (
+                    <Link key={s.slug} href={`/for/${s.slug}`} className="block rounded-xl p-3 transition hover:bg-slate-50">
+                      <p className="font-semibold text-slate-900">{s.name}</p>
+                      <p className="mt-0.5 text-[13px] leading-snug text-slate-500">{s.cardSummary}</p>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <Link href="/events" className="rounded-full px-3 py-2 transition hover:text-slate-900">
+              Events
+            </Link>
+            <Link href="/blog" className="rounded-full px-3 py-2 transition hover:text-slate-900">
+              Insights
+            </Link>
+            <Link href="/contact" className="rounded-full px-3 py-2 transition hover:text-slate-900">
+              Contact
+            </Link>
           </div>
+
           <div className="flex items-center gap-2 sm:gap-3">
-            <Link
-              href="/login"
-              className="hidden text-sm font-medium text-slate-600 transition hover:text-slate-900 sm:block"
-            >
-              Sign in
+            <Link href="/login" className="hidden text-sm font-medium text-slate-500 transition hover:text-slate-900 xl:block">
+              Host sign in
             </Link>
-            <WhatsAppButton className="hidden sm:inline-flex">Contact now</WhatsAppButton>
-            <Link
-              href="/signup"
-              className="rounded-full bg-brand-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-600"
+            <a
+              href={whatsappUrl(DIAGNOSTIC_MESSAGE)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden rounded-full bg-brand-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-600 sm:inline-flex"
             >
-              Start free
-            </Link>
+              Book a growth diagnostic
+            </a>
+            <MobileMenu groups={mobileGroups} cta={{ label: "Book a growth diagnostic", href: whatsappUrl(DIAGNOSTIC_MESSAGE) }} />
           </div>
         </nav>
       </header>
@@ -46,50 +126,54 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
       {children}
 
       <footer className="border-t border-slate-100 bg-slate-50">
-        <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 md:grid-cols-[1.5fr_1fr_1fr_1fr]">
-          <div>
-            <span className="text-brand-500">
-              <LogoMark className="h-9 w-9" />
-            </span>
+        <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1fr]">
+          <div className="sm:col-span-2 lg:col-span-1">
+            <LogoMark className="h-10" />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-slate-500">
-              We promote, sell out and run events — ads, creative, photography and a
-              ticketing platform, all in one place.
+              A growth consulting firm with its own marketing, engineering, and analytics &amp; data
+              science teams — so the plan and the execution come from the same place.
             </p>
             <div className="mt-5">
-              <WhatsAppButton>Chat on WhatsApp</WhatsAppButton>
+              <WhatsAppButton message={DIAGNOSTIC_MESSAGE}>Talk to us on WhatsApp</WhatsAppButton>
             </div>
           </div>
 
+          {SERVICE_GROUPS.filter((g) => g.id === "strategy" || g.id === "marketing").length > 0 && (
+            <FooterCol
+              title="Growth & marketing"
+              links={SERVICE_GROUPS.filter((g) => g.id === "strategy" || g.id === "marketing")
+                .flatMap((g) => g.services)
+                .map((s) => ({ href: `/services/${s.slug}`, label: s.shortName }))}
+            />
+          )}
           <FooterCol
-            title="Services"
-            links={[
-              { href: "/services/event-marketing", label: "Event marketing" },
-              { href: "/services/paid-ads", label: "Meta & Google ads" },
-              { href: "/services/creative-content", label: "Creative & content" },
-              { href: "/services/photography-videography", label: "Photo & video" },
-            ]}
+            title="Data, engineering & AI"
+            links={SERVICE_GROUPS.filter((g) => g.id === "data" || g.id === "engineering")
+              .flatMap((g) => g.services)
+              .map((s) => ({ href: `/services/${s.slug}`, label: s.shortName }))}
           />
           <FooterCol
-            title="Platform"
+            title="Who we help"
             links={[
-              { href: "/services/ticketing-platform", label: "Ticketing" },
-              { href: "/signup", label: "Create an event" },
-              { href: "/login", label: "Host sign in" },
-              { href: "/scan", label: "Door scanner" },
+              ...SEGMENTS.map((s) => ({ href: `/for/${s.slug}`, label: s.name })),
+              { href: "/events", label: "Event organizers" },
             ]}
           />
           <FooterCol
             title="Company"
             links={[
-              { href: "/blog", label: "Blog" },
+              { href: "/services", label: "All services" },
+              { href: "/events", label: "Events arm" },
+              { href: "/blog", label: "Insights" },
               { href: "/contact", label: "Contact" },
+              { href: "/login", label: "Event host sign in" },
               { href: `mailto:${CONTACT.email}`, label: CONTACT.email },
             ]}
           />
         </div>
         <div className="border-t border-slate-100">
           <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 py-6 text-sm text-slate-400 sm:flex-row">
-            <p>© {new Date().getFullYear()} Publeca. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} Publeca. Growth consulting · Marketing · Engineering · Events.</p>
             <div className="flex gap-6">
               <a href="#" className="hover:text-slate-700">Privacy</a>
               <a href="#" className="hover:text-slate-700">Terms</a>
@@ -103,13 +187,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
   );
 }
 
-function FooterCol({
-  title,
-  links,
-}: {
-  title: string;
-  links: { href: string; label: string }[];
-}) {
+function FooterCol({ title, links }: { title: string; links: { href: string; label: string }[] }) {
   return (
     <div>
       <h3 className="text-sm font-semibold text-slate-900">{title}</h3>
