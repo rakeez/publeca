@@ -3,7 +3,9 @@ import Link from "next/link";
 import { JsonLd } from "@/components/json-ld";
 import { BucketPanel } from "@/components/marketing/buckets";
 import { DemoSection } from "@/components/marketing/demo-section";
-import { HeroCard } from "@/components/marketing/hero-card";
+import { CompareToggle } from "@/components/marketing/compare-toggle";
+import { HeroFlow } from "@/components/marketing/hero-flow";
+import { StageScroller } from "@/components/marketing/stage-scroller";
 import { PanelTabs } from "@/components/marketing/tabs";
 import {
   BenefitList,
@@ -12,7 +14,6 @@ import {
   CtaBand,
   CtaButton,
   FaqList,
-  NumberedCards,
   ScrollRow,
   SectionHeading,
   StatusPill,
@@ -84,54 +85,25 @@ export default function HomePage() {
       <JsonLd data={orgJsonLd} />
       <JsonLd data={websiteJsonLd} />
 
-      {/* ── Hero: who + value + checkmark benefits, the product card beside it (P1) ── */}
-      <section className="bg-white">
-        {/* Who we serve is told by the card (who → what → how). DOM order puts it right after the
-            H1, so on phones the reader finds themselves before the benefits; from lg it sits in
-            the right column beside both. */}
-        <Container className="grid gap-10 pb-16 pt-12 md:pt-16 lg:grid-cols-[1.15fr_1fr] lg:gap-x-16 lg:gap-y-0 lg:pb-24">
-          <div className="lg:col-start-1 lg:row-start-1 lg:self-end">
-            <h1 className="font-display tracking-display text-[2.6rem] font-extrabold leading-[1.02] text-onyx md:text-6xl lg:text-[4.25rem]">
-              <Headline text={home.hero.headline} accent={home.hero.headlineAccent} />
-            </h1>
+      {/* ── Hero (stacked horizontal blocks): headline → flow band → who/what/how ──
+          The particle canvas covers the whole section (HeroFlow). */}
+      <HeroFlow audiences={home.hero.audiences} departments={home.departments} stages={home.process.steps.map((s) => s.title)}>
+        <Container className="pb-6 pt-14 text-center md:pt-20">
+          <h1 className="font-display tracking-display mx-auto max-w-5xl text-[2.6rem] font-extrabold leading-[1.02] text-onyx md:text-6xl lg:text-[4.5rem]">
+            <Headline text={home.hero.headline} accent={home.hero.headlineAccent} />
+          </h1>
+          <div className="mx-auto mt-8 flex max-w-5xl justify-center">
+            <BenefitList items={home.hero.benefits} layout="row" />
           </div>
-
-          <div className="lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-center">
-            <HeroCard audiences={home.hero.audiences} departments={home.departments} />
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+            <CtaButton cta={home.hero.primaryCta} size="lg" source="hero" />
+            <Link href={home.hero.secondaryCta.href} className={buttonClass("secondary")}>
+              {home.hero.secondaryCta.label}
+            </Link>
           </div>
-
-          <div className="lg:col-start-1 lg:row-start-2 lg:pt-7">
-            <div>
-              <BenefitList items={home.hero.benefits} />
-            </div>
-            <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-slate-500">{home.hero.subhead}</p>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <CtaButton cta={home.hero.primaryCta} size="lg" source="hero" />
-              <Link href={home.hero.secondaryCta.href} className={buttonClass("secondary")}>
-                {home.hero.secondaryCta.label}
-              </Link>
-            </div>
-            {home.hero.primaryCta.note && <p className="mt-4 text-sm text-slate-500">{home.hero.primaryCta.note}</p>}
-
-            {/* Feature tag pills: the five value buckets */}
-            <div className="mt-9 border-t border-slate-200 pt-6">
-              <p className="mono-label text-slate-400">Five ways to grow</p>
-              <ul className="mt-3 flex flex-wrap gap-2">
-                {BUCKET_GROUPS.map((b) => (
-                  <li key={b.id}>
-                    <Link
-                      href={`/services#${b.id}`}
-                      className="inline-flex rounded-full border border-slate-200 bg-white px-3.5 py-1.5 text-sm font-bold text-slate-800 transition-colors duration-150 hover:border-slate-900"
-                    >
-                      {b.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
+          {home.hero.primaryCta.note && <p className="mt-4 text-sm text-slate-500">{home.hero.primaryCta.note}</p>}
         </Container>
-      </section>
+      </HeroFlow>
 
       {/* ── The problem: the enemy, as a situation ──────────────────── */}
       <section className="border-t border-slate-200 bg-white">
@@ -144,15 +116,7 @@ export default function HomePage() {
             align="center"
           />
           <div className="mt-12">
-            <ScrollRow cols={3}>
-              {home.problem.points.map((p, i) => (
-                <div key={p.title} data-reveal style={stagger(i)} className={`${scrollItem} rounded-2xl border border-slate-200 bg-white p-7`}>
-                  <StatusPill tone="neutral">Gap {String(i + 1).padStart(2, "0")}</StatusPill>
-                  <p className="font-display mt-4 text-xl font-bold text-onyx">{p.title}</p>
-                  <p className="mt-2 text-[15px] leading-relaxed text-slate-600">{p.body}</p>
-                </div>
-              ))}
-            </ScrollRow>
+            <CompareToggle compare={home.problem.compare} />
           </div>
         </Container>
       </section>
@@ -187,13 +151,13 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* ── How we work (P7) ────────────────────────────────────── */}
+      {/* ── How we work (P7): scroll-linked stages ──────────────────── */}
       <section id="how-we-work" className="scroll-mt-20 border-y border-slate-200 bg-slate-50">
         <Container className="py-20 md:py-28">
-          <SectionHeading eyebrow="How we work" heading={home.process.heading} headingDim={home.process.headingDim} intro={home.process.intro} />
-          <div className="mt-12">
-            <NumberedCards steps={home.process.steps} connector />
-          </div>
+          <StageScroller
+            steps={home.process.steps}
+            heading={<SectionHeading size="md" eyebrow="How we work" heading={home.process.heading} headingDim={home.process.headingDim} intro={home.process.intro} />}
+          />
         </Container>
       </section>
 

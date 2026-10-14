@@ -236,18 +236,28 @@ export interface HomeContent {
     headlineAccent?: string;
     /** Checkmark list: bold lead + regular descriptor. 3 items, outcomes not activities. */
     benefits: { lead: string; rest: string }[];
-    subhead: string;
     primaryCta: Cta;
     secondaryCta: { label: string; href: string };
   };
   /** "Who we help": one card per segment, built from that segment's own content. */
   audiences: Heading & { intro: string };
-  problem: Heading & { intro: string; points: TitledText[] };
+  problem: Heading & {
+    intro: string;
+    /** "Three vendors vs one firm" toggle: the same work, fragmented and then owned. */
+    compare: {
+      beforeLabel: string;
+      afterLabel: string;
+      pieces: { who: string; does: string; before: string; after: string }[];
+      beforeResult: string;
+      afterResult: string;
+    };
+  };
   /** The value buckets section (./buckets.ts). */
   buckets: Heading & { intro: string };
   /** "What you'd actually receive": the deliverables, demonstrated. */
   demos: DemoSection;
-  process: Heading & { intro: string; steps: TitledText[] };
+  /** Each stage names the deliverable it ends in (shown in the scroll-linked stage view). */
+  process: Heading & { intro: string; steps: (TitledText & { deliverable?: string })[] };
   /**
    * The commercial shape, objection first (no prices): the documented promises a reader
    * can hold us to, and the primary CTA repeated.

@@ -1207,6 +1207,21 @@ decisions**, not defaults, and they override the matching rows of 15.1.
   it's done (the growth executive, the teams involved, the package it starts with). It
   rotates through the readers; it replaces the department/stage diagram (R3). The card
   follows the H1 directly on phones, so the reader still finds themselves first.
+- **Hero rebuilt as Surge-style flow, in stacked horizontal blocks** (user direction,
+  2026-10-15): headline block centered on top; a full-width particle canvas behind the
+  whole hero where five department streams (labeled at the left) converge on the growth
+  executive node and run as one spine through dot-matrix stage modules to "Revenue you can
+  see" (§4.4 rules: DPR ≤ 2, stops off-screen/hidden, 48 ms clamp, batched fills, one static
+  frame under reduced motion; geometry in `lib/hero-flow.ts`, tested). Below it, the
+  who → what → how explainer as three horizontal columns: window bar removed, the rail dot
+  removed, replaced by a sliding reader selector, an auto-advance timer bar (pauses on
+  hover; a click hands control to the reader), staggered column transitions and teams
+  popping in. The featured reader drives which streams are lit; hovering a team label
+  lights its stream. The conic border is retired (the canvas is now the dramatic element).
+- **New interactive concepts:** problem section "Three vendors / One firm" toggle that
+  merges the three pieces of work (auto-flips once on view); scroll-linked stages with a
+  sticky list and filling rail; pause/replay controls on every demo; a reading-progress
+  bar under the header (not on `/for/investors` or `/blog`).
 - **Patterns retired by the redesign:** R2 cursor spotlight, R6 bento, R7 services
   marquee, the hero aura and the home "value" and "capabilities" sections (folded
   into the buckets). P2 tabs now switch between buckets instead of readers; "Who we

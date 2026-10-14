@@ -17,8 +17,9 @@
 - **Pills everywhere.** Every button, tag, chip and badge is `rounded-full`.
 - **Heavy, tight headlines; compact everything else.** Big section gaps (80–112px),
   compact gaps inside sections (8–12px).
-- **One dramatic animation per page:** the rotating conic border on the hero product card.
-  Everything else settles with a short ease-out, and nothing moves under reduced motion.
+- **One dramatic animation per page:** on home, the hero particle canvas (department streams
+  converging into one spine, Surge-style). Everything else settles with a short ease-out,
+  and nothing moves under reduced motion.
 
 ## Tokens (as implemented)
 
@@ -48,15 +49,18 @@ uppercase meta labels (`.mono-label`: 11px, +0.08em) and status pills. Loaded wi
 | `Eyebrow`, `.mono-label` | Mono uppercase meta label with a pink dot |
 | `StatusPill` | Status pill (mono, tinted fill): stage numbers, departments, "In plan" |
 | `BenefitList` | Checkmark list item: bold lead + regular descriptor (hero) |
-| `HeroCard` | Product screenshot card, inside the `.conic-frame` rotating border: who → what → how for each reader |
+| `HeroFlow` | Full-width hero: canvas streams → growth executive node → dot-matrix stage modules, plus the horizontal who → what → how explainer (sliding selector, timer bar) |
+| `CompareToggle` | Segmented toggle that animates three vendors merging into one firm |
+| `StageScroller` | Sticky stage list with a filling rail; the stage at screen center is active |
+| `DemoStage` | Demo window chrome with pause/play and replay controls |
+| `ScrollProgress` | 2px pink reading-progress bar under the header (not on investors/blog) |
 | `PanelTabs` + `BucketPanel` + `HowWeDoIt` | Feature list / tabs: value buckets with their capabilities |
 | `DemoCard` | Product window with chrome and a "Sample data" label |
 | `CtaBand` | Dark feature card (charcoal-to-black fade, white display heading) |
 | header nav | Nav pills (`hover:bg-black/[0.04]`), ghost "Host sign in", pink CTA |
 
 **Gradient text** (`.text-gradient`, pink → violet) is allowed on one phrase of a hero
-headline (`home.hero.headlineAccent`). No other gradients except the conic border and the
-dark panel fade.
+headline (`home.hero.headlineAccent`). No other gradients except the dark panel fade.
 
 ## Not used, and why
 

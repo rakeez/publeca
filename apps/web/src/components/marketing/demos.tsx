@@ -24,7 +24,16 @@ import {
   TICKET_FLOW,
   opportunityScore,
 } from "@/lib/content/demos";
+import { createContext, useContext, useState } from "react";
 import { usePlayable, useSequence } from "./motion";
+
+/** Lets the reader pause a demo (DemoStage controls); a paused demo holds its current step. */
+const DemoPaused = createContext(false);
+function useDemoPlayable<T extends Element>() {
+  const paused = useContext(DemoPaused);
+  const p = usePlayable<T>();
+  return { ...p, playing: p.playing && !paused };
+}
 
 const EASE = "ease-out-expo duration-700";
 
@@ -83,7 +92,7 @@ function Meter({ label, n, tone }: { label: string; n: number; tone: "brand" | "
 }
 
 function OpportunityMap() {
-  const { ref, playing } = usePlayable<HTMLDivElement>();
+  const { ref, playing } = useDemoPlayable<HTMLDivElement>();
   const step = useSequence(OPP_STEPS, playing);
 
   const ranked = [...OPPORTUNITIES]
@@ -144,7 +153,7 @@ function OpportunityMap() {
 const READOUT_STEPS = [700, 1500, 1500, 1500, 1500, 3200] as const;
 
 function WeeklyReadout() {
-  const { ref, playing } = usePlayable<HTMLDivElement>();
+  const { ref, playing } = useDemoPlayable<HTMLDivElement>();
   const step = useSequence(READOUT_STEPS, playing);
   const shown = (n: number) => step >= n;
 
@@ -185,7 +194,7 @@ function WeeklyReadout() {
 const SALE_STEPS = [700, 900, 900, 1100, 1500, 1600, 2600] as const;
 
 function VerifiedSale() {
-  const { ref, playing } = usePlayable<HTMLDivElement>();
+  const { ref, playing } = useDemoPlayable<HTMLDivElement>();
   const step = useSequence(SALE_STEPS, playing);
   const lit = (n: number) => step >= n + 1;
 
@@ -254,7 +263,7 @@ function VerifiedSale() {
 const TECH_STEPS = [700, 1000, 1100, 1100, 1100, 1500, 1600, 2600] as const;
 
 function VerifiedSaleTechnical() {
-  const { ref, playing } = usePlayable<HTMLDivElement>();
+  const { ref, playing } = useDemoPlayable<HTMLDivElement>();
   const step = useSequence(TECH_STEPS, playing);
 
   return (
@@ -290,7 +299,7 @@ function VerifiedSaleTechnical() {
 const TICKET_STEPS = [900, 800, 1000, 1200, 1000, 1600, 2800] as const;
 
 function VerifiedTicket() {
-  const { ref, playing } = usePlayable<HTMLDivElement>();
+  const { ref, playing } = useDemoPlayable<HTMLDivElement>();
   const step = useSequence(TICKET_STEPS, playing);
   const pressed = step === 1;
   const checkout = step >= 2;
@@ -358,7 +367,7 @@ const CPS_STEPS = [1800, 900, 2000, 2800] as const; // by clicks → connect →
 const CPS_ROW = 54;
 
 function CostPerSale() {
-  const { ref, playing } = usePlayable<HTMLDivElement>();
+  const { ref, playing } = useDemoPlayable<HTMLDivElement>();
   const step = useSequence(CPS_STEPS, playing);
   const connected = step >= 1;
   const byCost = step >= 2;
@@ -421,7 +430,7 @@ function CostPerSale() {
 const SEAT_STEPS = [1200, 1800, 1500, 1500, 2600] as const; // base → held → paid → expired → hold
 
 function SeatHold() {
-  const { ref, playing } = usePlayable<HTMLDivElement>();
+  const { ref, playing } = useDemoPlayable<HTMLDivElement>();
   const step = useSequence(SEAT_STEPS, playing);
   const sold = new Set<number>(SEAT_MAP.sold);
   const held = new Set<number>();
@@ -458,3 +467,54 @@ function SeatHold() {
     </div>
   );
 }
+
+// ─────────────────────────── Stage with controls ───────────────────────────
+
+/**
+ * The demo's product-window chrome with the reader's controls: pause/play (holds the current
+ * step) and replay (restarts the loop from the top). Hidden under reduced motion, where demos
+ * show their finished state and never loop.
+ */
+export function DemoStage({ id, title }: { id: DemoId; title: string }) {
+  const [paused, setPaused] = useState(false);
+  const [run, setRun] = useState(0);
+  return (
+    <div className="relative rounded-2xl bg-slate-50 p-3.5 pt-12 md:p-4 md:pt-[3.25rem]">
+      <span className="absolute inset-x-0 top-0 flex items-center justify-between gap-2 border-b border-slate-200 px-3 py-2">
+        <span className="flex gap-1.5" aria-hidden>
+          <span className="h-2 w-2 rounded-full bg-slate-300" />
+          <span className="h-2 w-2 rounded-full bg-slate-300" />
+          <span className="h-2 w-2 rounded-full bg-slate-300" />
+        </span>
+        <span className="mono-label text-slate-400">Sample data</span>
+        <span className="demo-controls flex gap-1">
+          <button
+            type="button"
+            onClick={() => setPaused((p) => !p)}
+            aria-label={(paused ? "Play " : "Pause ") + title}
+            className={CTRL}
+          >
+            {paused ? "▶" : "❚❚"}
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setPaused(false);
+              setRun((r) => r + 1);
+            }}
+            aria-label={"Replay " + title}
+            className={CTRL}
+          >
+            ↻
+          </button>
+        </span>
+      </span>
+      <DemoPaused.Provider value={paused}>
+        <Demo key={run} id={id} />
+      </DemoPaused.Provider>
+    </div>
+  );
+}
+
+const CTRL =
+  "flex h-6 w-6 items-center justify-center rounded-full border border-slate-200 bg-white text-[10px] text-slate-500 transition-colors hover:border-slate-900 hover:text-slate-900";

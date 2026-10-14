@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Logo, LogoMark } from "@/components/logo";
 import { WhatsAppButton, WhatsAppFab } from "@/components/whatsapp";
 import { MobileMenu } from "@/components/marketing/mobile-menu";
-import { MarketingMotion } from "@/components/marketing/motion";
+import { MarketingMotion, ScrollProgress } from "@/components/marketing/motion";
 import { CONTACT, whatsappUrl } from "@/lib/brand";
 import { BUCKET_GROUPS, SEGMENTS, brandLine } from "@/lib/content";
 
@@ -126,6 +126,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
             <MobileMenu groups={mobileGroups} cta={{ label: "Book a growth diagnostic", href: whatsappUrl(DIAGNOSTIC_MESSAGE) }} />
           </div>
         </nav>
+        <ScrollProgress />
       </header>
 
       {children}

@@ -172,3 +172,42 @@ export function useSequence(durations: readonly number[], playing: boolean) {
 
   return step;
 }
+
+// ─────────────────────────── Reading progress ───────────────────────────
+
+/**
+ * A thin pink bar under the header that fills as the page scrolls, so long pages show how
+ * far there is to go. Not on the quiet pages (/for/investors, /blog), and still under
+ * reduced motion (it tracks the reader's own scrolling, it doesn't animate on its own).
+ */
+export function ScrollProgress() {
+  const pathname = usePathname();
+  const ref = useRef<HTMLDivElement>(null);
+  const quiet = pathname?.startsWith("/for/investors") || pathname?.startsWith("/blog");
+
+  useEffect(() => {
+    if (quiet) return;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const el = ref.current;
+      if (!el) return;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      el.style.transform = `scaleX(${max > 0 ? Math.min(1, window.scrollY / max) : 0})`;
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [quiet, pathname]);
+
+  if (quiet) return null;
+  return <div ref={ref} aria-hidden className="absolute inset-x-0 bottom-0 h-[2px] origin-left scale-x-0 bg-brand-500" />;
+}

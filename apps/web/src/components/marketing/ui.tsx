@@ -140,6 +140,7 @@ export function SectionHeading({
   intro,
   tone = "dark",
   align = "left",
+  size = "lg",
   className = "",
 }: {
   eyebrow?: string;
@@ -148,13 +149,15 @@ export function SectionHeading({
   intro?: string;
   tone?: "dark" | "light";
   align?: "left" | "center";
+  /** "md" for headings in a narrow column (e.g. beside a sticky list). */
+  size?: "lg" | "md";
   className?: string;
 }) {
   return (
     <div className={`max-w-3xl ${align === "center" ? "mx-auto text-center" : ""} ${className}`} data-reveal>
       {eyebrow && <Eyebrow tone={tone === "light" ? "light" : "brand"}>{eyebrow}</Eyebrow>}
       <h2
-        className={`font-display tracking-display mt-4 text-[2rem] font-bold leading-[1.08] md:text-5xl ${
+        className={`font-display tracking-display mt-4 text-[2rem] font-bold leading-[1.08] ${size === "md" ? "md:text-[2.5rem]" : "md:text-5xl"} ${
           tone === "light" ? "text-white" : "text-onyx"
         }`}
       >
@@ -258,9 +261,9 @@ export function CheckList({ items }: { items: string[] }) {
 }
 
 /** Checkmark list item: bold lead text, then a regular descriptor (hero benefits). */
-export function BenefitList({ items }: { items: { lead: string; rest: string }[] }) {
+export function BenefitList({ items, layout = "stack" }: { items: { lead: string; rest: string }[]; layout?: "stack" | "row" }) {
   return (
-    <ul className="space-y-2.5">
+    <ul className={layout === "row" ? "grid gap-3 text-left md:grid-cols-3 md:gap-6" : "space-y-2.5"}>
       {items.map((b) => (
         <li key={b.lead} className="flex gap-2.5 text-[15px] md:text-base">
           <Check className="mt-0.5" />

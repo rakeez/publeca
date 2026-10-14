@@ -109,6 +109,10 @@ session** so every future session writes the way they want. Note the change in t
 - 2026-10-14 — User feedback: the hero "who" line is no longer a separate paragraph; it is
   told by the hero card as who → what → how per reader (`home.hero.audiences`). Keep the card
   directly after the H1 on phones so who + value still lead.
+- 2026-10-15 — User feedback: hero rebuilt as a Surge-style particle flow in stacked
+  horizontal blocks (headline → flow band → who/what/how explainer); no window chrome or
+  rail dot on the explainer. Added the vendors-vs-firm toggle, scroll-linked stages, demo
+  controls and a reading-progress bar. Recorded in playbook §15.2.
 
 ---
 

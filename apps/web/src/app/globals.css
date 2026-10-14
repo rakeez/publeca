@@ -48,36 +48,6 @@ body {
   color: transparent;
 }
 
-/* Rotating conic border (the system's one dramatic animation; at most one per page).
-   A 2px frame around the hero product card, pink-led to keep the Publeca palette. */
-@property --conic-angle {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
-.conic-frame {
-  padding: 2px;
-  background: conic-gradient(
-    from var(--conic-angle),
-    #ff0066 0%,
-    #ff7aac 18%,
-    #c13cff 36%,
-    #635bff 54%,
-    #0091ff 70%,
-    #e8e8e8 84%,
-    #ff0066 100%
-  );
-}
-@media (prefers-reduced-motion: no-preference) {
-  .conic-frame {
-    animation: conic-spin 6s linear infinite;
-  }
-}
-@keyframes conic-spin {
-  to {
-    --conic-angle: 360deg;
-  }
-}
 
 /* ─── Scroll reveal (playbook §10.3) ───────────────────────────────────────────
    Elements marked data-reveal are hidden only after components/marketing/motion.tsx has
@@ -126,6 +96,43 @@ body {
   }
 }
 
+/* Hero flow: the stage modules light in a wave along the spine; the explainer timer pauses
+   while the reader hovers it. */
+@media (prefers-reduced-motion: no-preference) {
+  .stage-module {
+    animation: stage-wave 3.2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+    animation-delay: calc(var(--i, 0) * 0.32s);
+  }
+}
+@keyframes stage-wave {
+  0%,
+  60%,
+  100% {
+    border-color: #e8e8e8;
+    --dot: #c9c9c9;
+    transform: scale(1);
+  }
+  12% {
+    border-color: #ff0066;
+    --dot: #ff0066;
+    transform: scale(1.12);
+  }
+}
+/* Dot-matrix module: a 4×4 grid of dots drawn with one background (Surge's module look). */
+@property --dot {
+  syntax: "<color>";
+  initial-value: #c9c9c9;
+  inherits: false;
+}
+.dot-matrix {
+  background-image: radial-gradient(circle, var(--dot) 1.4px, transparent 1.6px);
+  background-size: 6px 6px;
+  background-position: 1px 1px;
+}
+.hero-explainer:hover .hero-progress {
+  animation-play-state: paused;
+}
+
 /* ─── Reduced motion: one global switch (required before any motion ships) ──── */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -136,6 +143,10 @@ body {
     transition-duration: 0.01ms !important;
     transition-delay: 0ms !important;
     scroll-behavior: auto !important;
+  }
+  /* Demos show their finished state and never loop, so their play/replay controls go too. */
+  .demo-controls {
+    display: none !important;
   }
 }
 

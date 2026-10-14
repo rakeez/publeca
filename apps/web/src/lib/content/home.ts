@@ -46,8 +46,6 @@ const home: HomeContent = {
       { lead: "A senior growth executive", rest: "inside your business who owns the plan, without a C-level hire." },
       { lead: "Spend traced to sales,", rest: "measured by our own analytics team from day one." },
     ],
-    subhead:
-      "Strategy and execution sit in one firm, with our own marketing, engineering, and analytics & data science teams, so one firm answers for the result.",
     primaryCta: {
       label: "Book a growth diagnostic",
       message:
@@ -64,23 +62,22 @@ const home: HomeContent = {
   },
 
   problem: {
+    // The interactive comparison under the problem: the same three pieces of work, bought from
+    // three vendors, then owned by one firm.
+    compare: {
+      beforeLabel: "Three vendors",
+      afterLabel: "One firm",
+      pieces: [
+        { who: "Consultants", does: "Strategy", before: "Hand over a deck and leave", after: "The plan, and the person who owns it" },
+        { who: "Agencies", does: "Marketing", before: "Report the clicks they control", after: "Campaigns judged on tracked sales" },
+        { who: "Developers", does: "Software", before: "Build to spec, without the market", after: "Sites and systems built to convert" },
+      ],
+      beforeResult: "Three briefs, three reports, and a result that belongs to nobody.",
+      afterResult: "One plan, one set of numbers, and one firm answering for the result.",
+    },
     heading: brandLine.enemy.replace(/.$/, ""),
     intro:
       "Most companies buy growth in three pieces: strategy from consultants, marketing from agencies, software from developers. Each piece can be done well and the result still belongs to nobody.",
-    points: [
-      {
-        title: "The strategy stops at the deck",
-        body: "A consultant diagnoses the business, recommends a direction, and leaves. The plan may be right, but no one stays to turn it into campaigns, software, and tracked sales.",
-      },
-      {
-        title: "The agency executes without the plan",
-        body: "Agencies run ads and publish content against a brief, not against your growth plan. They report reach, clicks, and impressions because those are the numbers they control. Revenue is left for you to reconcile.",
-      },
-      {
-        title: "The developers build without the market",
-        body: "The website or app is built to spec, but nobody briefed the developers on the market, the funnel or what a conversion is worth. It works. It just doesn't sell, and nothing in it is set up to show why.",
-      },
-    ],
   },
 
   demos: {
@@ -98,22 +95,27 @@ const home: HomeContent = {
     steps: [
       {
         title: "Diagnose",
+        deliverable: "An opportunity map, sized in money",
         body: "Your market, customers, funnel, unit economics, and data quality are examined to find where the next growth will actually come from, and each opportunity is sized in money.",
       },
       {
         title: "Prioritize",
+        deliverable: "A 90-day plan with named owners",
         body: "Opportunities are ranked by financial impact, effort, and risk. Leadership agrees on a 90-day plan with named owners and the numbers it should move.",
       },
       {
         title: "Deploy",
+        deliverable: "A growth executive inside your business",
         body: "A forward-deployed growth executive leads the plan inside your business, on-site or remote, and directs our marketing, engineering, and analytics specialists to execute it.",
       },
       {
         title: "Measure",
+        deliverable: "A plain-language read-out every week",
         body: "Tracking and analytics are in place from day one. Every week you get a plain-language read-out: what moved, what didn't, and what changes next.",
       },
       {
         title: "Scale",
+        deliverable: "Systems that make what works repeatable",
         body: "What works gets more budget and is built into the systems, software, and AI that make it repeatable. What doesn't work is cut early, before it absorbs another quarter.",
       },
     ],

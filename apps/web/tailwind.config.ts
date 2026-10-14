@@ -79,18 +79,20 @@ export default {
           "0%": { opacity: "0", transform: "translateY(105%)", filter: "blur(3px)" },
           "100%": { opacity: "1", transform: "translateY(0)", filter: "blur(0)" },
         },
-        // A dot running down the hero card's who → what → how rail.
-        "rail-flow": {
-          "0%": { top: "0%", opacity: "0" },
-          "12%": { opacity: "1" },
-          "88%": { opacity: "1" },
-          "100%": { top: "100%", opacity: "0" },
+        // Auto-advance timer bar in the hero explainer (the bar ending advances the reader).
+        "progress-fill": {
+          "0%": { transform: "scaleX(0)" },
+          "100%": { transform: "scaleX(1)" },
+        },
+        "pop-in": {
+          "0%": { opacity: "0", transform: "scale(.88)" },
+          "100%": { opacity: "1", transform: "scale(1)" },
         },
       },
       animation: {
         "fade-up": "fade-up 0.6s cubic-bezier(.16, 1, .3, 1) both",
         "word-in": "word-in 0.68s cubic-bezier(.16, 1, .3, 1) both",
-        "rail-flow": "rail-flow 1.6s cubic-bezier(.4, 0, .6, 1) both",
+        "pop-in": "pop-in 0.45s cubic-bezier(.16, 1, .3, 1) both",
       },
     },
   },

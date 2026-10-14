@@ -1,6 +1,6 @@
 import { DEMO_COPY } from "@/lib/content/demos";
 import type { DemoId, DemoSection as DemoSectionContent } from "@/lib/content/types";
-import { Demo } from "./demos";
+import { DemoStage } from "./demos";
 import { SectionHeading } from "./ui";
 
 /**
@@ -16,18 +16,7 @@ export function DemoCard({ id, index = 0 }: { id: DemoId; index?: number }) {
       aria-label={copy.label}
       className="flex flex-col rounded-3xl border border-slate-200 bg-white p-3 md:p-4"
     >
-      <div className="relative rounded-2xl bg-slate-50 p-3.5 pt-11 md:p-4 md:pt-12">
-        {/* Window chrome: the demos read as product screenshots (docs/design-system.md). */}
-        <span className="absolute inset-x-0 top-0 flex items-center justify-between border-b border-slate-200 px-4 py-2.5">
-          <span className="flex gap-1.5" aria-hidden>
-            <span className="h-2 w-2 rounded-full bg-slate-300" />
-            <span className="h-2 w-2 rounded-full bg-slate-300" />
-            <span className="h-2 w-2 rounded-full bg-slate-300" />
-          </span>
-          <span className="mono-label text-slate-400">Sample data</span>
-        </span>
-        <Demo id={id} />
-      </div>
+      <DemoStage id={id} title={copy.title} />
       <figcaption className="mt-4 flex flex-1 flex-col px-2 pb-2">
         <p className="leading-relaxed text-slate-600">
           <strong className="font-bold text-slate-900">{copy.title}.</strong> {copy.body}
