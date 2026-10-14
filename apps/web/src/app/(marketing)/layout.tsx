@@ -2,11 +2,13 @@ import Link from "next/link";
 import { Logo, LogoMark } from "@/components/logo";
 import { WhatsAppButton, WhatsAppFab } from "@/components/whatsapp";
 import { MobileMenu } from "@/components/marketing/mobile-menu";
+import { MarketingMotion } from "@/components/marketing/motion";
 import { CONTACT, whatsappUrl } from "@/lib/brand";
-import { SEGMENTS, SERVICE_GROUPS } from "@/lib/content";
+import { SEGMENTS, SERVICE_GROUPS, brandLine } from "@/lib/content";
 
+// Written in the reader's voice, with a slot they can fill in (playbook §8.2, construction 10).
 const DIAGNOSTIC_MESSAGE =
-  "Hi Publeca, I'd like to book a growth diagnostic. Here's a bit about my business:";
+  "Hi Publeca, I run [type of business] and want to know where our next growth will come from. Could we talk about a growth diagnostic?";
 
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   const mobileGroups = [
@@ -32,6 +34,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
       title: "Company",
       links: [
         { label: "All services", href: "/services" },
+        { label: "Where a diagnostic would start", href: "/diagnostic" },
         { label: "Insights", href: "/blog" },
         { label: "Contact", href: "/contact" },
       ],
@@ -40,6 +43,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="min-h-screen">
+      <MarketingMotion />
       <header className="sticky top-0 z-40 border-b border-slate-100 bg-white/85 backdrop-blur-md">
         <nav className="mx-auto flex h-[60px] max-w-6xl items-center justify-between px-6">
           <Link href="/" aria-label="Publeca home">
@@ -114,6 +118,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
               href={whatsappUrl(DIAGNOSTIC_MESSAGE)}
               target="_blank"
               rel="noopener noreferrer"
+              data-cta="header"
               className="hidden rounded-full bg-brand-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-600 sm:inline-flex"
             >
               Book a growth diagnostic
@@ -129,9 +134,12 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
         <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1fr]">
           <div className="sm:col-span-2 lg:col-span-1">
             <LogoMark className="h-10" />
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-slate-500">
-              A growth consulting firm with its own marketing, engineering, and analytics &amp; data
-              science teams — so the plan and the execution come from the same place.
+            {/* The repeated line and the enemy it answers (playbook §8.2, constructions 2–3). */}
+            <p className="font-display mt-5 text-lg font-semibold leading-snug text-slate-900">{brandLine.line}</p>
+            <p className="mt-2 max-w-xs text-sm leading-relaxed text-slate-500">
+              {brandLine.enemy} Publeca is a growth consulting firm with its own marketing,
+              engineering, and analytics &amp; data science teams, so the plan and the execution
+              come from the same place.
             </p>
             <div className="mt-5">
               <WhatsAppButton message={DIAGNOSTIC_MESSAGE}>Talk to us on WhatsApp</WhatsAppButton>
@@ -163,6 +171,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
             title="Company"
             links={[
               { href: "/services", label: "All services" },
+              { href: "/diagnostic", label: "Where a diagnostic would start" },
               { href: "/events", label: "Events arm" },
               { href: "/blog", label: "Insights" },
               { href: "/contact", label: "Contact" },

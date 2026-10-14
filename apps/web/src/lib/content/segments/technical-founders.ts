@@ -158,6 +158,27 @@ const segment: Segment = {
       "Hi Publeca, I'd like to know more about the Go-to-Market Sprint for our product: what the six weeks cover, what you need from us, and how we'd get started.",
   },
 
+  // Each heading answers this reader's fear (playbook §8.2, construction 7): giving up equity,
+  // and tracking they'll have to rebuild.
+  headings: {
+    gains: { heading: "Keep 100% of your equity,", headingDim: "and get numbers you'd accept in a code review." },
+    packages: {
+      heading: "A fee for a defined scope,",
+      headingDim: "not a slice of the cap table.",
+      intro:
+        "Fixed scope, monthly or quarterly, with no equity at any stage. The Go-to-Market Sprint is the recommended start: six weeks to a position, tracking you can trust and a live launch.",
+    },
+    process: { heading: "Changes to your product arrive as pull requests", headingDim: "you review and merge." },
+  },
+
+  demos: {
+    heading: "Tracking you'd trust in production,",
+    headingDim: "shown event by event.",
+    intro:
+      "Sample data, real mechanism. The purchase event exists only once the payment does, and is counted once. The ranking that follows is by cost per paying customer, not by clicks.",
+    items: ["verified-sale-technical", "cost-per-sale"],
+  },
+
   seo: {
     title: "Growth Team for Technical Founders: Keep Your Equity",
     description:

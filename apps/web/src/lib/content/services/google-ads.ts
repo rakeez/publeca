@@ -101,6 +101,14 @@ const service: Service = {
     note: "Read-only access is enough for a first look.",
   },
 
+  demos: {
+    heading: "Cost per sale by campaign,",
+    headingDim: "not just cost per click.",
+    intro:
+      "Once sales from your CRM flow back into the account, campaigns are ranked by what each sale cost, and budget follows that ranking. Shown with sample data.",
+    items: ["cost-per-sale", "verified-sale"],
+  },
+
   seo: {
     title: "Google Ads Management That Optimizes to Revenue",
     description:

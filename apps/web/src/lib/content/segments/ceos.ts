@@ -150,17 +150,39 @@ const segment: Segment = {
   cta: {
     label: "Book a growth diagnostic",
     message:
-      "Hi Publeca, I run a company and I'd like to book a growth diagnostic. Growth has slowed and I want a clear, costed view of where the next stage should come from. Could we set up a call?",
+      "Hi Publeca, I run [type of business] and I'd like to book a growth diagnostic. Growth has slowed and I want a clear, costed view of where the next stage should come from. Could we set up a call?",
     note: "Fixed fee. About three weeks. The plan is yours to keep.",
     secondaryLabel: "Talk to a growth executive",
     secondaryMessage:
       "Hi Publeca, I'd like to talk to one of your growth executives about having a senior person own growth in our business. When would be a good time to speak?",
   },
 
+  // Each heading answers this reader's fear (playbook §8.2, construction 7): funding the wrong
+  // bet, reports full of jargon, and another senior hire that might not work.
+  headings: {
+    gains: { heading: "What changes for you:", headingDim: "decisions made on numbers, explained in plain English." },
+    packages: {
+      heading: "Start with a costed answer.",
+      headingDim: "Scale only what the numbers prove.",
+      intro:
+        "Every package is scoped around an outcome, not hours. The Growth Diagnostic is the recommended start, because everything after it is decided on its numbers.",
+    },
+    process: { heading: "Your time goes on the decisions,", headingDim: "not on managing the work." },
+  },
+
+  demos: {
+    heading: "A weekly read-out you can act on,",
+    headingDim: "measured in sales, not clicks.",
+    intro:
+      "Two things you would receive, shown here with sample data: the read-out written for a CEO rather than a marketer, and the campaign table that ranks spend by what each sale cost.",
+    items: ["weekly-readout", "cost-per-sale"],
+  },
+
   seo: {
     title: "Growth Consulting for CEOs: Know Where Growth Comes From",
+    // Carries the repeated line (playbook §8.2, construction 2).
     description:
-      "Growth consulting for directors and CEOs: know which growth opportunity pays before you fund it, and get a senior executive who delivers it in plain English.",
+      "Growth consulting for CEOs that builds what it recommends: know which growth opportunity pays before you fund it, then a senior executive who delivers it.",
     keywords: [
       "growth consulting for CEOs",
       "management consulting",

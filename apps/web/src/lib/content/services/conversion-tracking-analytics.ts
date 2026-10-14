@@ -101,6 +101,14 @@ const service: Service = {
     note: "Bring two reports that disagree. That is where the audit starts.",
   },
 
+  demos: {
+    heading: "One purchase, counted once,",
+    headingDim: "tied to a real order.",
+    intro:
+      "Sample data, real mechanism: the purchase event is sent once payment is verified, keyed by the order ID so browser and server count it once, and the reporting that follows ranks spend by cost per sale.",
+    items: ["verified-sale-technical", "cost-per-sale"],
+  },
+
   seo: {
     title: "Conversion Tracking & Analytics for Websites and Apps",
     description:

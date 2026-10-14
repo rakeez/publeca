@@ -26,6 +26,132 @@ body {
   letter-spacing: -0.02em;
 }
 
+/* ─── Scroll reveal (playbook §10.3) ───────────────────────────────────────────
+   Elements marked data-reveal are hidden only after components/marketing/motion.tsx has
+   mounted (it adds .reveal-ready to <html>, having first marked everything already on
+   screen as .is-in). Without JavaScript, if the script fails, or with reduced motion, the
+   finished state is what shows. */
+/* .is-shown = already on screen at load (no animation); .is-in = revealed on scroll.
+   A one-shot animation with fill-mode "backwards" (not a transition), so it never delays or
+   overrides the hover transitions on the same cards. */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-ready [data-reveal]:not(.is-in):not(.is-shown) {
+    opacity: 0;
+  }
+  .reveal-ready [data-reveal="line"]:not(.is-in):not(.is-shown) {
+    opacity: 1;
+    transform: scaleX(0);
+  }
+  [data-reveal].is-in {
+    animation: reveal-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    animation-delay: calc(var(--reveal-i, 0) * 70ms);
+  }
+  [data-reveal="line"] {
+    transform-origin: left center;
+  }
+  [data-reveal="line"].is-in {
+    animation: draw-line 1.2s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    animation-delay: 150ms;
+  }
+}
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes draw-line {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Bento (R6): on fine pointers the tile lifts and its outcome line rises into full ink on
+   hover. The outcome is always visible, so touch and keyboard readers never miss it. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .bento-tile {
+    transition:
+      transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .bento-tile:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px -12px rgba(15, 23, 42, 0.18);
+  }
+  .bento-outcome {
+    transition:
+      color 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .bento-tile .bento-outcome {
+    color: #64748b;
+  }
+  .bento-tile:hover .bento-outcome {
+    color: #0f172a;
+    transform: translateY(-8px);
+  }
+}
+
+/* Cursor spotlight (R2): a soft brand glow and a masked dot grid that follow the pointer.
+   Fine pointers only; off under reduced motion. */
+.spotlight {
+  --spot-x: 70%;
+  --spot-y: 20%;
+}
+.spotlight::before,
+.spotlight::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.spotlight::before {
+  background: radial-gradient(420px 320px at var(--spot-x) var(--spot-y), rgba(255, 0, 102, 0.1), transparent 70%);
+}
+.spotlight::after {
+  background-image: radial-gradient(rgba(99, 91, 255, 0.35) 1px, transparent 1.4px);
+  background-size: 18px 18px;
+  -webkit-mask-image: radial-gradient(260px 200px at var(--spot-x) var(--spot-y), #000, transparent 75%);
+  mask-image: radial-gradient(260px 200px at var(--spot-x) var(--spot-y), #000, transparent 75%);
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .spotlight.is-active::before,
+  .spotlight.is-active::after {
+    opacity: 1;
+  }
+}
+
+/* Marquee (R7): pause on hover. */
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* ─── Reduced motion: one global switch (required before any motion ships) ──── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+  .marquee-track {
+    animation: none !important;
+  }
+}
+
 /* Hide scrollbars on horizontal snap rows (mobile card carousels) */
 .snap-x.overflow-x-auto {
   scrollbar-width: none;

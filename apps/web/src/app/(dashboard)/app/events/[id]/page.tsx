@@ -3,7 +3,7 @@ import { redirect, notFound } from "next/navigation";
 import { prisma } from "@publeca/db";
 import { getCurrentHost } from "@/lib/session";
 import { accessibleHostIds } from "@/lib/access";
-import { availableAccountsForHost } from "@/lib/payment-config";
+import { availableAccountsForHost, PLATFORM_PAYHERE_ID } from "@/lib/payment-config";
 import { EventForm } from "../event-form";
 import {
   updateEvent,
@@ -44,6 +44,7 @@ export default async function EventDetailPage({
   const availableAccounts = await availableAccountsForHost(event.hostId);
   const selectedAccounts = event.paymentAccountIds ?? [];
   const offerAll = selectedAccounts.length === 0;
+  const platformAccount = availableAccounts.find((a) => a.id === PLATFORM_PAYHERE_ID);
 
   return (
     <div className="max-w-3xl">
@@ -114,6 +115,10 @@ export default async function EventDetailPage({
       {/* Ticket types */}
       <section className="mt-8">
         <h2 className="text-lg font-semibold">Ticket types</h2>
+        <p className="mt-1 text-sm text-slate-500">
+          Sold counts only paid tickets; seats held during checkout never count. A ticket type can
+          be removed until its first sale.
+        </p>
         <div className="mt-3 space-y-2">
           {event.ticketTypes.map((t) => (
             <div
@@ -234,6 +239,14 @@ export default async function EventDetailPage({
             <p className="mt-3 text-xs text-slate-400">
               Leave all checked to offer every method. Unchecking everything also offers all.
             </p>
+            {platformAccount && (
+              <p className="mt-2 text-xs text-slate-500">
+                Each payment goes to the account that takes it. &ldquo;{platformAccount.label}&rdquo; is
+                Publeca&rsquo;s own PayHere account, offered so you can sell before your merchant
+                account is approved. Uncheck it, and check at least one of yours, to keep every
+                payment in your own accounts.
+              </p>
+            )}
             <button className="mt-4 rounded-full bg-brand-500 px-5 py-2 text-sm font-semibold text-white transition hover:bg-brand-600">
               Save payment methods
             </button>

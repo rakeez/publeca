@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { DemoSection } from "@/components/marketing/demo-section";
 import {
   Breadcrumbs,
   Container,
@@ -44,6 +45,7 @@ export default function EventsPage() {
           </Link>
         }
         note={eventsHub.cta.note}
+        spotlight
       >
         <Breadcrumbs items={[{ name: "Home", href: "/" }, { name: "Events", href: "/events" }]} />
       </ValueHero>
@@ -59,21 +61,51 @@ export default function EventsPage() {
             <span className="h-1.5 w-1.5 rounded-full bg-brand-400" />
             Only on Publeca
           </span>
-          <SectionHeading heading={eventsHub.differentiator.heading} intro={eventsHub.differentiator.body} tone="light" className="mt-4" />
+          <SectionHeading
+            heading={eventsHub.differentiator.heading}
+            headingDim={eventsHub.differentiator.headingDim}
+            intro={eventsHub.differentiator.body}
+            tone="light"
+            className="mt-4"
+          />
           <div className="mt-10">
             <NumberedCards steps={eventsHub.differentiator.points} dark />
           </div>
         </Container>
       </section>
 
+      {/* The platform, demonstrated (P3) */}
+      {eventsHub.demos && (
+        <section>
+          <Container className="py-14 md:py-20">
+            <DemoSection content={eventsHub.demos} eyebrow="See it work" />
+            <div className="mt-10 flex flex-wrap items-center gap-3" data-reveal>
+              <CtaButton cta={eventsHub.cta} source="demos" />
+              <Link
+                href="/signup"
+                data-cta="demos-signup"
+                className="inline-flex items-center rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-800 transition hover:border-slate-300"
+              >
+                Start free on the platform
+              </Link>
+            </div>
+          </Container>
+        </section>
+      )}
+
       {/* Journey */}
-      <section className="border-b border-slate-100 bg-slate-50">
+      <section className="border-y border-slate-100 bg-slate-50">
         <Container className="py-14 md:py-20">
           <SectionHeading eyebrow="The whole journey, handled" heading="From first ad to final scan at the door" />
           <div className="mt-8">
             <ScrollRow cols={5}>
-              {eventsHub.journey.map((j) => (
-                <div key={j.title} className={`${scrollItem} rounded-2xl border border-slate-200 bg-white p-5`}>
+              {eventsHub.journey.map((j, i) => (
+                <div
+                  key={j.title}
+                  data-reveal
+                  style={{ "--reveal-i": i } as React.CSSProperties}
+                  className={`${scrollItem} rounded-2xl border border-slate-200 bg-white p-5`}
+                >
                   <p className="font-display text-lg font-bold text-slate-900">{j.title}</p>
                   <p className="mt-2 text-sm leading-relaxed text-slate-500">{j.body}</p>
                 </div>
@@ -89,7 +121,7 @@ export default function EventsPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-600">Done for you</p>
           <h2 className="font-display mt-3 text-2xl font-bold text-slate-900">{eventsHub.paths.doneForYou.title}</h2>
           <p className="mt-3 flex-1 leading-relaxed text-slate-600">{eventsHub.paths.doneForYou.body}</p>
-          <CtaButton cta={eventsHub.cta} className="mt-7 w-fit" />
+          <CtaButton cta={eventsHub.cta} className="mt-7 w-fit" source="paths" />
         </div>
         <div className="flex flex-col rounded-3xl border border-slate-200 bg-white p-8">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent-600">Self-serve</p>

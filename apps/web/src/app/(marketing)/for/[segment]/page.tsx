@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/json-ld";
+import { DemoSection } from "@/components/marketing/demo-section";
 import {
   Breadcrumbs,
   CheckList,
@@ -46,6 +47,14 @@ export default async function SegmentPage({ params }: { params: Promise<{ segmen
   const quiet = s.tone === "understated";
   const services = s.services.map((slug) => getService(slug)).filter((x) => !!x);
   const posts = postsFor(s.slug).slice(0, 3);
+  // The investor page stays quiet (playbook §9.3): entrances only, no demos, no connectors.
+  const demos = quiet ? undefined : s.demos;
+  const gainsHeading = s.headings?.gains ?? { heading: "What changes for you" };
+  const packagesHeading = s.headings?.packages ?? {
+    heading: "Start small. Scale what works.",
+    intro: "Every package is scoped around an outcome, not hours.",
+  };
+  const processHeading = s.headings?.process ?? { heading: "How we work together" };
 
   const secondary = s.cta.secondaryLabel ? (
     <a
@@ -131,11 +140,16 @@ export default async function SegmentPage({ params }: { params: Promise<{ segmen
       {/* Value */}
       <section className="border-y border-slate-100 bg-slate-50">
         <Container className="py-14 md:py-20">
-          <SectionHeading eyebrow="What you get" heading={quiet ? "What portfolio companies get" : "What changes for you"} />
+          <SectionHeading eyebrow="What you get" heading={gainsHeading.heading} headingDim={gainsHeading.headingDim} />
           <div className="mt-8">
             <ScrollRow cols={s.gains.length >= 4 ? 4 : 3}>
               {s.gains.map((g, i) => (
-                <div key={g.title} className={`${scrollItem} rounded-2xl border border-slate-200 bg-white p-6`}>
+                <div
+                  key={g.title}
+                  data-reveal
+                  style={{ "--reveal-i": i } as React.CSSProperties}
+                  className={`${scrollItem} rounded-2xl border border-slate-200 bg-white p-6`}
+                >
                   <span className={`block h-1 w-10 rounded-full ${i % 2 === 0 ? "bg-brand-500" : "bg-accent-500"}`} />
                   <p className="font-display mt-5 text-lg font-semibold text-slate-900">{g.title}</p>
                   <p className="mt-2 text-sm leading-relaxed text-slate-600">{g.body}</p>
@@ -146,23 +160,34 @@ export default async function SegmentPage({ params }: { params: Promise<{ segmen
         </Container>
       </section>
 
+      {/* The deliverables, demonstrated (P3) — never on the investor page */}
+      {demos && (
+        <section>
+          <Container className="py-14 md:py-20">
+            <DemoSection content={demos} />
+            <div className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-3" data-reveal>
+              <CtaButton cta={s.cta} source="demos" />
+              {s.cta.note && <p className="text-sm text-slate-500">{s.cta.note}</p>}
+            </div>
+          </Container>
+        </section>
+      )}
+
       {/* Packages */}
-      <section id="packages" className="scroll-mt-20">
+      <section id="packages" className={`scroll-mt-20 ${demos ? "border-t border-slate-100 bg-slate-50" : ""}`}>
         <Container className="py-14 md:py-20">
           <SectionHeading
             eyebrow={quiet ? "Ways we can help" : "Packages"}
-            heading={quiet ? "Three ways portfolio teams use us" : "Start small. Scale what works."}
-            intro={
-              quiet
-                ? "Scoped per company, agreed with the founder, reported to you in a format you can read in minutes."
-                : "Every package is scoped around an outcome, not hours. Most clients start with the first and grow from there."
-            }
+            heading={packagesHeading.heading}
+            headingDim={packagesHeading.headingDim}
+            intro={packagesHeading.intro}
           />
           <div className="mt-10">
             <ScrollRow cols={3}>
               {s.packages.map((p) => (
                 <div
                   key={p.name}
+                  data-reveal
                   className={`${scrollItem} relative flex flex-col rounded-3xl border p-7 ${
                     p.highlight ? "border-brand-200 bg-white shadow-xl shadow-brand-500/10" : "border-slate-200 bg-white"
                   }`}
@@ -187,6 +212,7 @@ export default async function SegmentPage({ params }: { params: Promise<{ segmen
                   </div>
                   {!quiet && (
                     <CtaButton
+                      source="packages"
                       className="mt-7 w-full"
                       variant={p.highlight ? "primary" : "secondary"}
                       cta={{
@@ -199,15 +225,27 @@ export default async function SegmentPage({ params }: { params: Promise<{ segmen
               ))}
             </ScrollRow>
           </div>
+          {!quiet && (
+            <p className="mt-8 text-sm text-slate-500" data-reveal>
+              Not sure which to start with?{" "}
+              <Link
+                href="/diagnostic"
+                data-cta="packages-intake"
+                className="font-semibold text-slate-900 underline decoration-slate-300 underline-offset-4 hover:text-brand-600"
+              >
+                See what a diagnostic would look at first
+              </Link>
+            </p>
+          )}
         </Container>
       </section>
 
       {/* Process */}
-      <section className="border-y border-slate-100 bg-slate-50">
+      <section className={demos ? "border-b border-slate-100" : "border-y border-slate-100 bg-slate-50"}>
         <Container className="py-14 md:py-20">
-          <SectionHeading eyebrow="How it runs" heading={quiet ? "How an engagement runs" : "How we work together"} />
+          <SectionHeading eyebrow="How it runs" heading={processHeading.heading} headingDim={processHeading.headingDim} />
           <div className="mt-8">
-            <NumberedCards steps={s.process} />
+            <NumberedCards steps={s.process} connector={!quiet} />
           </div>
         </Container>
       </section>

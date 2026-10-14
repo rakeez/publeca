@@ -106,7 +106,7 @@ export function LandingForm({
 
       <Section
         title="Conversion tracking"
-        subtitle="Paste your IDs — Publeca installs the code and fires a conversion when someone pays."
+        subtitle="Paste your IDs and Publeca installs the code. A purchase is sent only after payment is verified, with the ticket value and order ID, so an abandoned checkout never counts as a sale. Meta receives it from the browser and from our server, merged into one by the order ID."
       >
         <Text label="Meta Pixel ID" name="metaPixelId" defaultValue={defaults.metaPixelId} />
         <Text label="Meta Conversions API token" name="metaCapiToken" defaultValue={defaults.metaCapiToken} />

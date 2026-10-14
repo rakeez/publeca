@@ -101,6 +101,14 @@ const service: Service = {
     note: "Starts with a look at your current tracking and spend.",
   },
 
+  demos: {
+    heading: "Campaigns that learn from buyers,",
+    headingDim: "not from likes.",
+    intro:
+      "A sale reaches Meta only once it is real, so the platform learns what a buyer looks like, and you see what each one cost. Shown with sample data.",
+    items: ["verified-sale", "cost-per-sale"],
+  },
+
   seo: {
     title: "Social Media Advertising Optimized for Sales, Not Likes",
     description:

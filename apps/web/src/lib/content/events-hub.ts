@@ -29,6 +29,15 @@ const eventsHub: EventsHubContent = {
     ],
   },
 
+  // The platform's real behavior, demonstrated with sample data (playbook P3 / §9.3).
+  demos: {
+    heading: "Watch a ticket sale teach your ads,",
+    headingDim: "while your sales figures stay real.",
+    intro:
+      "Shown with sample data: a purchase reaches Meta and Google only once payment is verified, and a seat held at checkout never counts as sold.",
+    items: ["verified-ticket", "seat-hold"],
+  },
+
   paths: {
     doneForYou: {
       title: "Done for you: hand over the on-sale",
@@ -72,7 +81,7 @@ const eventsHub: EventsHubContent = {
     },
     {
       q: "Do ticket payments go through Publeca's account?",
-      a: "No. You connect your own PayHere, Koko and Mintpay merchant accounts, and you can keep more than one account per provider and choose which one each event uses. Buyers pay into your accounts, not ours.",
+      a: "Not once your own accounts are connected. You connect your own PayHere, Koko and Mintpay merchant accounts, keep more than one per provider if you like, and choose which ones each event offers. Each payment goes to the account that takes it. Publeca's own PayHere account is available too, so you can sell before your merchant account is approved; switch it off on an event and every payment goes to your own accounts.",
     },
     {
       q: "Do I need a developer to set up conversion tracking?",

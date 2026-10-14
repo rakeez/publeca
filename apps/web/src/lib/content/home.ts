@@ -1,11 +1,12 @@
 import type { HomeContent } from "./types";
+import { brandLine } from "./site";
 
 // Homepage copy. Follows the writing rule in /CLAUDE.md: who + value first, then the
-// problem, then the details, then the CTA. Synthesized from a 3-draft judge panel
-// (winner: outcome-first draft, with grafts from the credibility and problem-first drafts).
+// problem, then the details, then the CTA. Section patterns and two-tone headings follow
+// docs/playbook.md (P1 hero diagram, P2 tabs, P3 demos, P4 bento, P6 commitments, P7 stages).
 const home: HomeContent = {
   hero: {
-    eyebrow: "Consulting that builds what it recommends",
+    eyebrow: brandLine.line.replace(/.$/, ""),
     who: "For directors and CEOs who want the next stage of growth explained in plain English, technical founders scaling without trading equity for a co-founder, and the investors who back them.",
     headline:
       "Revenue and market share you can see, from a growth consulting firm that executes its own plan",
@@ -14,7 +15,7 @@ const home: HomeContent = {
     primaryCta: {
       label: "Book a growth diagnostic",
       message:
-        "Hi Publeca, I'd like to book a growth diagnostic. I want a clear, costed view of where our next growth will come from and what it should be worth. Could we set up a call?",
+        "Hi Publeca, I run [type of business] and want to know where our next growth will come from, and what it should be worth. Could we set up a growth diagnostic call?",
       note: "Fixed fee. About three weeks. Ends with a 90-day plan.",
     },
     secondaryCta: { label: "See how an engagement runs", href: "#how-we-work" },
@@ -33,7 +34,7 @@ const home: HomeContent = {
   },
 
   problem: {
-    heading: "Growth stalls in the gaps between the firms you hire",
+    heading: brandLine.enemy.replace(/.$/, ""),
     intro:
       "Most companies buy growth in three pieces: strategy from consultants, marketing from agencies, software from developers. Each piece can be done well and the result still belongs to nobody.",
     points: [
@@ -53,8 +54,9 @@ const home: HomeContent = {
   },
 
   value: {
-    heading: "What changes when one firm owns the result",
-    intro: "You stop managing three vendors and start reviewing one set of numbers. Specifically, you get:",
+    heading: "What changes when one firm owns the result:",
+    headingDim: "one set of numbers, and one party answering for them.",
+    intro: "You stop managing three vendors and the gaps between them. Specifically, you get:",
     items: [
       {
         title: "A clear answer on where growth comes from",
@@ -75,9 +77,18 @@ const home: HomeContent = {
     ],
   },
 
+  demos: {
+    heading: "Know which growth bet pays",
+    headingDim: "before you fund it.",
+    intro:
+      "Three things every engagement hands you, shown here with sample data: the opportunity map that decides where the money goes, the weekly read-out that says what moved, and tracking that counts a sale only once it's real.",
+    items: ["opportunity-map", "weekly-readout", "verified-sale"],
+  },
+
   process: {
-    heading: "How an engagement runs",
-    intro: "Five stages, each ending in something your leadership can review and decide on.",
+    heading: "How an engagement runs:",
+    headingDim: "five stages, each ending in something your leadership can decide on.",
+    intro: "Each stage has an owner, a deliverable and a decision point, so the work never runs on trust alone.",
     steps: [
       {
         title: "Diagnose",
@@ -102,36 +113,73 @@ const home: HomeContent = {
     ],
   },
 
+  commitments: {
+    heading: "Fixed fee. About three weeks.",
+    headingDim: "The plan is yours to keep.",
+    intro:
+      "Every engagement starts with a Growth Diagnostic: an opportunity map, a financial model of your growth levers and a 90-day plan presented to your leadership team. Whether you continue with us is a separate decision.",
+    promises: [
+      {
+        title: "The plan is yours to keep",
+        body: "Run it with your own people, with us or with anyone else. It is written so it doesn't depend on us.",
+      },
+      {
+        title: "Tracking before spend scales",
+        body: "Our analytics & data science team puts tracking in place before budgets grow, so results are judged on sales, not reach.",
+      },
+      {
+        title: "No equity, ever",
+        body: "Engagements are paid as a fixed fee or a monthly fee, never in stake. You keep full ownership of your company.",
+      },
+      {
+        title: "Scope reviewed every quarter",
+        body: "Ongoing work is written down and reviewed with you each quarter, so you always know what you are paying for and why.",
+      },
+    ],
+  },
+
   capabilities: {
-    heading: "Every capability the plan calls for, built in-house",
+    heading: "Every capability the plan calls for,",
+    headingDim: "built in-house.",
     intro:
       "When the diagnosis points to a rebuilt website, server-side tracking, a product launch or an AI workflow, the team that recommended it is the team that builds it. Each capability has its own page covering what's included and how it's measured.",
   },
 
   firm: {
-    heading: "Five departments, one growth plan, one firm accountable",
+    heading: "Five departments, one growth plan,",
+    headingDim: "one firm accountable.",
     intro:
       "Every department answers to the plan your forward-deployed growth executive owns. Work moves between desks, not between companies, so nothing gets lost in a handover and no one can blame another vendor.",
     departments: [
       {
         title: "Growth Consulting",
         body: "Diagnosis, opportunity sizing, and growth planning, plus the forward-deployed growth executives who lead each engagement from inside the client's business.",
+        outcome: "Decides where your next growth comes from, sizes it in money, and owns the plan.",
+        stages: ["Diagnose", "Prioritize", "Deploy"],
       },
       {
         title: "Marketing & Brand",
         body: "Branding, content, social media ads, Google Ads, SEO, AEO/GEO, and product marketing, each judged on tracked sales and leads rather than reach.",
+        outcome: "Brand, content and ads judged on the sales they bring in, not the reach they buy.",
+        stages: ["Deploy", "Scale"],
       },
       {
         title: "Engineering",
         body: "Web development, software development, and AI solutions, built to convert, rank, and measure, and to remove the system bottlenecks that cap growth.",
+        outcome: "Builds the website, software and AI the plan calls for, ready to measure from day one.",
+        stages: ["Deploy", "Scale"],
       },
       {
         title: "Analytics & Data Science",
         body: "Conversion tracking and analytics for websites and apps, attribution, dashboards, and modeling, so every growth decision is tied to revenue.",
+        outcome: "Puts tracking in place before spend scales, so every decision ties back to revenue.",
+        stages: ["Diagnose", "Measure", "Scale"],
       },
       {
         title: "Events",
         body: "Publeca's original arm: event marketing, event photo and video, and the Publeca ticketing platform.",
+        outcome: "Fills rooms, and runs the ticketing platform where your ads learn who actually buys.",
+        stages: ["Deploy", "Measure"],
       },
     ],
   },
@@ -143,7 +191,8 @@ const home: HomeContent = {
   },
 
   insights: {
-    heading: "Thinking you can use before you hire anyone",
+    heading: "Thinking you can use",
+    headingDim: "before you hire anyone.",
     intro:
       "Practical guides for CEOs, technical founders, and investors: how to size the next growth opportunity before spending on it, what to ask before approving a growth plan, how to tell whether marketing is working, and what actually moves AI search visibility.",
   },
@@ -189,15 +238,16 @@ const home: HomeContent = {
     cta: {
       label: "Book a growth diagnostic",
       message:
-        "Hi Publeca, I'd like to book a growth diagnostic for my company. I want a clear, costed view of where our next stage of growth should come from. Could we set up a call?",
+        "Hi Publeca, I run [type of business] and I'd like to book a growth diagnostic. I want a clear, costed view of where our next stage of growth should come from. Could we set up a call?",
       note: "Fixed fee. About three weeks. The plan is yours to keep.",
     },
   },
 
   seo: {
     title: "Growth Consulting Firm for Marketing, Management & Events",
+    // Carries the repeated line (playbook §8.2, construction 2). Title covers management + events.
     description:
-      "A growth consulting firm that diagnoses and delivers: marketing consulting, management consulting, engineering, analytics and event management in one team.",
+      "A growth consulting firm that builds what it recommends: a costed growth plan, then our own marketing, engineering and analytics teams to deliver it.",
     keywords: [
       "growth consulting firm",
       "growth consulting",

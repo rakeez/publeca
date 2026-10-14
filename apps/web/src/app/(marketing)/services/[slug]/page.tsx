@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/json-ld";
+import { DemoSection } from "@/components/marketing/demo-section";
 import {
   Breadcrumbs,
   CheckList,
   Container,
   CtaBand,
+  CtaButton,
   FaqList,
   NumberedCards,
   ProblemCallout,
@@ -96,14 +98,32 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         </div>
       </Container>
 
+      {/* The deliverables, demonstrated (P3): one per service where it has a natural one */}
+      {s.demos && (
+        <section className="border-t border-slate-100 bg-slate-50">
+          <Container className="py-14 md:py-20">
+            <DemoSection content={s.demos} />
+            <div className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-3" data-reveal>
+              <CtaButton cta={s.cta} source="demos" />
+              {s.cta.note && <p className="text-sm text-slate-500">{s.cta.note}</p>}
+            </div>
+          </Container>
+        </section>
+      )}
+
       {/* Details */}
-      <section className="border-y border-slate-100 bg-slate-50">
+      <section className={s.demos ? "border-b border-slate-100" : "border-y border-slate-100 bg-slate-50"}>
         <Container className="py-14 md:py-20">
           <SectionHeading eyebrow="What's included" heading={`What ${s.shortName} includes`} />
           <div className="mt-8">
             <ScrollRow cols={s.includes.length % 3 === 0 ? 3 : s.includes.length === 4 ? 4 : 3}>
-              {s.includes.map((i) => (
-                <div key={i.title} className={`${scrollItem} rounded-2xl border border-slate-200 bg-white p-6`}>
+              {s.includes.map((i, n) => (
+                <div
+                  key={i.title}
+                  data-reveal
+                  style={{ "--reveal-i": n } as React.CSSProperties}
+                  className={`${scrollItem} rounded-2xl border border-slate-200 bg-white p-6`}
+                >
                   <p className="font-display font-semibold text-slate-900">{i.title}</p>
                   <p className="mt-2 text-sm leading-relaxed text-slate-600">{i.body}</p>
                 </div>
@@ -117,7 +137,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
         <Container className="py-14 md:py-20">
           <SectionHeading eyebrow="How it works" heading="How we work with you" />
           <div className="mt-8">
-            <NumberedCards steps={s.process} />
+            <NumberedCards steps={s.process} connector />
           </div>
         </Container>
       </section>

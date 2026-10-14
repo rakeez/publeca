@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Cta, FAQ } from "@/lib/content/types";
 import { ctaHref, isExternalCta } from "@/lib/brand";
 import { JsonLd } from "@/components/json-ld";
+import { Spotlight } from "./motion";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://www.publeca.com";
 
@@ -25,20 +26,24 @@ export function CtaButton({
   variant = "primary",
   size = "md",
   className = "",
+  source,
 }: {
   cta: Cta;
   variant?: Variant;
   size?: "md" | "lg";
   className?: string;
+  /** Where on the page this CTA sits (hero, demos, commitments, closing…). See MarketingMotion. */
+  source?: string;
 }) {
   const href = ctaHref(cta);
+  const tag = source ? { "data-cta": source } : {};
   const cls = `inline-flex items-center justify-center gap-2 rounded-full font-semibold transition ${
     size === "lg" ? "px-7 py-3.5 text-base" : "px-5 py-2.5 text-sm"
   } ${VARIANTS[variant]} ${className}`;
 
   if (cta.href) {
     return (
-      <Link href={href} className={cls}>
+      <Link href={href} className={cls} {...tag}>
         {cta.label}
       </Link>
     );
@@ -47,6 +52,7 @@ export function CtaButton({
     <a
       href={href}
       className={cls}
+      {...tag}
       {...(isExternalCta(cta) ? { target: "_blank", rel: "noopener noreferrer" } : {})}
     >
       {cta.label}
@@ -109,28 +115,41 @@ export function Eyebrow({ children, tone = "brand" }: { children: React.ReactNod
   );
 }
 
+/**
+ * Section heading. `headingDim` makes it a two-tone heading (playbook R1): one sentence, the
+ * resolving clause in muted ink. Still one <h2>, read as one sentence by screen readers.
+ */
 export function SectionHeading({
   eyebrow,
   heading,
+  headingDim,
   intro,
   tone = "dark",
   className = "",
 }: {
   eyebrow?: string;
   heading: string;
+  headingDim?: string;
   intro?: string;
   tone?: "dark" | "light";
   className?: string;
 }) {
   return (
-    <div className={`max-w-3xl ${className}`}>
+    <div className={`max-w-3xl ${className}`} data-reveal>
       {eyebrow && <Eyebrow tone={tone === "light" ? "light" : "brand"}>{eyebrow}</Eyebrow>}
       <h2
-        className={`font-display mt-3 text-3xl font-bold tracking-tight md:text-4xl ${
+        className={`font-display mt-3 text-3xl font-bold leading-[1.1] tracking-tight md:text-4xl ${
           tone === "light" ? "text-white" : "text-slate-900"
         }`}
       >
         {heading}
+        {headingDim && (
+          <>
+            {" "}
+            {/* slate-500, not the playbook's slate-400: slate-400 on white is under WCAG's 3:1 for large text. */}
+            <span className={tone === "light" ? "text-slate-400" : "text-slate-500"}>{headingDim}</span>
+          </>
+        )}
       </h2>
       {intro && (
         <p className={`mt-4 text-lg leading-relaxed ${tone === "light" ? "text-slate-300" : "text-slate-600"}`}>
@@ -156,6 +175,7 @@ export function ValueHero({
   primaryVariant = "primary",
   secondary,
   note,
+  spotlight = false,
   children,
 }: {
   eyebrow: string;
@@ -166,10 +186,13 @@ export function ValueHero({
   primaryVariant?: Variant;
   secondary?: React.ReactNode;
   note?: string;
+  /** Cursor spotlight (R2). Home and events heroes only. */
+  spotlight?: boolean;
   children?: React.ReactNode;
 }) {
+  const Wrap = spotlight ? Spotlight : PlainSection;
   return (
-    <section className="relative overflow-hidden border-b border-slate-100">
+    <Wrap className="relative overflow-hidden border-b border-slate-100">
       <div
         className="absolute inset-0 -z-10"
         style={{
@@ -186,13 +209,17 @@ export function ValueHero({
         </h1>
         <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate-600">{valueDetail}</p>
         <div className="mt-8 flex flex-wrap items-center gap-3">
-          <CtaButton cta={primary} variant={primaryVariant} size="lg" />
+          <CtaButton cta={primary} variant={primaryVariant} size="lg" source="hero" />
           {secondary}
         </div>
         {note && <p className="mt-3 text-sm text-slate-500">{note}</p>}
       </Container>
-    </section>
+    </Wrap>
   );
+}
+
+function PlainSection({ className = "", children }: { className?: string; children: React.ReactNode }) {
+  return <section className={className}>{children}</section>;
 }
 
 export function ProblemCallout({ label = "The problem we solve", problem }: { label?: string; problem: string }) {
@@ -219,13 +246,37 @@ export function CheckList({ items }: { items: string[] }) {
   );
 }
 
-export function NumberedCards({ steps, dark = false }: { steps: { title: string; body: string }[]; dark?: boolean }) {
+/**
+ * Numbered stage cards. `connector` adds the one motion this pattern takes (playbook P7): a
+ * line joining the stages that draws itself as it enters the viewport (md+ only).
+ */
+export function NumberedCards({
+  steps,
+  dark = false,
+  connector = false,
+}: {
+  steps: { title: string; body: string }[];
+  dark?: boolean;
+  connector?: boolean;
+}) {
   return (
+    <div className="relative">
+      {connector && (
+        <div
+          aria-hidden
+          data-reveal="line"
+          className={`absolute left-6 right-6 top-[2.35rem] hidden h-px md:block ${
+            dark ? "bg-gradient-to-r from-accent-300/60 to-brand-400/60" : "bg-gradient-to-r from-accent-300 to-brand-300"
+          }`}
+        />
+      )}
     <ScrollRow cols={steps.length >= 5 ? 5 : steps.length >= 4 ? 4 : 3}>
       {steps.map((s, i) => (
         <div
           key={s.title}
-          className={`${scrollItem} rounded-2xl p-6 ${
+          data-reveal
+          style={{ "--reveal-i": i } as React.CSSProperties}
+          className={`${scrollItem} relative rounded-2xl p-6 ${
             dark ? "border border-white/10 bg-white/5" : "border border-slate-100 bg-white shadow-sm"
           }`}
         >
@@ -239,6 +290,7 @@ export function NumberedCards({ steps, dark = false }: { steps: { title: string;
         </div>
       ))}
     </ScrollRow>
+    </div>
   );
 }
 
@@ -336,7 +388,7 @@ export function CtaBand({
             <h2 className="font-display text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">{heading}</h2>
             <p className="mt-3 text-lg leading-relaxed text-slate-600">{body}</p>
             <div className="mt-7 flex flex-wrap items-center gap-4">
-              <CtaButton cta={cta} variant="quiet" />
+              <CtaButton cta={cta} variant="quiet" source="closing" />
               {secondary}
             </div>
             {cta.note && <p className="mt-3 text-sm text-slate-500">{cta.note}</p>}
@@ -359,7 +411,7 @@ export function CtaBand({
           <h2 className="font-display text-3xl font-bold tracking-tight md:text-4xl">{heading}</h2>
           <p className="mt-4 text-lg leading-relaxed text-slate-300">{body}</p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <CtaButton cta={cta} variant="primary" size="lg" />
+            <CtaButton cta={cta} variant="primary" size="lg" source="closing" />
             {secondary}
           </div>
           {cta.note && <p className="mt-3 text-sm text-slate-400">{cta.note}</p>}

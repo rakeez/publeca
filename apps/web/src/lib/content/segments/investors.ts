@@ -164,6 +164,17 @@ const segment: Segment = {
       "Hi, I came across your page for investors. Happy to compare notes on go-to-market in portfolio companies whenever convenient.",
   },
 
+  // Understated by design: no demos, no motion beyond entrances (playbook §9.3). The process
+  // heading answers the partner's fear of an outsider overriding the founder.
+  headings: {
+    gains: { heading: "What portfolio companies get" },
+    packages: {
+      heading: "Three ways portfolio teams use us",
+      intro: "Scoped per company, agreed with the founder, reported to you in a format you can read in minutes.",
+    },
+    process: { heading: "The founder keeps the decisions." },
+  },
+
   seo: {
     title: "Growth Team for Portfolio Companies | Investors & VCs",
     description:

@@ -100,6 +100,13 @@ const service: Service = {
     href: "/signup",
   },
 
+  demos: {
+    heading: "Real sales figures,",
+    headingDim: "and ads that learn who buys.",
+    intro: "How the platform behaves on a live on-sale, shown with sample data.",
+    items: ["verified-ticket", "seat-hold"],
+  },
+
   seo: {
     title: "Sri Lanka Event Ticketing Platform: PayHere, Koko, Mintpay",
     description:

@@ -5,6 +5,8 @@ data science teams, plus an **events arm** (event marketing + a self-serve ticke
 This repo is the website (`apps/web`, Next.js) and the events platform (dashboard, checkout,
 tickets, scanner). Positioning, audiences, services and offers are defined in
 [`docs/positioning.md`](docs/positioning.md) — read it before writing any public copy.
+Section patterns, motion, demos and tools follow [`docs/playbook.md`](docs/playbook.md),
+which ranks **below** this file and `positioning.md` (where they disagree, they win).
 
 ---
 
@@ -63,6 +65,13 @@ made with confidence, control kept, **equity kept**. "Grow your business" is not
 - `apps/web/src/lib/content/segments/*.ts` — one file per audience page (`/for/[segment]`).
 - `apps/web/src/lib/content/posts/*.ts` — one file per article (`/blog/[slug]`).
 - `apps/web/src/lib/content/home.ts`, `events-hub.ts` — homepage and events arm.
+- `apps/web/src/lib/content/site.ts` — the repeated line (*Consulting that builds what it
+  recommends.*) and the enemy line. Footer on every page; meta descriptions of `/`,
+  `/services/growth-consulting` and `/for/ceos` only. Never in investor headings or meta.
+- `apps/web/src/lib/content/demos.ts` — copy **and every sample value** for the deliverable
+  demos. Always labelled "Sample data"; no figures (dots and relative bars only).
+- `apps/web/src/lib/content/intake.ts` — the `/diagnostic` planner: questions, focus items and
+  the pure `planFor()` logic (tested by `intake.test.ts`). Never outputs a score or a number.
 - Adding a page = add a content file + register it in `apps/web/src/lib/content/index.ts`.
 
 ### Self-check before shipping copy
@@ -72,6 +81,8 @@ made with confidence, control kept, **equity kept**. "Grow your business" is not
 - [ ] Details come *after* value; the CTA comes last and fits the segment's tone?
 - [ ] Zero invented numbers, clients, testimonials or prices?
 - [ ] Investor copy would not read as a pitch to a skeptical partner?
+- [ ] Two-tone headings (`headingDim`): the reader's value is never only in the dim half?
+- [ ] Any demo or tool output: sample data labelled, no figures, only what we actually deliver?
 
 ### 🔁 Keep this rule current
 
@@ -82,6 +93,10 @@ session** so every future session writes the way they want. Note the change in t
 **Change log**
 - 2026-10-12 — Rule created with the repositioning to full-stack growth consulting
   (audiences: CEOs, technical founders, investors; events kept as an arm).
+- 2026-10-14 — Site redone with `docs/playbook.md` (user instruction). Added: the repeated
+  line and enemy in the footer, two-tone headings, fear-answering segment headings,
+  sample-data demos (no figures), the `/diagnostic` planner and show-your-working copy in
+  the ticketing platform. Decisions are recorded in playbook §15.1, pending confirmation.
 
 ---
 
@@ -94,3 +109,7 @@ session** so every future session writes the way they want. Note the change in t
 - Payments: named accounts per host (multiple per provider), selected per event; webhook verifies with the order's exact account.
 - Brand: pink `brand-500` (#ff0066, logo) + blue `accent-500` (#635bff). Real logo is `apps/web/public/publeca-logo.png` — never recreate it.
 - SEO: `robots.ts`, `sitemap.ts`, JSON-LD via `components/json-ld.tsx`. Follow Google's guidance: no AEO hacks, unique non-commodity content.
+- Motion: server renders the finished state; `prefers-reduced-motion` shows it with no
+  movement; loops stop off-screen and on hidden tabs; hover gated to fine pointers. Runtime in
+  `components/marketing/motion.tsx`. `/for/investors` and `/blog`: entrances only.
+- Tests: `cd apps/web && npm test` (Node's built-in runner on `*.test.ts`).

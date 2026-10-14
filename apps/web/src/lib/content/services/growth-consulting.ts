@@ -101,10 +101,19 @@ const service: Service = {
     note: "Fixed fee. About three weeks. Ends with a 90-day plan.",
   },
 
+  demos: {
+    heading: "Know which growth bet pays",
+    headingDim: "before you fund it.",
+    intro:
+      "What the diagnostic hands your leadership team, and what you get every week after it, shown with sample data.",
+    items: ["opportunity-map", "weekly-readout"],
+  },
+
   seo: {
     title: "Growth Consulting: A Costed Growth Strategy, Delivered",
+    // Carries the repeated line (playbook §8.2, construction 2).
     description:
-      "Know which growth bet pays before you fund it. Growth consulting that sizes every opportunity in revenue and embeds a senior operator to deliver the plan.",
+      "Growth consulting that builds what it recommends: know which growth bet pays before you fund it, then a senior operator who delivers the plan.",
     keywords: [
       "growth consulting",
       "management consulting",

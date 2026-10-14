@@ -52,6 +52,9 @@ import eventsHub from "./events-hub";
 export * from "./types";
 export { CATEGORIES, getCategory } from "./categories";
 export { home, eventsHub };
+export { brandLine } from "./site";
+export { DEMO_COPY } from "./demos";
+export { intakePage } from "./intake";
 
 export const SERVICES: Service[] = [
   growthConsulting,

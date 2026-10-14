@@ -2,7 +2,8 @@
 
 > Source of truth for all public copy. Follow the **Writing rule** in `/CLAUDE.md`
 > (Who + Value → Problem → Details → CTA). Update this file whenever the user changes
-> positioning, audiences, services or offers. Last updated: 2026-10-12.
+> positioning, audiences, services or offers. Last updated: 2026-10-14.
+> Page patterns, motion and demos: `docs/playbook.md` (ranks below this file).
 
 ## 1. What Publeca is
 
@@ -131,4 +132,15 @@ QR e-tickets, door scanning, assigned seating, Meta/Google conversion tracking).
 - Default CTA opens WhatsApp **+94 75 365 0002** with a prefilled, segment-specific message.
   Email: hello@publeca.com.
 - Primary site CTA: "Book a growth diagnostic". Events CTA: "Plan your event" / "Start free".
+- **Repeated line:** *Consulting that builds what it recommends.* Enemy line: *Growth stalls
+  in the gaps between the firms you hire.* Both live in `lib/content/site.ts`; footer on every
+  page, and the meta descriptions of `/`, `/services/growth-consulting` and `/for/ceos`.
+  Investor page: footer only.
+- Prefilled WhatsApp messages are written in the reader's voice with a slot to fill, e.g.
+  "Hi Publeca, I run [type of business] and want to know where our next growth will come from."
+- **Payments accuracy:** organizers *can* take every payment into their own merchant accounts,
+  but Publeca's own PayHere account is also offered on each event unless they untick it. Never
+  write that payments "never" go through Publeca.
+- **Tools:** `/diagnostic` (six questions → what a diagnostic would look at first, and why).
+  It never outputs a score, forecast or number.
 - No invented proof or prices (see Banned in `/CLAUDE.md`).

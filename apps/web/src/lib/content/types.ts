@@ -59,6 +59,40 @@ export interface TitledText {
   body: string;
 }
 
+/**
+ * A section heading. `headingDim` is the optional resolving clause of a two-tone heading
+ * (playbook R1): it renders in muted ink right after `heading`, as one sentence. The reader's
+ * value must never sit only in the dim half.
+ */
+export interface Heading {
+  heading: string;
+  headingDim?: string;
+}
+
+/** The deliverable micro-demos (playbook P3). Copy and sample values live in ./demos.ts. */
+export type DemoId =
+  | "opportunity-map"
+  | "weekly-readout"
+  | "verified-sale"
+  | "verified-sale-technical"
+  | "verified-ticket"
+  | "cost-per-sale"
+  | "seat-hold";
+
+/** A "shown, not described" section: up to three demos of what the client receives. */
+export interface DemoSection extends Heading {
+  intro: string;
+  items: DemoId[];
+}
+
+/** One of Publeca's five departments. Read by the hero diagram and the firm bento. */
+export interface Department extends TitledText {
+  /** One-line outcome for the reader, revealed on hover in the bento (always shown on touch). */
+  outcome: string;
+  /** The method stages this department does most of its work in (names from home.process). */
+  stages: string[];
+}
+
 export interface Service extends ValueFirst {
   slug: string;
   /** Full name, e.g. "Search engine optimization (SEO)". */
@@ -80,6 +114,8 @@ export interface Service extends ValueFirst {
   faqs: FAQ[];
   cta: Cta;
   seo: SeoMeta;
+  /** Optional demos of this service's deliverables, shown after "What you get". */
+  demos?: DemoSection;
 }
 
 export interface Package {
@@ -118,6 +154,17 @@ export interface Segment extends ValueFirst {
   faqs: FAQ[];
   cta: Cta & { secondaryLabel?: string; secondaryMessage?: string };
   seo: SeoMeta;
+  /**
+   * Section headings that answer this reader's fear (playbook §8.2, construction 7).
+   * Each falls back to a neutral default when omitted.
+   */
+  headings?: {
+    gains?: Heading;
+    packages?: Heading & { intro?: string };
+    process?: Heading;
+  };
+  /** Optional deliverable demos. Never set on the investor page (it stays quiet). */
+  demos?: DemoSection;
 }
 
 export type PostAudience = SegmentSlug | "events" | "general";
@@ -160,23 +207,40 @@ export interface HomeContent {
     /** 3–4 short proof-of-capability chips (capabilities, not invented stats). */
     chips: string[];
   };
-  audiences: { heading: string; intro: string };
-  problem: { heading: string; intro: string; points: TitledText[] };
-  value: { heading: string; intro: string; items: TitledText[] };
-  process: { heading: string; intro: string; steps: TitledText[] };
-  capabilities: { heading: string; intro: string };
-  firm: { heading: string; intro: string; departments: TitledText[] };
+  /** "Who we help" tabs. Each panel is built from that segment's own content. */
+  audiences: Heading & { intro: string };
+  problem: Heading & { intro: string; points: TitledText[] };
+  value: Heading & { intro: string; items: TitledText[] };
+  /** "What you'd actually receive": the deliverables, demonstrated. */
+  demos: DemoSection;
+  process: Heading & { intro: string; steps: TitledText[] };
+  /**
+   * The commercial shape, objection first (no prices): the documented promises a reader
+   * can hold us to, and the primary CTA repeated.
+   */
+  commitments: Heading & { intro: string; promises: TitledText[] };
+  capabilities: Heading & { intro: string };
+  firm: Heading & { intro: string; departments: Department[] };
   eventsArm: { heading: string; body: string; ctaLabel: string };
-  insights: { heading: string; intro: string };
+  insights: Heading & { intro: string };
   faqs: FAQ[];
   finalCta: { heading: string; body: string; cta: Cta };
   seo: SeoMeta;
 }
 
+/** The repeated brand line (playbook §8.2, construction 2): footer + named meta descriptions. */
+export interface BrandLine {
+  line: string;
+  /** The enemy, as a situation (never a competitor). Repeated in the footer. */
+  enemy: string;
+}
+
 export interface EventsHubContent extends ValueFirst {
   eyebrow: string;
   /** "Only on Publeca" differentiator — conversion tracking on paid bookings. */
-  differentiator: { heading: string; body: string; points: TitledText[] };
+  differentiator: Heading & { body: string; points: TitledText[] };
+  /** The real platform behavior, demonstrated with sample data. */
+  demos?: DemoSection;
   paths: { doneForYou: TitledText; selfServe: TitledText };
   journey: TitledText[];
   /** Service slugs in the events arm. */
