@@ -10,3 +10,10 @@ export const brandLine: BrandLine = {
   line: "Consulting that builds what it recommends.",
   enemy: "Growth stalls in the gaps between the firms you hire.",
 };
+
+/**
+ * The date the marketing content last changed in a meaningful way. Used as `lastmod` for
+ * pages without their own date in the sitemap. Bump it when page copy changes, not for
+ * styling-only releases: Google only trusts lastmod that is consistently accurate.
+ */
+export const CONTENT_UPDATED = "2026-10-15";

@@ -52,7 +52,7 @@ import eventsHub from "./events-hub";
 export * from "./types";
 export { CATEGORIES, departmentOf, getCategory } from "./categories";
 export { home, eventsHub };
-export { brandLine } from "./site";
+export { CONTENT_UPDATED, brandLine } from "./site";
 export { DEMO_COPY } from "./demos";
 export { intakePage } from "./intake";
 export { BUCKETS } from "./buckets";

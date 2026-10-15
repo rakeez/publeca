@@ -124,8 +124,14 @@ session** so every future session writes the way they want. Note the change in t
 - Inventory: `quantitySold` counts confirmed sales only; holds never touch it (see `packages/db/src/inventory.ts`).
 - Payments: named accounts per host (multiple per provider), selected per event; webhook verifies with the order's exact account.
 - Brand: pink `brand-500` (#ff0066, logo; also the primary CTA) + violet `accent-500` (#635bff, badges only). Real logo is `apps/web/public/publeca-logo.png` — never recreate it.
-- Design system: `docs/design-system.md`. `slate-*` is remapped to a neutral grayscale; Plus Jakarta Sans display, Inter body, JetBrains Mono labels; flat cards, pill buttons, one conic border per page.
+- Design system: `docs/design-system.md`. `slate-*` is remapped to a neutral grayscale; Plus Jakarta Sans display, Inter body, JetBrains Mono labels; flat cards, pill buttons, one dramatic animation per page (the home hero canvas).
 - SEO: `robots.ts`, `sitemap.ts`, JSON-LD via `components/json-ld.tsx`. Follow Google's guidance: no AEO hacks, unique non-commodity content.
+  - robots: non-production blocks everything; production allows all, blocks private paths, and
+    names AI search/answer crawlers (OAI-SearchBot, PerplexityBot, Claude-SearchBot, …) with the
+    same private paths. Training crawlers are allowed via `*`; opting out is a business decision.
+  - sitemap: every page has an accurate `lastmod`. Bump `CONTENT_UPDATED` in
+    `lib/content/site.ts` when page copy changes; posts use their own date; only events that
+    haven't ended are listed. New public pages must be added to `sitemap.ts`.
 - Motion: server renders the finished state; `prefers-reduced-motion` shows it with no
   movement; loops stop off-screen and on hidden tabs; hover gated to fine pointers. Runtime in
   `components/marketing/motion.tsx`. `/for/investors` and `/blog`: entrances only.
